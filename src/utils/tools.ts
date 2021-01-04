@@ -268,3 +268,35 @@ export function setSession(key:string, value:object) {
   obj = {...obj, ...value};
   sessionStorage.setItem(key, JSON.stringify(obj));
 }
+
+/**
+ * 时间格式转换 -> 'y-m-d h:m:s'
+ * @param long 日期时间字符串
+ */
+export function transYears(long: any): string {
+  if (!long) return "";
+  let date = new Date(long);
+  let year = date.getFullYear();
+  let month = lt9(date.getMonth() + 1);
+  return `${year}${month}`;
+}
+// 年月展示的第二种格式
+export function transMonth(long: any): string {
+  if (!long) return "";
+  let date = new Date(long);
+  let year = date.getFullYear();
+  let month = lt9(date.getMonth() + 1);
+  return `${year}-${month}`;
+}
+
+export function transTimesss(long: any): string {
+  if (!long) return "";
+  let date = new Date(long);
+  let year = date.getFullYear();
+  let month = lt9(date.getMonth() + 1);
+  let day = lt9(date.getDate());
+  let hour = lt9(date.getHours());
+  let minutes = lt9(date.getMinutes());
+  let second = lt9(date.getSeconds());
+  return `${year}${month}${day}${hour}${minutes}${second}`;
+}

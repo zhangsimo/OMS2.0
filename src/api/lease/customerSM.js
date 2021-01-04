@@ -19,6 +19,15 @@ export function saveCustomer(data) {
   });
 }
 
+//转当期损益tab切换查询
+export function getSubjectMsg(data) {
+  return axios.request({
+    url: `${api.wmsApi}/financeManage/selectAccountList`,
+    method: "post",
+    data
+  });
+}
+
 // 获取不可见的租户id
 export function getNotLookTenantIds(params) {
   return axios.request({

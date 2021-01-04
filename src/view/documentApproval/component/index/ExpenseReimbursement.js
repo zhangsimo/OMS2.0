@@ -10,7 +10,7 @@ import {
   getExpSve,
   getOtherPeopleNew
 } from "_api/documentApproval/ExpenseReimbursement";
-import {getThisAllList, getBackList , getPayAccount} from "@/api/documentApproval/documentApproval/documentApproval";
+import {getThisAllList, getBackList, getPayAccount} from "@/api/documentApproval/documentApproval/documentApproval";
 import {getDigitalDictionary} from "@/api/system/essentialData/clientManagement";
 import {getPost} from "../utils";
 
@@ -34,17 +34,17 @@ export default {
         return Promise.reject(new Error("核销金额不能大于借支金额"));
       }
     };
-    const notaxValid = ({cellValue ,row }) => {
+    const notaxValid = ({cellValue, row}) => {
       return new Promise((resolve, reject) => {
-        if (row.billTypeId && row.billTypeId != "010103"){
+        if (row.billTypeId && row.billTypeId != "010103") {
           resolve()
-        }else{
-          if ( !cellValue || cellValue != this.$utils.subtract(row.totalAmt, row.taxAmt)) {
+        } else {
+          if (!cellValue || cellValue != this.$utils.subtract(row.totalAmt, row.taxAmt)) {
             reject(new Error('不含税金额计算错误'))
           } else {
-            if(/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/.test(cellValue)){
+            if (/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/.test(cellValue)) {
               resolve()
-            }else{
+            } else {
               reject(new Error('最多保留2为小数'))
             }
           }
@@ -52,17 +52,17 @@ export default {
 
       })
     }
-    const taxAmt = ({cellValue ,row }) => {
+    const taxAmt = ({cellValue, row}) => {
       return new Promise((resolve, reject) => {
-        if (row.billTypeId && row.billTypeId != "010103"){
+        if (row.billTypeId && row.billTypeId != "010103") {
           resolve()
-        }else{
-          if(cellValue==''){
+        } else {
+          if (cellValue == '') {
             reject(new Error('税额必填'))
-          }else{
-            if(/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/.test(cellValue)){
+          } else {
+            if (/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/.test(cellValue)) {
               resolve()
-            }else{
+            } else {
               reject(new Error('最多保留2为小数'))
             }
           }
@@ -78,7 +78,7 @@ export default {
     };
     return {
       loading1: false,
-      saveDis:false,//保存草稿/提交申请按钮接口没有返回不可点击
+      saveDis: false,//保存草稿/提交申请按钮接口没有返回不可点击
       model: false, //模态框开关
       modelType: false, //模态框打开模式 0-新增false 1-编辑false 2-查看true 3-审核true
       formInline: {}, //所有数据对象
@@ -111,7 +111,7 @@ export default {
       taxRate: [], //税率
       //费用支出表格的数据校验
       validRules: {
-        summary: [{required: true, message: "摘要必填" ,trigger:'blur'}],
+        summary: [{required: true, message: "摘要必填", trigger: 'blur'}],
         taxRateCode: [{validator: taxRateCodeValid}],
         accountEntry: [{required: true, message: "入账科目必填"}],
         totalAmt: [
@@ -219,8 +219,8 @@ export default {
           user.groups.length > 0
             ? user.groups[user.groups.length - 1].name
             : "";
-        this.formInline.shopCode = user.currentCompany?user.currentCompany.code : "";
-        this.formInline.orgName = user.currentCompany?user.currentCompany.shortName : "";
+        this.formInline.shopCode = user.currentCompany ? user.currentCompany.code : "";
+        this.formInline.orgName = user.currentCompany ? user.currentCompany.shortName : "";
         this.formInline.applyTypeName = "费用报销";
         this.formInline.applyTime = date;
         this.formInline.paymentOrgName = getPost();
@@ -234,8 +234,8 @@ export default {
       }
     },
     //打开进项发票登记弹框
-    registrationEntryOpen(row){
-      this.$refs.registrationEntry.modal1=true;
+    registrationEntryOpen(row) {
+      this.$refs.registrationEntry.modal1 = true;
       this.$refs.registrationEntry.accountData = [];
       this.$refs.registrationEntry.accountData.push(...this.formInline.expenseDetails)
     },
@@ -245,20 +245,20 @@ export default {
     },
 
     //获取本点下的付款账号
-   async getpayList(){
-      let data ={
-        check:1
+    async getpayList() {
+      let data = {
+        check: 1
       }
       let res = await getPayAccount(data)
-     if (res.code === 0){
-       this.payUserList = res.data
-       if (this.list.type == 1){
-        if( res.data.length  == 0 ) return
-         let arr = res.data.filter(item => item.accountName == '张华')
-         this.formInline.paymentAccount =  arr.length > 0 ? arr[0].id : res.data[0].id
-         this.getPay(this.formInline.paymentAccount)
-       }
-     }
+      if (res.code === 0) {
+        this.payUserList = res.data
+        if (this.list.type == 1) {
+          if (res.data.length == 0) return
+          let arr = res.data.filter(item => item.accountName == '张华')
+          this.formInline.paymentAccount = arr.length > 0 ? arr[0].id : res.data[0].id
+          this.getPay(this.formInline.paymentAccount)
+        }
+      }
     },
     //付款人账号搜索出发
     // remoteMethod2(query) {
@@ -273,17 +273,17 @@ export default {
         data.size = 50
         let res = {}
         if (this.formInline.accountType) {
-           res = await getBackList(data)
-        }else {
-           res = await getOtherPeopleNew(data)
+          res = await getBackList(data)
+        } else {
+          res = await getOtherPeopleNew(data)
         }
         if (res.code == 0) {
           if (this.formInline.accountType) {
             this.options1 = res.data.content || []
-            this.options1.map( item =>  item.accountBankNo = item.accountBankNo )
-          }else {
+            this.options1.map(item => item.accountBankNo = item.accountBankNo)
+          } else {
             this.options1 = res.data.content || []
-            this.options1.map( item =>  item.accountBankNo = item.accountBankNo )
+            this.options1.map(item => item.accountBankNo = item.accountBankNo)
           }
         }
       } else {
@@ -402,7 +402,7 @@ export default {
     getsubBack(row) {
       // console.log(row.titleCode,this.subjectType,1111)
       this.$set(this.subjectType, "accountEntry", row.titleName);
-      this.$set(this.subjectType,"accountEntryCode",row.titleCode)
+      this.$set(this.subjectType, "accountEntryCode", row.titleCode)
       // 刷新列表方法 accountEntryCode
       this.$refs.xTable.refreshColumn();
     },
@@ -550,8 +550,8 @@ export default {
     getPay(value) {
       if (!value) return;
       let list = this.payUserList.filter(item => item.id == value)[0];
-      this.$set(this.formInline , 'paymentBank' , list.bankName)
-      this.$set(this.formInline , 'paymentBankNo' , list.accountCode)
+      this.$set(this.formInline, 'paymentBank', list.bankName)
+      this.$set(this.formInline, 'paymentBankNo', list.accountCode)
     },
 
     //获取到上传图片地址
@@ -567,11 +567,23 @@ export default {
       const errTwo = await this.$refs.documentTable
         .fullValidate()
         .catch(errTwo => errTwo);
+      let ajaxBool = false;
+      if (type) {
+        this.formInline.expenseDetails.map(el => {
+          if (!el.summary || !el.accountEntry || !el.totalAmt) {
+            ajaxBool = true;
+          }
+        })
+      }
       this.$refs.formInline.validate(async valid => {
         if (valid) {
-          if (errMap || errTwo) {
-            if (errTwo) return this.$Message.error("核销金额不能大于借支金额");
-            //this.$Message.error('表格校验失败')
+          if (errMap || errTwo || ajaxBool) {
+            if (errTwo){
+              return this.$Message.error("核销金额不能大于借支金额");
+            }
+            if (ajaxBool) {
+              return this.$message.error("费用支出明细输入不正确")
+            }
           } else {
             this.formInline.step = type;
             this.formInline.details = this.details;
@@ -579,30 +591,19 @@ export default {
               content: '处理中...',
               duration: 0
             });
-            let ajaxBool=true;
-            if(type){
-              this.formInline.expenseDetails.map(el=>{
-                if(!el.summary||!el.accountEntry||!el.totalAmt){
-                  ajaxBool=false;
-                }
-              })
-            }
             this.formInline.accountType = this.formInline.accountType ? 1 : 0
-            this.saveDis=true
-            if(ajaxBool){
-              let res = await getExpSve(this.formInline);
-              msg();
-              if (res.code == 0) {
-                this.saveDis=false;
-                this.$Message.success("操作成功");
-                this.model = false;
-                this.$emit("updateD")
-              }else{
-                this.saveDis=false;
-              }
-            }else{
-              return this.$message.error("费用支出明细输入不正确")
+            this.saveDis = true
+            let res = await getExpSve(this.formInline);
+            msg();
+            if (res.code == 0) {
+              this.saveDis = false;
+              this.$Message.success("操作成功");
+              this.model = false;
+              this.$emit("updateD")
+            } else {
+              this.saveDis = false;
             }
+
           }
         } else {
           //this.$Message.error("带*必填");

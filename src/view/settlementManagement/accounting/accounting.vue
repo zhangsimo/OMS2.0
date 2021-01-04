@@ -117,6 +117,7 @@
               class="mr10 ivu-btn ivu-btn-default"
               type="button"
               @click="putVoucher"
+              :disabled="status == 0"
               v-has="'change'"
             >
               <span>修改凭证</span>
@@ -575,23 +576,29 @@
         <Button @click="shenheCancel">取消</Button>
       </div>
     </Modal>
+    <CredentChange ref="credent" :vercherId="oneList" :resultObj="resOBj"></CredentChange>
   </div>
 </template>
 
 <script>
-import { getTableList } from "@/api/accountant/accountant";
-import { goshop } from "@/api/settlementManagement/shopList";
-import * as api from "@/api/settlementManagement/financialStatement";
-import moment from "moment";
-import { creat } from "./../components";
-import * as tools from "_utils/tools";
-import { showLoading, hideLoading } from "@/utils/loading";
+  import {getTableList} from "@/api/accountant/accountant";
+  import {goshop} from '@/api/settlementManagement/shopList';
+  import * as api from "@/api/settlementManagement/financialStatement";
+  import moment from "moment";
+  import {creat} from "./../components";
+  import * as tools from "_utils/tools";
+  import {showLoading, hideLoading} from "@/utils/loading"
+  import CredentChange from './components/CredentialsModify'
+  import {findById} from "@/api/voucherInput/voucherInput"
 
 export default {
   name: "accountings",
-  components: {},
+  components: {
+    CredentChange
+  },
   data() {
     return {
+      resOBj: {},
       // 数据类
       oneList: [], // 表格选中
       status: 0, // 当前tabs 0未审核， 1已审核
@@ -922,30 +929,47 @@ export default {
       let mateAccountCode = this.subjectId;
       if (!occurTime) {
         return this.$message.error("发生日期必须选择！");
-      }
-      if (!mateAccountCode) {
-        return this.$message.error("对应科目必须选择！");
-      }
-      let remarks = this.content.trim();
-      if (remarks.length <= 0) {
-        return this.$message.error("请输入撤销原因");
-      }
-      let ids = this.oneList.map((el) => el.id);
-      let res = await api.certificationAuditRevocation({
-        ids,
-        remarks,
-        occurTime,
-        mateAccountCode,
-        shopNumber: this.store,
-      });
-      if (res.code == 0) {
-        this.$message.success(res.data);
-        this.isShow = false;
-        this.query();
+        let mateAccountCode = this.subjectId;
+        if (!occurTime) {
+          return this.$message.error("发生日期必须选择！")
+        }
+        if (!mateAccountCode) {
+          return this.$message.error("对应科目必须选择！")
+        }
+        let remarks = this.content.trim();
+        if (remarks.length <= 0) {
+          return this.$message.error("请输入撤销原因");
+        }
+        let ids = this.oneList.map(el => el.id);
+        let res = await api.certificationAuditRevocation({
+          ids,
+          remarks,
+          occurTime,
+          mateAccountCode,
+          shopNumber: this.store,
+        });
+        if (res.code == 0) {
+          this.$message.success(res.data);
+          this.isShow = false;
+          this.query();
+        }
       }
     },
     // 修改凭证
-    putVoucher() {},
+    async putVoucher() {
+      if(this.oneList.length !== 1){
+        return this.$message.error('修改凭证只能选择一条数据')
+      }
+      if(!this.oneList[0].proofCode){
+        return this.$message.error('该条数据未生成凭证，无法修改')
+      }
+      let res = await findById({id: this.oneList[0].financeVoucherId})
+      if(res.data.isVerify == 1){
+        return this.$message.error('凭证已审核，请先反审核')
+      }
+      this.resOBj = res
+      this.$refs.credent.credentShow = true
+    }
   },
 };
 </script>
