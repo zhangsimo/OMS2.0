@@ -72,9 +72,9 @@
 
         </vxe-table-column>
       </vxe-table>
-      <div>
+      <div class="mt10">
         <span>备注:</span>
-        <Input v-model.trim="remark" type="text" show-word-limit maxlength="500" style="width: 925px;" />
+        <Input v-model.trim="remark" type="text" show-word-limit maxlength="500" style="width: 935px;" />
       </div>
       <div slot="footer">
         <Button type="primary" @click="confirm">确定</Button>
