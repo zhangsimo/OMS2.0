@@ -588,8 +588,8 @@ export default {
               })
             }
             this.formInline.accountType = this.formInline.accountType ? 1 : 0
-            this.saveDis=true
             if(ajaxBool){
+              this.saveDis=true
               let res = await getExpSve(this.formInline);
               msg();
               if (res.code == 0) {
