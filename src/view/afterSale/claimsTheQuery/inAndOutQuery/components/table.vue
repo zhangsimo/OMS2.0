@@ -81,12 +81,7 @@
         let res = await api.inAndOutLogQuery(params,this.body);
         if (res.code == 0 && res.data != null) {
           this.tableData = (res.data.content || []).map(el=>{
-            //单据类型  1 理赔出库 1；2 理赔入库
-            switch (el.recordType) {
-              case "1":el.recordTypeStatus="理赔出库";break;
-              case "2":el.recordTypeStatus="理赔入库";break;
-              default: "1";
-            }
+            el.recordTypeStatus = el.recordType.name;
             return el;
           })
           // this.total = res.data.purchaseOrderBean

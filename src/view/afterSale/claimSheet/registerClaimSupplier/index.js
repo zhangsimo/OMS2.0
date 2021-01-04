@@ -670,14 +670,7 @@ export default {
         let res = await api.registerPartsProcesLog(data)
         if (res.code === 0) {
           this.logData = (res.data || []).map(el => {
-            switch (el.recordType) {
-              case "1":
-                el.recordTypeStatus = "理赔出库";
-                break;
-              case "2":
-                el.recordTypeStatus = "理赔入库";
-                break;
-            }
+            el.recordTypeStatus = el.recordType.name;
             return el;
           });
           this.logDataLoading = false;
