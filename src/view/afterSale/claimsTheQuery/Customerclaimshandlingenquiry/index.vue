@@ -117,7 +117,7 @@
       :data="claimSupplierData"
       size="mini"
       ref="xTable"
-      
+        height="400"
       class="mt20"
       >
         <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>

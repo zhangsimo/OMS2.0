@@ -61,17 +61,17 @@
               </div>
             </th>
           </tr>
-          <tr style="text-align: left;line-height: 12px;">
+           <tr style="text-align: left;line-height: 12px;">
             <th
               style="width:5%;padding: 2px 0;font-size: 12px; font-weight: 400;border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               序号
             </th>
             <th
-              style="width:20%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width:25%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               配件内码
             </th>
             <th
-              style="width:20%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width:25%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000;borer-left:2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               配件编码
             </th>
             <th
@@ -79,25 +79,26 @@
               配件名称
             </th>
             <th
-              style="width: 9%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width:10%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               品牌
             </th>
             <th
-              style="width: 10%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width: 15%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               品牌车型
             </th>
             <th
-              style="width: 7%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width: 10%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               规格
             </th>
             <th
-              style="width: 4%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width: 13%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
               单位
             </th>
             <th
-              style="width: 5%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-right: 1px solid #000;border-bottom:1px solid #000;">
+              style="width: 5%;padding: 2px 0;font-size: 12px;font-weight: 400; border-top: 2px solid #000; text-align: left;border-bottom:1px solid #000;">
               数量
             </th>
+          
           </tr>
           </thead>
           <tbody style="text-align: left;">
@@ -141,38 +142,38 @@
                 {{item.unit}}
               </div>
             </td>
-            <td style="border-bottom: 1px solid #000; text-align: left;border-right: 1px solid #000;padding: 2px 0;">
+            <td style="border-bottom: 1px solid #000; text-align: left;padding: 2px 0;">
               <div style="font-size: 12px;overflow: hidden;word-break:break-all;line-height: 12px;height: 12px">
                 {{item.afterSaleQty}}
               </div>
             </td>
+          
           </tr>
-          <tr style="font-size: 12px;line-height: 12px;">
+         <tr style="font-size: 12px;line-height: 12px;">
+            <td colspan="8"></td>
             <td colspan="2" style="padding: 0 2px;">
-              <span class="he">合计: </span>
-              <span class="ji">{{onelist.afterSaleQty}}</span>
+              <span>合计: </span>
+              <span>{{ onelist.afterSaleQty }}</span>
             </td>
           </tr>
           <tr style="font-size: 12px;line-height: 12px;">
-            <td colspan="3"
-                style="padding: 2px;margin-top: 0;border: 1px #000000 solid;border: 1px #000000 solid;border-left: none;">
+            <td colspan="2"
+                style="padding: 4px;margin-top: 0;border: 1px #000000 solid;border-left: none;">
               <span>制单人:</span>
               <span>{{ onelist.createUname }}</span>
             </td>
-            <td colspan="3"
-                style="padding: 2px;margin-top: 0;border: 1px #000000 solid;border: 1px #000000 solid;border-left: none;">
+            <td colspan="2"
+                style="padding: 4px;margin-top: 0;border: 1px #000000 solid;border-left: none;">
               <span>提交人:</span>
               <span>{{ onelist.orderMan }}</span>
             </td>
             <td colspan="3"
-                style="padding: 2px;margin-top: 0;border: 1px #000000 solid;border: 1px #000000 solid;border-left: none;">
+                style="padding: 4px;margin-top: 0;border: 1px #000000 solid;border-left: none;">
               <span>送货人:</span>
-              <span></span>
             </td>
-            <td colspan="3"
-                style="padding: 2px;margin-top: 0;;border: 1px #000000 solid;border-left: none;border-right: none;">
+            <td colspan="5"
+                style="padding: 4px;margin-top: 0;;border: 1px #000000 solid;border-left: none;border-right: none;">
               <span>收货人:</span>
-              <span></span>
             </td>
           </tr>
           <tr>
