@@ -593,9 +593,12 @@
 
 export default {
   name: "accountings",
-  components: {},
+  components: {
+    CredentChange
+  },
   data() {
     return {
+      resOBj: {},
       // 数据类
       oneList: [], // 表格选中
       status: 0, // 当前tabs 0未审核， 1已审核
