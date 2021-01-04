@@ -39,8 +39,8 @@
       </Select> -->
       <span class="ml5">理赔单号：</span>
       <Input
-        v-model.trim="search.serviceId"
-        placeholder="请输入理赔单位"
+        v-model.trim="search.claimsCode"
+        placeholder="请输入理赔单号"
         style="width: 200px"
         clearable
       />
@@ -117,7 +117,7 @@
       :data="claimSupplierData"
       size="mini"
       ref="xTable"
-      
+        height="400"
       class="mt20"
       >
         <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>

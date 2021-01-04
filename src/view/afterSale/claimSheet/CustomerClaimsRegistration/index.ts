@@ -104,8 +104,10 @@ export default class Customs extends Vue {
   private validRules:any= {
     afterSaleQty: [{required: true, validator: this.changeNumber}]
   }
-  //--------左边的table
-  //记录左边点击的数据
+  //提交内容不能为空
+  private yuan:boolean=true
+  //--------左边的table 
+  //记录左边点击的数据 
   //选中的行
   private bcflag: boolean = false
   private row: any = {
@@ -218,11 +220,7 @@ export default class Customs extends Vue {
           return el;
         });
         this.$set(this.Left.page, "total", res.data.totalElements)
-
-
-        // // hideLoading()
-        // let hg = this.filters(this.tableList);
-
+        
          let row:any = null
         // if (hg !== undefined) {
         //   row = hg
@@ -341,7 +339,10 @@ export default class Customs extends Vue {
   //理赔原因
   private afterSaleReasonChange(row) {
     if (row.afterSaleReason == "") {
+      this.yuan=false
       return this.$Message.error("理赔原因必填")
+    }else{
+      this.yuan=true
     }
   }
   //快速查询
@@ -371,6 +372,7 @@ export default class Customs extends Vue {
 
   //新增
   private add() {
+    this.form.units = ""
     this.peiflag=true
     this.tjflag = false
     this.bcflag = true
@@ -393,13 +395,11 @@ export default class Customs extends Vue {
   this.mainId=""
    // this.row.orderSignStatus = "草稿"
      this.flag = true;
-
-    this.form.serviceId = ""
     this.form.guestId = ""
     this.form.afterSaleDate = moment(new Date()).format("YYYY-MM-DD")
     this.form.moblenumber = ""
     this.form.remark = ""
-    this.form.units = ""
+    
     this.form.serviceId = ""
     let item: any = {
       code: "2",
@@ -424,13 +424,27 @@ export default class Customs extends Vue {
       return this.$Message.error("请添加明细");
     }
     let hh = this.details.every((item, i) => {
+     // console.log(item.afterSaleReason)
       return item.afterSaleReason != null
     })
+    
     let ge = this.details.every((item, i) => {
-      return item.afterSaleQty != 0||item.afterSaleQty<0 && item.afterSaleQty != null
+      return item.afterSaleQty != 0&& item.afterSaleQty != null
     })
-    if (!ge) { return this.$Message.info("理赔数量不能为0") }
-    if (!hh) { return this.$Message.info("请填写理赔原因") }
+    if (!ge) {
+       return this.$Message.info("理赔数量不能为0") 
+      }
+    if (!hh) {
+       return this.$Message.info("请填写理赔原因")
+       }
+    if(!this.yuan){
+       return this.$Message.info("请填写理赔原因")
+    }
+    // this.details.forEach((ele)=>{
+    //   if(!ele.afterSaleReason){
+    //    
+    //   }
+    // })
     Object.assign(this.Leftcurrentrow, this.form)
 
     this.Leftcurrentrow.details = this.details
@@ -439,8 +453,10 @@ export default class Customs extends Vue {
       : "";
     let res: any = await all.submitSale(this.Leftcurrentrow);
     if (res.code == 0) {
+      
       this.getLeftLists()
       // this.$refs.xTable.setCurrentRow(this.highlight);
+      this.yuan=true
       this.flag = false
       this.$Message.success("提交成功");
       this.bcflag = false
@@ -473,28 +489,41 @@ export default class Customs extends Vue {
   //上传成功
   private onSuccess(response) {
     if (response.code == 0) {
-      if (response.data.list && response.data.list.length > 0) {
-        this.warning(response.data.list[0]);
+      if (response.data && response.data.length > 0) {
+        this.warning(response.data);
       }
-      //this.getLeftLists();
-      // this.formPlan = {
-      //   code: ""
-      // };
-      this.$Message.success("导入成功");
-      this.getLeftLists()
+      this.getLeftLists();
+     // this.formPlan.partOrCustomerOnly = 1;
+      this.formPlan = {
+       // code: ""
+      };
+      this.$Message.success("保存成功");
     } else {
       this.$Message.error("上传失败");
     }
   }
   private beforeUpload() {
-    this.$refs.upload.clearFiles();
+   // this.$refs.upload.clearFiles();
   }
   private beforeUploadInnerId() { }
-  private onFormatError() { }
+  private onFormatError() { 
+    this.$Message.error("只支持xls xlsx后缀的文件");
+  }
   private warning(nodesc) {
+    let str = ""
+    if (nodesc.length > 0) {
+      nodesc.map((item, index) => {
+        if (index != nodesc.length - 1) {
+          str += `${item}<br/>`;
+        } else {
+          str += `${item}`;
+        }
+      })
+    }
     this.$Notice.warning({
-      title: "上传错误信息",
-      desc: nodesc
+      title: '上传错误信息',
+      desc: `<div style="height:300px;overflow-y: scroll;">${str}</div>`,
+      duration: 0
     });
   }
   //按照配件内码导入
@@ -507,10 +536,11 @@ export default class Customs extends Vue {
 
   }
   private getSupplierNamea(val) {
-//   console.log(val)
-    this.chaId= val.id
+   ///console.log(val) 
     this.$set(this.form, 'guestId', val.id)
-    this.$set(this.form, 'units', val.fullName)
+     this.$set(this.form, 'units', val.fullName) 
+    this.chaId= val.id;
+   
   }
   private  rightList:any= [] //右侧点击数据
   private tmpDeletePartArr:any=[]//暂时存储删除配件
@@ -688,8 +718,8 @@ export default class Customs extends Vue {
       this.bjFlag = false
       this.peiflag=false
       this.$Message.success("保存成功");
-      this.form = {
-      }
+    
+      this.Left.page.num = 1;
        this.getLeftLists()
     }else{
       hideLoading()
@@ -777,7 +807,7 @@ export default class Customs extends Vue {
     this.form.afterSaleDate = moment(data.row.afterSaleDate).format("YYYY-MM-DD");
     this.form.remark=data.row.remark
     data.row.manualCode ? this.form.moblenumber = data.row.manualCode : this.form.moblenumber = "";
-    data.row.manualCode ? this.form.moblenumber = data.row.manualCode : this.form.moblenumber = ""
+   
     this.form.units = data.row.guestName
 
     this.details = data.row.details
@@ -859,10 +889,10 @@ export default class Customs extends Vue {
 
   }
   mounted() {
-
+  this.getLeftLists()
   }
   created(){
-     this.getLeftLists()
+     
   }
 
 }

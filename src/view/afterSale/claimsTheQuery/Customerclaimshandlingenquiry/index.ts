@@ -22,7 +22,9 @@ export default class Custom extends Vue {
     partCode: "",
     partBrand: "",
     orderSign: 99,
-    orderUnit:""
+    orderUnit:"",
+    claimsCode:''
+
   }//搜索条件
   //品牌数组
   private brandArr: Array<any> = new Array<any>();//品牌数组
@@ -49,7 +51,6 @@ export default class Custom extends Vue {
     handleType:99,
     guestType:99,
     orderMan:"",
-    serviceId:"",
     returnCode:""
   }//更多查询
   private moreModel:boolean=false;
@@ -90,6 +91,7 @@ export default class Custom extends Vue {
   }
   //查询
   private query(){
+    this.page.num = 1;
    // alert(2)
         this.getList()
   }

@@ -202,7 +202,7 @@
                         max-width="140"
                       >
                       <sales-cus style="width:130px; display: inline-block"
-                         :disabled-prop="flag == false || row.manualCode" :title="form.units"
+                         :disabled-prop="flag == false || row.manualCode!=null" :title="form.units"
                          placeholder="请输入客户" :search-value="form.units" @throwName="throwNameFun"></sales-cus>
         
                       </Tooltip>
@@ -211,7 +211,7 @@
                       class="ml5 btn1"
                       size="small"
                       type="default"
-                      :disabled="flag == false || row.manualCode"
+                      :disabled="flag == false || row.manualCode!=null"
                       @click="addSuppler"
                     >
                       <Icon type="md-checkmark" />
@@ -224,7 +224,7 @@
                         format="yyyy-MM-dd"
                         type="date"
                         class="w160"
-                        :disabled="flag == false || row.manualCode"
+                        :disabled="flag == false || row.manualCode!=null"
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：">
@@ -282,7 +282,7 @@
                         class="mr10"
                         @click="changep"
                         v-has="'addpj'"
-                        :disabled="flag == false || row.manualCode"
+                        :disabled="flag == false || row.manualCode!=null"
                       >
                         添加配件
                       </Button>
@@ -302,14 +302,14 @@
                             :format="['xlsx', 'xls']"
                             :on-format-error="onFormatError"
                             :on-success="onSuccess"
-                            :before-upload="beforeUploadInnerId"
+                            :before-upload="beforeUpload"
                           >
                             <Button
                               size="small"
                               v-has="'Import'"
                               :disabled="
                                 row.orderSign !=0||
-                                row.manualCode ||
+                                row.manualCode!=null ||
                                 peiflag == true
                               "
                               @click="getRUlInnerId"
@@ -339,7 +339,7 @@
                         class="mr10"
                         v-has="'del'"
                         @click="shanchu"
-                        :disabled="row.manualCode||row.orderSign!=0"
+                        :disabled="row.manualCode!=null||row.orderSign!=0"
                       >
                         删除配件
                       </Button>
@@ -364,7 +364,7 @@
                  @select-cancel="selectSameList"
                 
                   @current-change="logDataMethod"
-                  :height="rightTableHeight"
+                 height="300"
                   :data="details"
                   :edit-config="{trigger: 'click', mode: 'cell',method:updateFooterEvent}"
                 >
@@ -403,23 +403,24 @@
                     title="品牌"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column field="afterSaleQty" title="理赔数量" width="100" min-width="100"
-                    :edit-render="{ name: 'input',autoselect: true , attrs: { disabled: false } }"
-                 
-                  >
-                  <!-- <template v-slot="{ row }">
-                    <vxe-input
-                      type="integer"
-                     :min="1"
-                     :max="1000"
+                  <vxe-table-column
+                  show-overflow="tooltip"
+                  field="afterSaleQty"
+                  title="理赔数量"
+                  :edit-render="{ name: 'input',autoselect: true}"
+                  width="160"
+                  size="mini"
+                >
+                  <template v-slot:edit="{ row }">
+                    <el-input-number
+                      :max="9999"
+                      :min="1"
                       v-model="row.afterSaleQty"
+                      :controls="false"
+                      size="small"
                       :precision="0"
-                     :disabled="form.moblenumber != ''"
-                      @change="afterSaleQtyChange(row)"
-                      size="mini"
-                     
                     />
-                  </template> -->
+                  </template>
                 </vxe-table-column>
                   <vxe-table-column
                     show-overflow="tooltip"
