@@ -579,17 +579,29 @@ export default {
               content: '处理中...',
               duration: 0
             });
+            let ajaxBool=true;
+            if(type){
+              this.formInline.expenseDetails.map(el=>{
+                if(!el.summary||!el.accountEntry||!el.totalAmt){
+                  ajaxBool=false;
+                }
+              })
+            }
             this.formInline.accountType = this.formInline.accountType ? 1 : 0
             this.saveDis=true
-            let res = await getExpSve(this.formInline);
-            msg();
-            if (res.code == 0) {
-              this.saveDis=false;
-              this.$Message.success("操作成功");
-              this.model = false;
-              this.$emit("updateD")
+            if(ajaxBool){
+              let res = await getExpSve(this.formInline);
+              msg();
+              if (res.code == 0) {
+                this.saveDis=false;
+                this.$Message.success("操作成功");
+                this.model = false;
+                this.$emit("updateD")
+              }else{
+                this.saveDis=false;
+              }
             }else{
-              this.saveDis=false;
+              return this.$message.error("费用支出明细输入不正确")
             }
           }
         } else {

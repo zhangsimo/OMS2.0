@@ -17,7 +17,7 @@
       size="mini"
       ref="xTable"
       show-overflow="title"
-      class="mt20"
+      class="mt10"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'cell'}"
       @checkbox-all="claimSupplierSel"
