@@ -579,16 +579,16 @@ export default {
               content: '处理中...',
               duration: 0
             });
-            let ajaxBool=true;
+            let ajaxBool=false;
             if(type){
               this.formInline.expenseDetails.map(el=>{
                 if(!el.summary||!el.accountEntry||!el.totalAmt){
-                  ajaxBool=false;
+                  ajaxBool=true;
                 }
               })
             }
             this.formInline.accountType = this.formInline.accountType ? 1 : 0
-            if(ajaxBool){
+            if(!ajaxBool){
               this.saveDis=true
               let res = await getExpSve(this.formInline);
               msg();
