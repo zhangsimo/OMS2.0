@@ -3,10 +3,6 @@
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
       <div class="flex-jb mb20">
         <Button class="fl" @click="openPClaimModal">选择单据</Button>
-        <div>
-          <span class="mr10">备注:</span>
-          <Input v-model.trim="remark" type="text" show-word-limit maxlength="500" class="w200" />
-        </div>
       </div>
 
       <vxe-table
@@ -56,7 +52,10 @@
         <vxe-table-column title="未认领金额" width="100" field="unClaimedAmt" show-overflow="tooltip"></vxe-table-column>
         <vxe-table-column title="智能匹配往来单位" width="180" field="suppliers" show-overflow="tooltip"></vxe-table-column>
       </vxe-table>
-
+      <div class="mt10">
+        <span class="mr10">备注:</span>
+        <Input v-model.trim="remark" type="text" show-word-limit maxlength="500" style="width: 925px;" />
+      </div>
       <div slot="footer">
         <Button type="primary" @click="confirm">确定</Button>
         <Button @click="close">取消</Button>
@@ -134,6 +133,7 @@
       //弹框打开
       open() {
         this.tableData = []
+        this.remark="";
         this.visibal = true;
         setTimeout(()=>{
           let params={

@@ -3,10 +3,6 @@
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
       <div class="mb20 flex-jb">
         <Button class="mr10" @click="openPClaimModal">选择单据</Button>
-        <div>
-          <span>备注:</span>
-          <Input v-model.trim="remark" type="text" show-word-limit maxlength="500" class="w200" />
-        </div>
         <div class="fr" v-show="titleName!='预收款支出认领'">
           <span style="color: red" class="mr5">*</span>
           <span>选择辅助核算：</span>
@@ -76,7 +72,10 @@
 
         </vxe-table-column>
       </vxe-table>
-
+      <div>
+        <span>备注:</span>
+        <Input v-model.trim="remark" type="text" show-word-limit maxlength="500" style="width: 925px;" />
+      </div>
       <div slot="footer">
         <Button type="primary" @click="confirm">确定</Button>
         <Button @click="close">取消</Button>
@@ -163,6 +162,7 @@ export default {
       this.$refs.voucherInput.Classification = 0
       this.voucherItem = {} //打开时清空上次选中的辅助核算数据
       this.calculation = '' //打开时清空上次辅助核算名称
+      this.remark="";
       this.visibal = true
       if(this.titleName!='预收款认领'){
         wirteAccount({accountNo:this.$parent.serviceId,sign:3}).then(res=>{
