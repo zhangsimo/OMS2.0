@@ -372,6 +372,7 @@ export default class Customs extends Vue {
 
   //新增
   private add() {
+    this.form.units = ""
     this.peiflag=true
     this.tjflag = false
     this.bcflag = true
@@ -394,13 +395,11 @@ export default class Customs extends Vue {
   this.mainId=""
    // this.row.orderSignStatus = "草稿"
      this.flag = true;
-
-    this.form.serviceId = ""
     this.form.guestId = ""
     this.form.afterSaleDate = moment(new Date()).format("YYYY-MM-DD")
     this.form.moblenumber = ""
     this.form.remark = ""
-    this.form.units = ""
+    
     this.form.serviceId = ""
     let item: any = {
       code: "2",
@@ -454,6 +453,7 @@ export default class Customs extends Vue {
       : "";
     let res: any = await all.submitSale(this.Leftcurrentrow);
     if (res.code == 0) {
+      
       this.getLeftLists()
       // this.$refs.xTable.setCurrentRow(this.highlight);
       this.yuan=true
@@ -536,10 +536,11 @@ export default class Customs extends Vue {
 
   }
   private getSupplierNamea(val) {
-//   console.log(val)
-    this.chaId= val.id
+   ///console.log(val) 
     this.$set(this.form, 'guestId', val.id)
-    this.$set(this.form, 'units', val.fullName)
+     this.$set(this.form, 'units', val.fullName) 
+    this.chaId= val.id;
+   
   }
   private  rightList:any= [] //右侧点击数据
   private tmpDeletePartArr:any=[]//暂时存储删除配件
@@ -717,8 +718,8 @@ export default class Customs extends Vue {
       this.bjFlag = false
       this.peiflag=false
       this.$Message.success("保存成功");
-      this.form = {
-      }
+    
+      this.Left.page.num = 1;
        this.getLeftLists()
     }else{
       hideLoading()

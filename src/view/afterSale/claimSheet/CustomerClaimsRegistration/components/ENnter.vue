@@ -61,8 +61,12 @@
         hoverIndex:0,
       }
     },
+    created(){
+     
+       
+    },
     mounted(){
-      this.isLayerValue = this.searchValue||"";
+     this.isLayerValue = this.searchValue||"";
       document.addEventListener("click",this.clickDom)
     },
     methods:{

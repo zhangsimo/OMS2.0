@@ -44,8 +44,9 @@ export default class Custom extends Vue {
         {value: 2, name: "已完成"}
       ]
     
-    private select1() {
-
+    private select1(e) {
+      ///this.search.partBrand=e.value
+       
     }
     
     //分页
@@ -63,7 +64,9 @@ export default class Custom extends Vue {
     }
     private getDataType1(e) {
     //  console.log(e)  
+    this.page.num = 1;
       this.$set(this.search,"orderSign",e)
+
       this.getList()
        
     }
@@ -85,8 +88,8 @@ export default class Custom extends Vue {
         showLoading()
         let res:any=await all.getdjQuery(params,this.body)
         if(res.code===0){
-         
-          this.claimSupplierData=(res.data.content || []).map(el=>{
+         if(res.data.content.length>0){
+           this.claimSupplierData=res.data.content.map(el=>{
             switch (el.orderSign) {
               case 0:
                 el.orderSign = "草稿";
@@ -102,10 +105,17 @@ export default class Custom extends Vue {
           });
           this.page.total=res.data.totalElements
           hideLoading()
+         }else{
+          this.claimSupplierData=[]
+          this.page.total=0;
+          hideLoading()
+         }
+          
         }
       }
     //查询 
     private query(){
+      this.page.num=1
       this.getList()
     }
     private getdata() {
