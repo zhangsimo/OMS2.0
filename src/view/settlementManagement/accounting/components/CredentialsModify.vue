@@ -711,7 +711,7 @@ import { hideLoading, showLoading } from '@/utils/loading';
     components: {
       addOutStaff
     },
-    props: ['vercherId'],
+    props: ['vercherId','resultObj'],
     data() {
       const subjectNameValid = ({row, cellValue}) => {
         return new Promise((resolve, reject) => {
@@ -732,10 +732,7 @@ import { hideLoading, showLoading } from '@/utils/loading';
         });
       };
       const debitAmountValid = (rule, value, callback, column) => {
-        // console.log(column.row)
-        // console.log(value)
         if (value == column.row.lenderAmount) {
-          // console.log(value);
           callback();
         } else {
           callback(new Error("借方金额要等于贷方金额"));
@@ -743,7 +740,6 @@ import { hideLoading, showLoading } from '@/utils/loading';
       };
       const lenderAmountValid = (rule, value, callback, column) => {
         if (value == column.row.debitAmount) {
-          // console.log(value);
           callback();
         } else {
           callback(new Error("借方金额要等于贷方金额"));
@@ -913,7 +909,7 @@ import { hideLoading, showLoading } from '@/utils/loading';
     methods: {
       showOrHide(v){
         if(v){
-          this.getList()
+          this.getList(this.resultObj)
         }
       },
       //业务日期改变=》年月改变
@@ -946,7 +942,6 @@ import { hideLoading, showLoading } from '@/utils/loading';
       // 上传成功
       handleSuccess(res, file, fileList) {
         if (res.code == 0) {
-          // console.log(res)
           this.FileName = "";
           if (fileList.length > 5) {
             fileList.shift();
@@ -956,7 +951,6 @@ import { hideLoading, showLoading } from '@/utils/loading';
               this.FileName += item.fileName + ",";
             });
           } else {
-            // console.log(this.FileListArr, 879)
             this.FileListArr.push(res.data);
             this.FileListArr.map(item => {
               item.filePath = api.getfile + item.url;
@@ -967,9 +961,7 @@ import { hideLoading, showLoading } from '@/utils/loading';
       },
       //移除时
       RemoveFile(file, fileList) {
-        // console.log(file,"移除");
         this.FileListArr = fileList;
-        // console.log(this.FileListArr);
       },
       //超过3M时提示
       BigVerify() {
@@ -1227,7 +1219,6 @@ import { hideLoading, showLoading } from '@/utils/loading';
       },
       //单选表格内数据
       selectOne(row) {
-        // console.log(row);
       },
       //新增行
       async insertEventLast(row) {
@@ -1300,7 +1291,6 @@ import { hideLoading, showLoading } from '@/utils/loading';
         this.accountingGetListQuanYi();
         this.accountingGetListChengBen();
         this.accountingGetListSunYi();
-        // console.log(this.oneAccountent)
         // this.formDynamic.fund = this.oneAccountent.paymentTypeCode
         document.addEventListener('keydown', this.addKey, false)
       },
@@ -1364,7 +1354,6 @@ import { hideLoading, showLoading } from '@/utils/loading';
           this.groundIds = [];
           this.AssistTableDataGeRen = [];
         } else {
-          // console.log(this.oneAccountent.subjectCode);
           this.$Message.error("请先选择会计科目！");
           this.subjectModelShowassist = false;
         }
@@ -1576,7 +1565,6 @@ import { hideLoading, showLoading } from '@/utils/loading';
         let params = {};
         params.dictCode = "CW00131";
         kmType(params).then(res => {
-          // console.log(res.data)
           this.fundList = res.data;
         });
       },
@@ -1610,7 +1598,6 @@ import { hideLoading, showLoading } from '@/utils/loading';
       },
       //点击单选框获取会计科目负债
       radioChangeEventLiabilities({row}) {
-        console.log(row)
         this.currentAccounting = row;
         this.accountingSubject = row.titleCode + " - " + row.fullTitle;
         this.balanceDirection = row.balanceDirection;
@@ -1659,21 +1646,18 @@ import { hideLoading, showLoading } from '@/utils/loading';
         this.AssistAccounting = row.fullName;
         this.auxiliaryTypeCode = "1";
         this.auxiliaryCode = row.code;
-        // console.log(row,row.code,this.auxiliaryTypeCode)
       },
       //点击单选框获取辅助核算供应商
       radioChangeEventSupplier({row}) {
         this.AssistAccounting = row.fullName;
         this.auxiliaryTypeCode = "1";
         this.auxiliaryCode = row.code;
-        // console.log(row)
       },
       //点击单选框获取辅助核算个人
       radioChangeEventPersonage({row}) {
         this.AssistAccounting = row.userName;
         this.auxiliaryTypeCode = "4";
         this.auxiliaryCode = row.id;
-        // console.log(row,this.auxiliaryTypeCode)
       },
       //点击单选框获取辅助核算其他
       radioChangeEventOther({row}) {
@@ -1731,7 +1715,6 @@ import { hideLoading, showLoading } from '@/utils/loading';
           this.$message.error("请选择会计科目");
           this.subjectModelShow = true;
         } else {
-          // console.log(this.accountingSubject)
           this.oneAccountent.subjectName = this.accountingSubject;
           this.oneAccountent.subjectCode = this.subjectCode;
           this.oneAccountent.rootCode = this.rootCode;
@@ -1830,44 +1813,37 @@ import { hideLoading, showLoading } from '@/utils/loading';
         });
       },
       //修改刷新列表
-      getList() {
-        let params = {};
-        params.id = this.vercherId[0].financeVoucherId;
-        findById(params).then(res => {
-          if (res.code === 0) {
-            this.ID = res.data.id;
-            this.formPlan.INS = res.data.voucherCode;
-            this.formPlan.BusinessDate = tools.transTime(res.data.businessDate);
-            this.formPlan.voucherTime = tools.transTime(res.data.voucherTime)
-            this.formPlan.period =
-              res.data.fiscalYear + "-" + res.data.fiscalMonth;
-            this.formPlan.ji = res.data.voucherInternalCode;
-            this.formPlan.perioda = res.data.voucherNo;
-            this.formPlan.businessNumber = res.data.originNo;
-            this.formPlan.StatementNumber = res.data.settlementNumber;
-            this.formPlan.businessType = res.data.businessTypeNo;
-            this.formPlan.remark = res.data.remark;
-            this.FileListArr = res.data.fileJson ? res.data.fileJson : []
-            res.data.detailVOS.map(item => {
-              if (item.paymentTypeCode) {
-                let same = this.fundList.filter(
-                  el => el.itemCode == item.paymentTypeCode
-                );
-                if(same[0]){
-                  item.paymentTypeCode = same[0].itemName;
-                }
-              }
-              if(item.subjectName){
-                item.subjectName = item.subjectCode + ' - ' + item.subjectName
-              }
-            });
-            this.tableData = res.data.detailVOS;
+      getList(res) {
+        this.ID = res.data.id;
+        this.formPlan.INS = res.data.voucherCode;
+        this.formPlan.BusinessDate = tools.transTime(res.data.businessDate);
+        this.formPlan.voucherTime = tools.transTime(res.data.voucherTime)
+        this.formPlan.period =
+          res.data.fiscalYear + "-" + res.data.fiscalMonth;
+        this.formPlan.ji = res.data.voucherInternalCode;
+        this.formPlan.perioda = res.data.voucherNo;
+        this.formPlan.businessNumber = res.data.originNo;
+        this.formPlan.StatementNumber = res.data.settlementNumber;
+        this.formPlan.businessType = res.data.businessTypeNo;
+        this.formPlan.remark = res.data.remark;
+        this.FileListArr = res.data.fileJson ? res.data.fileJson : []
+        res.data.detailVOS.map(item => {
+          if (item.paymentTypeCode) {
+            let same = this.fundList.filter(
+              el => el.itemCode == item.paymentTypeCode
+            );
+            if(same[0]){
+              item.paymentTypeCode = same[0].itemName;
+            }
+          }
+          if(item.subjectName){
+            item.subjectName = item.subjectCode + ' - ' + item.subjectName
           }
         });
+        this.tableData = res.data.detailVOS;
       },
       //部门改变
       ListChange(val, selectedData) {
-        // console.log(selectedData)
         if (selectedData.length == 1) {
           this.AssistAccounting = selectedData[0].label;
           this.departmentVal = selectedData[0].value;
@@ -1880,8 +1856,6 @@ import { hideLoading, showLoading } from '@/utils/loading';
       },
       //改变业务类型
       BusinessTypeC(value) {
-        // console.log(value);
-        // console.log(this.formPlan.businessTypes)
       },
       //其他新增
       ShowOtherAdd() {
