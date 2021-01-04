@@ -104,8 +104,8 @@ export default class Customs extends Vue {
   private validRules:any= {
     afterSaleQty: [{required: true, validator: this.changeNumber}]
   }
-  //--------左边的table 
-  //记录左边点击的数据 
+  //--------左边的table
+  //记录左边点击的数据
   //选中的行
   private bcflag: boolean = false
   private row: any = {
@@ -182,7 +182,7 @@ export default class Customs extends Vue {
     moreData.moreData.orderUnit ? data.guestName = moreData.moreData.orderUnit : ""
     //配件内码
     moreData.moreData.partCode ? data.partInnerId = moreData.moreData.partCode : ""
-    //理赔单号 
+    //理赔单号
     moreData.moreData.serviceId ? data.serviceId = moreData.moreData.serviceId : ""
     //配件编码
     moreData.moreData.code ? data.partCode = moreData.moreData.code : ""
@@ -192,7 +192,7 @@ export default class Customs extends Vue {
     moreData.moreData.orderMan ? data.createUname = moreData.moreData.orderMan : ""
     //console.log(this.purchaseType)
     this.purchaseType == 99 ? data.orderSign = "" : data.orderSign = this.purchaseType
-  
+
      showLoading()
     let res: any = await all.getListSale(params, data);
     if (res.code == 0) {
@@ -218,11 +218,11 @@ export default class Customs extends Vue {
           return el;
         });
         this.$set(this.Left.page, "total", res.data.totalElements)
-        
-        
+
+
         // // hideLoading()
         // let hg = this.filters(this.tableList);
-      
+
          let row:any = null
         // if (hg !== undefined) {
         //   row = hg
@@ -231,7 +231,7 @@ export default class Customs extends Vue {
       //  }
         this.details=row.details
         this.$refs.xTable.setCurrentRow(row);
-       
+
         //给表单赋值
         this.format(this.tableList[0])
       } else {
@@ -242,8 +242,8 @@ export default class Customs extends Vue {
     }
   }
   //给表单赋值
-  private format(data) { 
-   
+  private format(data) {
+
     this.row = data;
     this.mainId = data.id
     this.chaId=data.guestId
@@ -252,12 +252,12 @@ export default class Customs extends Vue {
     this.form.guestId = data.guestId
     this.form.afterSaleDate = moment(data.afterSaleDate).format("YYYY-MM-DD")
      data.manualCode ? this.form.moblenumber = data.manualCode : this.form.moblenumber = "";
-  
+
     this.form.remark = data.remark
     this.form.units = data.guestName
     this.form.serviceId = data.serviceId
     this.highlight = data
-   
+
    // console.log(data.id)
     //this.mainId=data.guestId
     this.relevanceList = data;
@@ -268,7 +268,7 @@ export default class Customs extends Vue {
     if (data.orderSign ==0) {
         this.flag = true;
         this.bcflag = true
-        this.tjflag = true 
+        this.tjflag = true
     }
   }
   //左边表格数据
@@ -287,7 +287,7 @@ export default class Customs extends Vue {
     params.size = this.Left.page.size;
      // showLoading()
     let res: any = await all.getListSale(params, data);
-    if (res.code === 0) {  
+    if (res.code === 0) {
       //  hideLoading()
       if (res.data.content && res.data.content.length > 0) {
         this.tableList = res.data.content.map(el => {
@@ -308,17 +308,17 @@ export default class Customs extends Vue {
               break;
           }
           return el;
-        }); 
-       
+        });
+
         this.$set(this.Left.page, "total", res.data.totalElements)
-      
+
         let hg = this.filters(this.tableList);
         //console.log(hg)
         let row:any = null
         if (hg !== undefined) {
           row = hg
         } else {
-          
+
           row = this.tableList[0]
         }
         this.details=row.details
@@ -333,12 +333,12 @@ export default class Customs extends Vue {
         this.tableList = []
         this.details = []
         this.$set(this.Left.page, "total", 0)
-       
-      } 
-      
+
+      }
+
     }
   }
-  //理赔原因 
+  //理赔原因
   private afterSaleReasonChange(row) {
     if (row.afterSaleReason == "") {
       return this.$Message.error("理赔原因必填")
@@ -367,8 +367,8 @@ export default class Customs extends Vue {
     console.log(v)
       this.getSupplierNamea(v);
     }
-    
-  
+
+
   //新增
   private add() {
     this.peiflag=true
@@ -393,7 +393,7 @@ export default class Customs extends Vue {
   this.mainId=""
    // this.row.orderSignStatus = "草稿"
      this.flag = true;
-   
+
     this.form.serviceId = ""
     this.form.guestId = ""
     this.form.afterSaleDate = moment(new Date()).format("YYYY-MM-DD")
@@ -556,7 +556,7 @@ export default class Customs extends Vue {
         if (delOk && delOk2) {
           this.$Message.success("删除成功");
           if (isNetWork) {
-           
+
             this.getLeftLists()
           }
         }
@@ -572,9 +572,9 @@ export default class Customs extends Vue {
   }
   private afterSaleQtyChange(row) {
    // console.log(row.afterSaleQty)
-   
+
       row.untreatedQty = row.afterSaleQty
-    
+
      this.updateFooterEvent()
   }
   // 在值发生改变时更新表尾合计
@@ -604,7 +604,7 @@ export default class Customs extends Vue {
   }
   //理赔单位的对勾
   private addSuppler() {
-   
+
     this.$refs.selectSupplier.openModel();
   }
   //更多的弹框回调
@@ -625,7 +625,7 @@ export default class Customs extends Vue {
     data.id = this.chaId;
     this.$refs.child.$refs.form.resetFields()
     getCustomerDetails(data).then((res: any) => {
-  
+
       if (res.code == 0) {
         this.clientList = res.data;
         this.clientList.isNeedPack = this.clientList.isNeedPack == 1 ? true : false
@@ -640,30 +640,30 @@ export default class Customs extends Vue {
         this.nameChange = true;
         this.getLeftLists()
       }
-     
+
       this.clientDataShow = true;
     });
 
   }
-  private fun(func, delay) {            
-    　　var prev = Date.now();            
-    　　return function() {                
-    　　　//　var context = this;                
-    　　　　var args = arguments;                
-    　　　　var now = Date.now();                
-    　　　　if (now - prev >= delay) {                    
-    　　　　　　func();                    
-    　　　　　　prev = Date.now();                
-    　　　　}            
-    　　}        
-    }  
-     
+  private fun(func, delay) {
+    　　var prev = Date.now();
+    　　return function() {
+    　　　//　var context = this;
+    　　　　var args = arguments;
+    　　　　var now = Date.now();
+    　　　　if (now - prev >= delay) {
+    　　　　　　func();
+    　　　　　　prev = Date.now();
+    　　　　}
+    　　}
+    }
+
   //保存
   //配件禁用
 
   private peiflag=true
   private async baocun() {
-   
+
     if (!this.form.units || !this.form.afterSaleDate) {
       return this.$Message.error("*为必填项");
     }
@@ -679,23 +679,23 @@ export default class Customs extends Vue {
      // showLoading()
     let res: any = await all.saveSale(this.Leftcurrentrow);
     showLoading()
-    if (res.code == 0) { 
+    if (res.code == 0) {
       hideLoading()
       this.bcflag = false
       this.tjflag = true
-     
+
      // this.flag = false;
       this.bjFlag = false
       this.peiflag=false
       this.$Message.success("保存成功");
       this.form = {
-      } 
+      }
        this.getLeftLists()
     }else{
       hideLoading()
     }
   }
-  //------左边的table 
+  //------左边的table
   private changePage(v) {
     this.Left.page.num = v
     this.getLeftLists()
@@ -708,13 +708,13 @@ export default class Customs extends Vue {
   //添加配件
   private getPartNameList(val) {
     console.log(val)
-   
+
     let datas = [...val].map(el => {
       //el.orderQty = undefined;
       if(!el.afterSaleQty){
             el.afterSaleQty=1
       }
-  
+
       return el;
     });
     let arr: any = [];
@@ -728,10 +728,10 @@ export default class Customs extends Vue {
     arr.forEach(item => {
      // console.log(item)
       delete item.id;
-     
+
       this.details.unshift(item);
     });
-    
+
     //this.setFilterArr(this.Leftcurrentrow.details || [])
     if (arr.length != datas.length) {
       return this.$Message.info("配件已存在请勿重复添加");
@@ -770,7 +770,7 @@ export default class Customs extends Vue {
     if(!this.bjFlag){
        this.form.id = data.row.id
     }
-   
+
     this.mainId = data.row.id
     this.form.serviceId = data.row.serviceId
     this.form.guestId = data.row.guestId
@@ -812,11 +812,11 @@ export default class Customs extends Vue {
       );
     }
   }
-  
+
   //选中当前行
   private currentChangeEvent(e) {
     // this.clientList = e.row
-    
+
   }
   private logDataLoading: boolean = false
   //获取日志
@@ -824,8 +824,8 @@ export default class Customs extends Vue {
     this.logDataLoading = true;
     let data = {
       detailId: row.id
-     
-    } 
+
+    }
     if(!this.mainId){
        return
     }
@@ -835,17 +835,8 @@ export default class Customs extends Vue {
     }
     let res: any = await all.registerPartsProcesLog(data)
     if (res.code === 0) {
-      this.currentData = (res.data || []).map(el => { 
-      
-        switch (el.recordType) {
-        
-          case "1":
-            el.recordTypeStatus = "理赔出库";
-            break;
-          case "2":
-            el.recordTypeStatus = "理赔入库";
-            break;
-        }
+      this.currentData = (res.data || []).map(el => {
+        el.recordTypeStatus = el.recordType.name;
         return el;
       });
       this.logDataLoading = false;
@@ -862,13 +853,13 @@ export default class Customs extends Vue {
   //   }else{
   //      this.delArr.push(e.row)
   //   }
-   
+
   // }
   private keydownEvent() {
 
   }
   mounted() {
-  
+
   }
   created(){
      this.getLeftLists()
