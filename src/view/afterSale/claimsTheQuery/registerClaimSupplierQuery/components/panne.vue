@@ -1,5 +1,5 @@
 <template>
-  <section class="oper-top">
+  <section class="oper-top pb5">
     <div class="oper-top">
       <div class="oper-top flex">
         <div class="wlf">

@@ -151,15 +151,15 @@
                 </FormItem>
               </div>
               <div class="flex plan-cz-btn" ref="planBtn">
-                <div class="clearfix pt5 pb5">
-                  <div class="fl mb5">
+                <div class="clearfix">
+                  <div class="fl">
                     <Button size="small" class="mr10" @click="addMountings"
                             :disabled="formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==2 " v-has="'addParts'">
                       <Icon type="md-add"/>
                       添加配件
                     </Button>
                   </div>
-                  <div class="fl mb5">
+                  <div class="fl">
                     <Button
                       @click="delect"
                       size="small"
@@ -170,7 +170,7 @@
                       <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
                     </Button>
                   </div>
-                  <div class="fl mb5">
+                  <div class="fl">
                     <Upload
                       ref="upload"
                       style="display: inline-block"
@@ -187,12 +187,12 @@
                       </Button>
                     </Upload>
                   </div>
-                  <div class="fl mb5">
+                  <div class="fl">
                     <Button class="mr10" size="small" @click="downModal" v-has="'downTemplate'">
                       <span class="center"><Icon custom="iconfont iconxiazaiicon icons" />下载模板</span>
                     </Button>
                   </div>
-                  <div class="fl mb5">
+                  <div class="fl">
                     <Button type="default" @click="openCustomer" size="small" v-has="'selCustomClaimRegister'"
                             :disabled="formPlan.orderSign!=0 || formPlan.partOrCustomerOnly==1">
                       选择客户理赔登记单
@@ -349,8 +349,8 @@
   .headerBox {
     border-bottom: 1px #e0e0e0 solid;
     padding-left: 10px;
-    padding-bottom: 16px;
-    padding-top: 16px;
+    padding-bottom: 6px;
+    padding-top: 6px;
   }
 
   .demo-split {

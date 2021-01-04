@@ -8,7 +8,7 @@
       size="mini"
       ref="xTable"
       show-overflow="title"
-      class="mt20"
+      class="mt10"
     >
       <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
       <vxe-table-column field="shortName" title="分店名称" width="100"></vxe-table-column>
