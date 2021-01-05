@@ -188,7 +188,7 @@ export default {
         },
         {
           title: "数量",
-          key: "orderQty",
+          key: "qty",
           className: "tc"
         },
         {
@@ -212,12 +212,12 @@ export default {
         },
         {
           title: "开票税率",
-          key: "invoiceTax",
+          key: "taxRate",
           className: "tc"
         },
         {
           title: "出库单号",
-          key: "orderNo",
+          key: "outNo",
           className: "tc"
         },
         {
