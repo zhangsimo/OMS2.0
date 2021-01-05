@@ -78,6 +78,7 @@
           isPanne: true,
           auditDate: ToDayStr(), // 提交日期
           orgid:"",
+          direction:0,
           partCode:"",//配件编码/名称/内码
           createUname:"",//操作人
           afterSaleCode:""//单号
