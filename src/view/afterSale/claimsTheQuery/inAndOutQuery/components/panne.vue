@@ -70,14 +70,15 @@
         stores: [{id: 0, name: "全部"}], // 门店
         quickDates: [], // 快速日期查询
         directionList:[
-          {value:"0",label:"全部"},
-          {value:"1",label:"进"},
-          {value:"2",label:"出"}
+          {value:0,label:"全部"},
+          {value:1,label:"进"},
+          {value:2,label:"出"}
         ],
         search: {
           isPanne: true,
           auditDate: ToDayStr(), // 提交日期
           orgid:"",
+          direction:0,
           partCode:"",//配件编码/名称/内码
           createUname:"",//操作人
           afterSaleCode:""//单号
