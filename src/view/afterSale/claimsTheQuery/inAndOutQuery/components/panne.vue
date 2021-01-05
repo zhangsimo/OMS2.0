@@ -70,9 +70,9 @@
         stores: [{id: 0, name: "全部"}], // 门店
         quickDates: [], // 快速日期查询
         directionList:[
-          {value:"0",label:"全部"},
-          {value:"1",label:"进"},
-          {value:"2",label:"出"}
+          {value:0,label:"全部"},
+          {value:1,label:"进"},
+          {value:2,label:"出"}
         ],
         search: {
           isPanne: true,
