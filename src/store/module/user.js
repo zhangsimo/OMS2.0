@@ -90,7 +90,8 @@ export default {
         logout(state.token).then(() => {
           commit('setToken', '')
           commit('setAccess', [])
-          localStorage.removeItem('oms2-userList')
+          sessionStorage.clear()
+          localStorage.clear()
           setTagNavListInLocalstorage([])
           resolve()
         }).catch(err => {
