@@ -137,7 +137,7 @@
           </template>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column field="remarks" title="备注"></vxe-table-column>
+      <vxe-table-column field="remarks" show-overflow='title' title="备注"></vxe-table-column>
     </vxe-table>
   </div>
 </template>
