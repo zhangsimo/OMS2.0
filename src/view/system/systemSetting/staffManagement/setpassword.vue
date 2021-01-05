@@ -25,16 +25,18 @@
       let account = (rule, value, callback) => {
         if(!this.userShow){
           if (!value) {
-            callback(new Error("账号前缀只能输入长度大于2位的字母或数字"));
+            callback(new Error("账号前缀只能输入长度大于2位且小于20位的字母或数字"));
           } else {
-            const reg = /^[a-zA-Z0-9]{2,}$/
+            const reg = /^[a-zA-Z0-9]{2,20}$/
             if (reg.test(value)) {
               callback();
             } else {
-              callback(new Error("账号前缀只能输入长度大于2位的字母或数字"));
+              callback(new Error("账号前缀只能输入长度大于2位且小于20位的字母或数字"));
 
             }
           }
+        }else{
+          callback();
         }
       };
       return {
@@ -44,19 +46,19 @@
             {required: true, message: '姓名不能为空', trigger: 'blur'}
           ],
           account: [
-            {required: true, validator:!this.userShow?"": account, trigger: 'blur'},
+            {required: true, validator:  account , trigger: 'blur'},
           ]
         }
 
       }
 
     },
-    computed:{
-      prefix(){
-        let currentCompany=this.$store.state.user.userData
-        if(currentCompany!=null){
-          return `${this.data.account==undefined?"":this.data.account}@${currentCompany.domain}${currentCompany.prefix}`;
-        }else{
+    computed: {
+      prefix() {
+        let currentCompany = this.$store.state.user.userData
+        if (currentCompany != null) {
+          return `${this.data.account == undefined ? "" : this.data.account}@${currentCompany.domain}${currentCompany.prefix}`;
+        } else {
           return `${this.data.account}`
         }
       }
