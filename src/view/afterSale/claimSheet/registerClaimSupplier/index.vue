@@ -104,6 +104,7 @@
                                :title="formPlan.guestName"
                                placeholder="请输入供应商"
                                :search-value="formPlan.guestName"
+                               :noSim="true"
                                @throwName="throwNameFun"
                                :disabled-prop="formPlan.orderSign!=0"
                       >

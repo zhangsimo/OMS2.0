@@ -114,7 +114,7 @@
     </Modal>
 
     <!--      开通账号-->
-    <Modal v-model="setPasswordShow" :title="setpasswordName" width="400px">
+    <Modal v-model="setPasswordShow" :title="setpasswordName" width="450px">
       <setPassword v-if="oneStaffChange" :data="oneStaffChange" ref="gopassword"></setPassword>
       <div slot="footer">
         <Button type="primary" @click="dredge">确定</Button>
@@ -124,7 +124,7 @@
     <Modal v-model="tenant_audit_sure" title="开通成功">
       <Form :label-width="80" :model="tenant_audit_data" ref="formValidate">
         <FormItem label="登录账号:">
-          <span>{{tenant_audit_data.userName}}</span>
+          <span>{{tenant_audit_data.prefix}}</span>
         </FormItem>
         <FormItem label="初始密码:">
           <span>{{tenant_audit_data.userPassword}}</span>

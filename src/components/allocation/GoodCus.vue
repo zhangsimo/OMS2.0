@@ -53,6 +53,10 @@ export default {
   props: {
     placeholder: "",
     searchValue: "",
+    noSim:{
+      type: Boolean,
+      default: false
+    },
     disabledProp: {
       type: Boolean,
       default: true
@@ -152,7 +156,11 @@ export default {
       fapi.getSupplier(req).then(res => {
         if (res.code === 0) {
           this.loading = false;
-          this.options = (res.data.content || [])
+          if(this.noSim){
+            this.options = (res.data.content || []).filter(el=>el.isInternalId!=this.$store.state.user.userData.currentCompany.id)
+          }else{
+            this.options = (res.data.content || [])
+          }
         }
       });
     },
