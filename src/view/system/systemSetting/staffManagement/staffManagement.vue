@@ -121,7 +121,19 @@
         <Button type="default" @click="setPasswordShow = false">取消</Button>
       </div>
     </Modal>
-
+    <Modal v-model="tenant_audit_sure" title="开通成功">
+      <Form :label-width="80" :model="tenant_audit_data" ref="formValidate">
+        <FormItem label="登录账号:">
+          <span>{{tenant_audit_data.userName}}</span>
+        </FormItem>
+        <FormItem label="初始密码:">
+          <span>{{tenant_audit_data.userPassword}}</span>
+        </FormItem>
+      </Form>
+      <div class="audit_nav2" slot="footer">
+        <Button type="error" @click="PassSure" class="mr20">确定</Button>
+      </div>
+    </Modal>
     <!--  新增兼职公司    -->
     <Modal title="选择兼职公司" v-model="PtCompany" width="800px" :footer-hide="true">
       <PTCompany
@@ -228,6 +240,8 @@ export default {
       password: "系统提示",
       dimission: 0,
       setPasswordShow: false,
+      tenant_audit_sure:false,
+      tenant_audit_data:{},
       findAllCompany: false,
       staffphoneNumber: "",
       staffName: "",
@@ -738,13 +752,18 @@ export default {
               if(this.closeAcc) {
                 this.$Message.success("关闭成功");
               } else {
-                this.$Message.success("开通成功");
+                this.tenant_audit_sure=true;
+                this.tenant_audit_data=res.data;
               }
             }
           }
         );
         this.setPasswordShow = false;
       });
+    },
+    PassSure(){
+      this.tenant_audit_sure=false;
+      this.tenant_audit_data={};
     },
     openCompany() {
       if (!this.oneStaffChange.id) {
