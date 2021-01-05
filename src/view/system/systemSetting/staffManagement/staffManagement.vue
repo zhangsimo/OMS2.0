@@ -124,7 +124,7 @@
     <Modal v-model="tenant_audit_sure" title="开通成功">
       <Form :label-width="80" :model="tenant_audit_data" ref="formValidate">
         <FormItem label="登录账号:">
-          <span>{{tenant_audit_data.prefix}}</span>
+          <span>{{tenant_audit_data.userName}}</span>
         </FormItem>
         <FormItem label="初始密码:">
           <span>{{tenant_audit_data.userPassword}}</span>
@@ -323,8 +323,10 @@ export default {
         },
         {
           title: "登录账号",
-          align: "center",
-          key: "loginName"
+          align: "right",
+          key: "loginName",
+          width: 230,
+          resizable:true
         },
         {
           title: "是否开通系统",

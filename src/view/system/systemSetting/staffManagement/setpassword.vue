@@ -3,10 +3,13 @@
     <FormItem label='姓名：' prop="userName">
       <Input placeholder='请输入姓名' v-model='data.userName' disabled style="width: 300px"></Input>
     </FormItem>
-    <FormItem label='账号前缀：' prop="account">
-      <Input placeholder='请输入账号前缀' v-model='data.account' style="width: 300px" :disabled="userShow"></Input>
+    <FormItem label='登录账号：' prop="account" v-if="userShow">
+      <Input placeholder='请输入登录账号' v-model='data.account' style="width: 300px" :disabled="userShow"></Input>
     </FormItem>
-    <FormItem label='登录账号：'>
+    <FormItem label='账号前缀：' prop="account" v-else>
+      <Input placeholder='请输入账号前缀' v-model='data.account' style="width: 300px"></Input>
+    </FormItem>
+    <FormItem label='登录账号：' v-if="!userShow">
       <Input v-model='prefix' style="width: 300px" disabled></Input>
     </FormItem>
   </Form>
