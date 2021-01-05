@@ -308,6 +308,7 @@ export default {
           title: "性别",
           align: "center",
           key: "",
+          width: 60,
           render: (h, params) => {
             let text = params.row.gender == 0 ? "男" : "女";
             return h("span", {}, text);
@@ -316,7 +317,8 @@ export default {
         {
           title: "生日",
           align: "center",
-          key: "birthDay"
+          key: "birthDay",
+          width: 120
           // render: (h, params) => {
           //     return h('span', {}, transTime(params.row.birthDay))
           // },
@@ -325,7 +327,7 @@ export default {
           title: "登录账号",
           align: "right",
           key: "loginName",
-          width: 230,
+          width: 300,
           resizable:true
         },
         {
