@@ -162,7 +162,7 @@
           </template>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column field="remarks" title="备注" min-width="100"></vxe-table-column>
+      <vxe-table-column field="remarks" show-overflow title="备注" min-width="100"></vxe-table-column>
     </vxe-table>
   </div>
 </template>
