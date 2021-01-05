@@ -126,7 +126,7 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="remarks" show-overflow='title' title="备注"></vxe-table-column>
+        <vxe-table-column field="remarks" show-overflow title="备注"></vxe-table-column>
       </vxe-table-column>
 
       <vxe-table-column title="凭证生成信息">
