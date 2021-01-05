@@ -719,7 +719,7 @@ export default class Customs extends Vue {
       this.peiflag=false
       this.$Message.success("保存成功");
     
-      this.Left.page.num = 1;
+     
        this.getLeftLists()
     }else{
       hideLoading()
