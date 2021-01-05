@@ -124,6 +124,7 @@ export default class Custom extends Vue {
   }
   //更多查询确定按钮
   private async Morequery() {
+    this.page.num=1
     let data:any = {};
     for (let key in this.moreSearch) {
       if (this.moreSearch[key]) {
