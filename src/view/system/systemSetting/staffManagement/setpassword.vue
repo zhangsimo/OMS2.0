@@ -1,16 +1,16 @@
 <template>
   <Form :label-width="100" :model='data' :rules='rules' ref="form">
     <FormItem label='姓名：' prop="userName">
-      <Input placeholder='请输入姓名' v-model='data.userName' disabled style="width: 300px"></Input>
+      <vxe-input placeholder='请输入姓名' v-model='data.userName' disabled style="width: 300px"></vxe-input>
     </FormItem>
     <FormItem label='登录账号：' prop="account" v-if="userShow">
-      <Input placeholder='请输入登录账号' v-model='data.account' style="width: 300px" :disabled="userShow"></Input>
+      <vxe-input placeholder='请输入登录账号' v-model='data.account' style="width: 300px" :disabled="userShow"></vxe-input>
     </FormItem>
     <FormItem label='账号前缀：' prop="account" v-else>
-      <Input placeholder='请输入账号前缀' v-model='data.account' style="width: 300px"></Input>
+      <vxe-input maxlength="20" type="string" placeholder='请输入账号前缀' v-model='data.account' style="width: 300px"></vxe-input>
     </FormItem>
     <FormItem label='登录账号：' v-if="!userShow">
-      <Input v-model='prefix' style="width: 300px" disabled></Input>
+      <vxe-input v-model='prefix' style="width: 300px" disabled></vxe-input>
     </FormItem>
   </Form>
 </template>
