@@ -278,7 +278,7 @@
             key: 'outOrderNo',
             className: 'tc',
             resizable: true,
-            width: 100,
+            width: 200,
             render: (h, params) => {
               return h('div', [
                 h('span', {

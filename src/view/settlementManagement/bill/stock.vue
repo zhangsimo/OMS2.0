@@ -212,6 +212,7 @@
         partCodeOrName:'',
         columns: [
           {
+            key: 'id',
             type: 'selection',
             width: 40,
             className: "tc",
@@ -280,7 +281,7 @@
             key: "code",
             className: "tc",
             resizable: true,
-            width: 150,
+            width: 200,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -326,7 +327,7 @@
             key: "orderCode",
             className: "tc",
             resizable: true,
-            width: 150,
+            width: 200,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -724,7 +725,7 @@
         const sums = {};
         columns.forEach((column, index) => {
           const key = column.key;
-          if (index === 1) {
+          if (index === 0) {
             sums[key] = {
               key,
               value: "合计"

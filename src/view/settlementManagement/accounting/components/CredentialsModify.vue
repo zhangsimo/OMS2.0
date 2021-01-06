@@ -651,7 +651,7 @@
             </FormItem>
           </Form>
         </div>
-        <div class="fund" v-show="!Classification">
+        <!-- <div class="fund" v-show="!Classification">
           <Form :label-width="80" style="width: 300px">
             <FormItem label="款项分类:" prop="fund">
               <Select v-model="formDynamic.fund" placeholder="请选择">
@@ -664,7 +664,7 @@
               </Select>
             </FormItem>
           </Form>
-        </div>
+        </div> -->
       </Form>
       <div slot="footer">
         <Button type="primary" @click="confirmFuzhu" class="mr10">保存</Button>
@@ -2021,7 +2021,7 @@ import { hideLoading, showLoading } from '@/utils/loading';
 
   .fund {
     position: relative;
-    top: -625px;
+    top: -650px;
     left: 400px;
   }
 
