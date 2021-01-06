@@ -269,6 +269,11 @@ export default {
           }
           return el;
         });
+        this.leftTableData.forEach((el) => {
+          Array.isArray(el.details) && el.details.forEach((d) => {
+            d.isOldFlag = true;
+          })
+        })
         this.addNewBool = false;
         this.leftPage.total = res.data.totalElements;
         hideLoading()
@@ -455,11 +460,12 @@ export default {
           if (this.dataChange) {
             try {
               await this.$refs.xTable.validate();
-              this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
+              let data= Object.assign({}, this.formPlan)
+              data.afterSaleDate = this.formPlan.afterSaleDate
                 ? moment(this.formPlan.afterSaleDate).format("YYYY-MM-DD")
                 : "";
               showLoading()
-              let res = await api.registerClaimSave(this.formPlan);
+              let res = await api.registerClaimSave(data);
               if (res.code === 0) {
                 this.formPlan = {
                   code: ""
@@ -502,11 +508,12 @@ export default {
           if (this.dataChange) {
             try {
               await this.$refs.xTable.validate();
-              this.formPlan.afterSaleDate = this.formPlan.afterSaleDate
+              let data= Object.assign({}, this.formPlan)
+              data.afterSaleDate = this.formPlan.afterSaleDate
                 ? moment(this.formPlan.afterSaleDate).format("YYYY-MM-DD")
                 : "";
               showLoading()
-              let res = await api.registerClaimSubmit(this.formPlan);
+              let res = await api.registerClaimSubmit(data);
               if (res.code === 0) {
                 this.formPlan = {
                   code: ""
@@ -597,21 +604,23 @@ export default {
     selectSameList({selection,row}) {
       if (selection) {
         selection.map(el=>{
-          if (el.isAddPart==0) {
-            this.tmpDeletePartArr.push(el);
-          } else {
+          if (row.isOldFlag) {
             this.rightList.push(el);
+          } else {
+            this.tmpDeletePartArr.push(el);
           }
         })
       } else {
         this.rightList.forEach((el, index, arr) => {
-          if (el.isAddPart==0 && row.id == el.id) {
+          if (el.isOldFlag && row.id == el.id) {
+            arr.splice(index, 1);
+          }else if(el.isAddPart==undefined&&row.enterDetailId==el.enterDetailId){
             arr.splice(index, 1);
           }
         });
         this.tmpDeletePartArr.forEach(
           (el, index, arr) => {
-            if (row.id == el.id) {
+            if (row.id == el.id || el.enterDetailId==els.enterDetailId) {
               arr.splice(index, 1);
             }
           }
@@ -654,7 +663,7 @@ export default {
       this.$Modal.confirm({
         title: "是否要删除配件",
         onOk: async () => {
-          if (this.selectLeftItemId) {
+          if (this.selectLeftItemId&&data.length>0) {
             let res = await api.deteleAfterSaleOutDetail(data);
             if (res.code == 0) {
               delOk = true;
@@ -663,11 +672,11 @@ export default {
           } else {
             delOk = true;
           }
-          if (this.tmpDeletePartArr.length > 0) {
+          if (this.tmpDeletePartArr.length > 0 ) {
             this.tmpDeletePartArr.forEach((els) => {
               this.formPlan.details.forEach(
                 (el, index, arr) => {
-                  if (el.id == els.id) {
+                  if (el.id!=undefined&&els.id!=undefined&&el.id == els.id || el.id==undefined&&els.id==undefined&&el.enterDetailId==els.enterDetailId) {
                     arr.splice(index, 1);
                   }
                 }
@@ -681,7 +690,15 @@ export default {
           if (delOk && delOk2) {
             this.$Message.success("删除成功");
             if (isNetWork) {
-              this.getLeftLists();
+              this.rightList.forEach((els) => {
+                this.formPlan.details.forEach(
+                  (el, index, arr) => {
+                    if (el.id!=undefined&&els.id!=undefined&&el.id == els.id || el.id==undefined&&els.id==undefined&&el.enterDetailId==els.enterDetailId) {
+                      arr.splice(index, 1);
+                    }
+                  }
+                );
+              });
             }
           }
         },
