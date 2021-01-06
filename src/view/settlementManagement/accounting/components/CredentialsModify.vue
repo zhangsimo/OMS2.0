@@ -1643,13 +1643,13 @@ import { hideLoading, showLoading } from '@/utils/loading';
       },
       //点击单选框获取辅助核算客户
       radioChangeEventClient({row}) {
-        this.AssistAccounting = row.fullName;
+        this.AssistAccounting = row.shortName;
         this.auxiliaryTypeCode = "1";
         this.auxiliaryCode = row.code;
       },
       //点击单选框获取辅助核算供应商
       radioChangeEventSupplier({row}) {
-        this.AssistAccounting = row.fullName;
+        this.AssistAccounting = row.shortName;
         this.auxiliaryTypeCode = "1";
         this.auxiliaryCode = row.code;
       },
