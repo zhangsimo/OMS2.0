@@ -206,12 +206,12 @@ export default {
     },
     changePage(p) {
       this.page.num = p;
-      this.query();
+      this.seleteQuery();
     },
     changeSize(size) {
       this.page.num = 1;
       this.page.size = size;
-      this.query();
+      this.seleteQuery();
     },
     // 对话框是否显示
     async visChange(flag) {
