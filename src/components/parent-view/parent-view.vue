@@ -1,9 +1,9 @@
 <template>
   <div style="height: 100%">
     <keep-alive>
-      <router-view v-if="$route.meta.keepAlive" />
+      <router-view v-if="$route.meta.keepAlive" :max="10" />
     </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive" />
+    <router-view v-if="!$route.meta.keepAlive" :max="10" />
   </div>
 </template>
 <script>

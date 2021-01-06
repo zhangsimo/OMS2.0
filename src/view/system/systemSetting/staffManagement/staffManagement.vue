@@ -114,14 +114,26 @@
     </Modal>
 
     <!--      开通账号-->
-    <Modal v-model="setPasswordShow" :title="setpasswordName" width="400px">
+    <Modal v-model="setPasswordShow" :title="setpasswordName" width="450px">
       <setPassword v-if="oneStaffChange" :data="oneStaffChange" ref="gopassword"></setPassword>
       <div slot="footer">
         <Button type="primary" @click="dredge">确定</Button>
         <Button type="default" @click="setPasswordShow = false">取消</Button>
       </div>
     </Modal>
-
+    <Modal v-model="tenant_audit_sure" title="开通成功">
+      <Form :label-width="80" :model="tenant_audit_data" ref="formValidate">
+        <FormItem label="登录账号:">
+          <span>{{tenant_audit_data.userName}}</span>
+        </FormItem>
+        <FormItem label="初始密码:">
+          <span>{{tenant_audit_data.userPassword}}</span>
+        </FormItem>
+      </Form>
+      <div class="audit_nav2" slot="footer">
+        <Button type="error" @click="PassSure" class="mr20">确定</Button>
+      </div>
+    </Modal>
     <!--  新增兼职公司    -->
     <Modal title="选择兼职公司" v-model="PtCompany" width="800px" :footer-hide="true">
       <PTCompany
@@ -228,6 +240,8 @@ export default {
       password: "系统提示",
       dimission: 0,
       setPasswordShow: false,
+      tenant_audit_sure:false,
+      tenant_audit_data:{},
       findAllCompany: false,
       staffphoneNumber: "",
       staffName: "",
@@ -249,7 +263,7 @@ export default {
         {
           title: "选择",
           key: "id",
-          width: 70,
+          width: 50,
           align: "center",
           render: (h, params) => {
             return h("span", { class: "table-radio" });
@@ -258,19 +272,20 @@ export default {
         {
           title: "姓名",
           align: "center",
-          key: "userName"
+          key: "userName",
+          width: 80
         },
         {
           title: "手机号码",
           align: "center",
           key: "phone",
-          minWidth: 80
+          width: 90
         },
         {
           title: "角色",
           align: "left",
           slot: 'userRoles',
-          minWidth: 80,
+          width: 200,
           // render:(h,params) => {
           //   let arr = params.row.userRoles || []
           //   let newArr = []
@@ -294,6 +309,7 @@ export default {
           title: "性别",
           align: "center",
           key: "",
+          width: 60,
           render: (h, params) => {
             let text = params.row.gender == 0 ? "男" : "女";
             return h("span", {}, text);
@@ -302,20 +318,23 @@ export default {
         {
           title: "生日",
           align: "center",
-          key: "birthDay"
+          key: "birthDay",
+          width: 80
           // render: (h, params) => {
           //     return h('span', {}, transTime(params.row.birthDay))
           // },
         },
         {
           title: "登录账号",
-          align: "center",
-          key: "loginName"
+          align: "right",
+          key: "loginName",
+          resizable:true
         },
         {
           title: "是否开通系统",
           align: "center",
           key: "",
+          width: 120,
           render: (h, params) => {
             let text = params.row.openSystem == 1 ? "否" : "是";
             return h("span", {}, text);
@@ -325,6 +344,7 @@ export default {
           title: "是否离职",
           align: "center",
           key: "",
+          width: 70,
           render: (h, params) => {
             let text = params.row.office ? "是" : "否";
             return h("span", {}, text);
@@ -333,17 +353,20 @@ export default {
         {
           title: "所属机构",
           align: "center",
-          key: "shopShortName"
+          key: "shopShortName",
+          width: 130
         },
         {
           title: "建档人",
           align: "center",
-          key: "createName"
+          key: "createName",
+          width: 120
         },
         {
           title: "建档日期",
           align: "center",
           key: "",
+          width: 130,
           render: (h, params) => {
             return h("span", {}, transTime(params.row.createTime));
           }
@@ -738,13 +761,18 @@ export default {
               if(this.closeAcc) {
                 this.$Message.success("关闭成功");
               } else {
-                this.$Message.success("开通成功");
+                this.tenant_audit_sure=true;
+                this.tenant_audit_data=res.data;
               }
             }
           }
         );
         this.setPasswordShow = false;
       });
+    },
+    PassSure(){
+      this.tenant_audit_sure=false;
+      this.tenant_audit_data={};
     },
     openCompany() {
       if (!this.oneStaffChange.id) {
