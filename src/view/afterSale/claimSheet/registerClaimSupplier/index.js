@@ -213,72 +213,16 @@ export default {
       this.getmoreyLeftLists();
     },
     //更多查询方法
-    async getmoreyLeftLists() {
+    getmoreyLeftLists() {
       let data = this.moreQueryList;
       let params = {}
       params.page = this.leftPage.num - 1;
       params.size = this.leftPage.size;
       data.orderSign = this.orderSign == 99 ? "" : this.orderSign;
-      showLoading()
-      let res = await api.registerClaimsQuery(params, data);
-      if (res.code === 0) {
-        this.leftTableData = (res.data.content || []).map(el => {
-          switch (el.handleSign) {
-            case 0:
-              el.handleSignStatus = "待处理";
-              break;
-            case 1:
-              el.handleSignStatus = "处理中";
-              break;
-            case 2:
-              el.handleSignStatus = "已处理";
-              break;
-          }
-          switch (el.orderSign) {
-            case 0:
-              el.orderSignStatus = "草稿";
-              break;
-            case 1:
-              el.orderSignStatus = "已提交";
-              break;
-            case 2:
-              el.orderSignStatus = "已完成";
-              break;
-          }
-          return el;
-        });
-        this.addNewBool = false;
-        this.leftPage.total = res.data.totalElements;
-        if (this.selectLeftItemId) {
-          for (let b of this.leftTableData) {
-            if (b.id == this.selectLeftItemId) {
-              this.clickOnesList({row: b});
-              break;
-            }
-          }
-        } else {
-          this.clickOnesList(this.leftTableData[0]);
-        }
-        hideLoading()
-      }else{
-        this.leftTableData =[];
-        this.addNewBool = false;
-        this.leftPage.total =0;
-        this.selectLeftItemId = null;
-        this.formPlan = {
-          details: [],
-          code: "",
-          serviceId: "",
-          remark: "",
-          partOrCustomerOnly: 0,//添加配件1 或者选择 客户理赔登记单2 只可选择一种
-          orderSign: 1,
-          afterSaleDate: "",
-        };
-        hideLoading()
-      }
+      this.getLeftList(params, data)
     },
     // 左侧表格数据
-    async getLeftLists() {
+    getLeftLists() {
       let data = {};
       if (this.queryDate) {
         data.createStartTime = this.queryDate[0];
@@ -291,6 +235,9 @@ export default {
       data.orderSign = this.orderSign == 99 ? "" : this.orderSign;
       params.page = this.leftPage.num - 1;
       params.size = this.leftPage.size;
+      this.getLeftList(params, data)
+    },
+    async getLeftList(params, data){
       showLoading()
       let res = await api.registerClaimsQuery(params, data);
       if (res.code === 0) {
@@ -333,9 +280,22 @@ export default {
             }
           }
         } else {
-          this.selectLeftItemId = this.leftTableData[0].id;
-          this.formPlan = this.leftTableData[0];
-          this.clickOnesList(this.leftTableData[0]);
+          if(this.leftTableData.length>0){
+            this.selectLeftItemId = this.leftTableData[0].id;
+            this.formPlan = this.leftTableData[0];
+            this.clickOnesList(this.leftTableData[0]);
+          }else{
+            this.selectLeftItemId =null;
+            this.formPlan = {
+              details: [],
+              code: "",
+              serviceId: "",
+              remark: "",
+              partOrCustomerOnly: 0,//添加配件1 或者选择 客户理赔登记单2 只可选择一种
+              orderSign: 1,
+              afterSaleDate: new Date(),
+            };
+          }
         }
       }else{
         this.leftTableData =[];

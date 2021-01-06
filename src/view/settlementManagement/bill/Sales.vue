@@ -67,7 +67,7 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row
+        <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row  :summary-method="handleSummary"
                @on-row-click="election" @on-selection-change="selectTab" @on-select-all="selectTab" max-height="400"></Table>
         <!--        :summary-method="handleSummary"-->
         <div class="clearfix">
@@ -168,6 +168,7 @@
         partCodeOrName:'',
         columns: [
           {
+            key: 'id',
             type: 'selection',
             width: 40,
             className: "tc",
@@ -208,7 +209,7 @@
             key: "serviceId",
             className: "tc",
             resizable: true,
-            width: 150,
+            width: 200,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -552,23 +553,32 @@
       },
       // 总表格合计方式
       handleSummary({columns, data}) {
-        //   console.log(columns,data)
         const sums = {};
         columns.forEach((column, index) => {
           const key = column.key;
           if (index === 0) {
             sums[key] = {
               key,
-              value: "总合计"
+              value: "合计"
             };
             return;
           }
           const values = data.map(item => Number(item[key]));
-          if (index === 10) {
-            sums[key] = {
-              key,
-              value: this.total[key] == null ? " " : this.total[key]
-            };
+          if (index === 11) {
+            if (!values.every(value => isNaN(value))) {
+              const v = values.reduce((prev, curr) => {
+                const value = Number(curr);
+                if (!isNaN(value)) {
+                  return prev + curr;
+                } else {
+                  return prev;
+                }
+              }, 0);
+              sums[key] = {
+                key,
+                value: v.toFixed(2)
+              };
+            }
           } else {
             sums[key] = {
               key,

@@ -263,7 +263,7 @@ export default {
         {
           title: "选择",
           key: "id",
-          width: 70,
+          width: 50,
           align: "center",
           render: (h, params) => {
             return h("span", { class: "table-radio" });
@@ -272,19 +272,20 @@ export default {
         {
           title: "姓名",
           align: "center",
-          key: "userName"
+          key: "userName",
+          width: 80
         },
         {
           title: "手机号码",
           align: "center",
           key: "phone",
-          minWidth: 80
+          width: 90
         },
         {
           title: "角色",
           align: "left",
           slot: 'userRoles',
-          minWidth: 80,
+          width: 200,
           // render:(h,params) => {
           //   let arr = params.row.userRoles || []
           //   let newArr = []
@@ -318,7 +319,7 @@ export default {
           title: "生日",
           align: "center",
           key: "birthDay",
-          width: 120
+          width: 80
           // render: (h, params) => {
           //     return h('span', {}, transTime(params.row.birthDay))
           // },
@@ -327,13 +328,13 @@ export default {
           title: "登录账号",
           align: "right",
           key: "loginName",
-          width: 300,
           resizable:true
         },
         {
           title: "是否开通系统",
           align: "center",
           key: "",
+          width: 120,
           render: (h, params) => {
             let text = params.row.openSystem == 1 ? "否" : "是";
             return h("span", {}, text);
@@ -343,6 +344,7 @@ export default {
           title: "是否离职",
           align: "center",
           key: "",
+          width: 70,
           render: (h, params) => {
             let text = params.row.office ? "是" : "否";
             return h("span", {}, text);
@@ -351,17 +353,20 @@ export default {
         {
           title: "所属机构",
           align: "center",
-          key: "shopShortName"
+          key: "shopShortName",
+          width: 130
         },
         {
           title: "建档人",
           align: "center",
-          key: "createName"
+          key: "createName",
+          width: 120
         },
         {
           title: "建档日期",
           align: "center",
           key: "",
+          width: 130,
           render: (h, params) => {
             return h("span", {}, transTime(params.row.createTime));
           }
