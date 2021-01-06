@@ -66,7 +66,7 @@
       </vxe-table>
 
       <div slot="footer">
-        <Button type="primary" @click="confirm">确定</Button>
+        <Button type="primary" :disabled="isDis" @click="confirm">确定</Button>
         <Button @click="close">取消</Button>
       </div>
     </Modal>
@@ -89,6 +89,7 @@
     props: ['titleName'],
     data() {
       return {
+        isDis: false,
         remark: '',
         visibal: false,
         fund: "",
@@ -241,12 +242,14 @@
             three: arr,
             paymentTypeCode:this.fund
           }
+          this.isDis = true
           saveAccount(data).then(res => {
             if (res.code === 0) {
               this.$message.success("认领成功")
               this.visibal = false
               this.$parent.getQuery()
             }
+            this.isDis = false
           })
         } else {
           let data = {
@@ -255,12 +258,14 @@
             three: arr,
             paymentTypeCode:this.fund
           }
+          this.isDis = true
           paymentRegain(data).then(res => {
             if (res.code === 0) {
               this.$message.success("认领成功")
               this.visibal = false
               this.$parent.getQuery()
             }
+            this.isDis = false
           })
         }
 

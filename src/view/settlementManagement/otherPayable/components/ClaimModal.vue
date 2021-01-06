@@ -85,7 +85,7 @@
       </vxe-table>
 
       <div slot="footer">
-        <Button type="primary" @click="confirm">确定</Button>
+        <Button type="primary" :disabled="isDis" @click="confirm">确定</Button>
         <Button @click="close">取消</Button>
       </div>
     </Modal>
@@ -117,6 +117,7 @@ export default {
   },
   data(){
     return {
+      isDis: false,
       remark: '',
       visibal: false,
       calculation: '', //选中辅助计算的名称
@@ -267,12 +268,14 @@ export default {
           auxiliaryTypeCode: this.$refs.voucherInput.AssistAccounting.auxiliaryTypeCode,
           remark: this.remark,
         }
+        this.isDis = true
         addClaim(obj).then(res => {
           if(res.code === 0){
             this.$message.success('认领成功')
             this.visibal = false
             this.$parent.getQuery()
           }
+          this.isDis = false
         })
       }else if(this.titleName=='其他付款支出认领'){
         let arr=[];
@@ -289,12 +292,14 @@ export default {
           paymentTypeCode:this.fund
         }
         this.dataOne.remark = this.remark
+        this.isDis = true
         expenditureClaim(data).then(res=>{
           if(res.code===0){
             this.$message.success("认领成功")
             this.visibal = false
             this.$parent.getQuery()
           }
+          this.isDis = false
         })
       }
 
