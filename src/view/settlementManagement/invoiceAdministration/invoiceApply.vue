@@ -230,9 +230,13 @@
           <vxe-table-column title="开票清单类型" field="isOilPartText" width="120"></vxe-table-column>
           <vxe-table-column title="开票单位" field="invoiceUnitName" width="80"></vxe-table-column>
           <vxe-table-column title="收款方式" field="collectionTypeName" width="80"></vxe-table-column>
+          <vxe-table-column title="快递收件人" field="consignee" width="80"></vxe-table-column>
           <vxe-table-column title="收件地址" field="address" width="80"></vxe-table-column>
-          <vxe-table-column title="快递方式" field="sendingWayName" width="80"></vxe-table-column>
-          <vxe-table-column title="备注" field="remark" width="100"></vxe-table-column>
+          <vxe-table-column title="电话" field="phone" width="80"></vxe-table-column>
+          <vxe-table-column title="寄件方式" field="sendingWayName" width="80"></vxe-table-column>
+          <vxe-table-column title="费用承担" field="costBear" width="80"></vxe-table-column>
+          <vxe-table-column title="快递备注" field="remark" width="100"></vxe-table-column>
+          <vxe-table-column title="开票说明" field="underTicketExplain" width="100"></vxe-table-column>
         </vxe-table>
       </div>
     </section>
