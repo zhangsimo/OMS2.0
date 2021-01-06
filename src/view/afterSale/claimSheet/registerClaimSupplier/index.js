@@ -256,8 +256,23 @@ export default {
               break;
             }
           }
-        } else {
-          this.clickOnesList(this.leftTableData[0]);
+        }  else {
+          if(this.leftTableData.length>0){
+            this.selectLeftItemId = this.leftTableData[0].id;
+            this.formPlan = this.leftTableData[0];
+            this.clickOnesList(this.leftTableData[0]);
+          }else{
+            this.selectLeftItemId =null;
+            this.formPlan = {
+              details: [],
+              code: "",
+              serviceId: "",
+              remark: "",
+              partOrCustomerOnly: 0,//添加配件1 或者选择 客户理赔登记单2 只可选择一种
+              orderSign: 1,
+              afterSaleDate: new Date(),
+            };
+          }
         }
         hideLoading()
       }else{
@@ -333,9 +348,22 @@ export default {
             }
           }
         } else {
-          this.selectLeftItemId = this.leftTableData[0].id;
-          this.formPlan = this.leftTableData[0];
-          this.clickOnesList(this.leftTableData[0]);
+          if(this.leftTableData.length>0){
+            this.selectLeftItemId = this.leftTableData[0].id;
+            this.formPlan = this.leftTableData[0];
+            this.clickOnesList(this.leftTableData[0]);
+          }else{
+            this.selectLeftItemId =null;
+            this.formPlan = {
+              details: [],
+              code: "",
+              serviceId: "",
+              remark: "",
+              partOrCustomerOnly: 0,//添加配件1 或者选择 客户理赔登记单2 只可选择一种
+              orderSign: 1,
+              afterSaleDate: new Date(),
+            };
+          }
         }
       }else{
         this.leftTableData =[];
