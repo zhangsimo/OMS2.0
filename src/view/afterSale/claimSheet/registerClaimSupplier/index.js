@@ -602,9 +602,10 @@ export default {
     },
     //右侧表格多选
     selectSameList({selection,row}) {
+      this.tmpDeletePartArr=[]
       if (selection) {
         selection.map(el=>{
-          if (row.isOldFlag) {
+          if (el.isOldFlag||row.isOldFlag) {
             this.rightList.push(el);
           } else {
             this.tmpDeletePartArr.push(el);
@@ -614,13 +615,11 @@ export default {
         this.rightList.forEach((el, index, arr) => {
           if (el.isOldFlag && row.id == el.id) {
             arr.splice(index, 1);
-          }else if(el.isAddPart==undefined&&row.enterDetailId==el.enterDetailId){
-            arr.splice(index, 1);
           }
         });
         this.tmpDeletePartArr.forEach(
           (el, index, arr) => {
-            if (row.id == el.id || el.enterDetailId==els.enterDetailId) {
+            if (row.id == el.id || el.enterDetailId==row.enterDetailId) {
               arr.splice(index, 1);
             }
           }
@@ -663,6 +662,7 @@ export default {
       this.$Modal.confirm({
         title: "是否要删除配件",
         onOk: async () => {
+          showLoading(".loadingClass", "数据处理中，请勿操作")
           if (this.selectLeftItemId&&data.length>0) {
             let res = await api.deteleAfterSaleOutDetail(data);
             if (res.code == 0) {
@@ -676,7 +676,7 @@ export default {
             this.tmpDeletePartArr.forEach((els) => {
               this.formPlan.details.forEach(
                 (el, index, arr) => {
-                  if (el.id!=undefined&&els.id!=undefined&&el.id == els.id || el.id==undefined&&els.id==undefined&&el.enterDetailId==els.enterDetailId) {
+                  if (el.id!=undefined&&els.id!=undefined&&el.id == els.id || el.enterDetailId!=undefined&&els.enterDetailId!=undefined&&el.enterDetailId==els.enterDetailId || el.id==undefined&&els.id==undefined&&el.partId==els.partId) {
                     arr.splice(index, 1);
                   }
                 }
@@ -688,12 +688,13 @@ export default {
             delOk2 = true;
           }
           if (delOk && delOk2) {
+            hideLoading()
             this.$Message.success("删除成功");
             if (isNetWork) {
               this.rightList.forEach((els) => {
                 this.formPlan.details.forEach(
                   (el, index, arr) => {
-                    if (el.id!=undefined&&els.id!=undefined&&el.id == els.id || el.id==undefined&&els.id==undefined&&el.enterDetailId==els.enterDetailId) {
+                    if (el.id!=undefined&&els.id!=undefined&&el.id == els.id || el.enterDetailId!=undefined&&els.enterDetailId!=undefined&&el.enterDetailId==els.enterDetailId || el.id==undefined&&els.id==undefined&&el.partId==els.partId) {
                       arr.splice(index, 1);
                     }
                   }
