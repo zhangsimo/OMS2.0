@@ -62,8 +62,8 @@
       }
     },
     created(){
+      
      
-       
     },
     mounted(){
      this.isLayerValue = this.searchValue||"";
@@ -151,10 +151,18 @@
         });
       },
       selectItem(v){
-        this.isLayerValue = v.fullName||"";
-        this.onBlur();
-        console.log(v)
-        this.$emit("throwName",v);
+       
+       
+       if(v.isInternalId == this.$store.state.user.userData.currentCompany.id){ 
+           this.$message.error("不能添加当前机构");
+           
+         return 
+       }else{
+          this.onBlur();
+         this.isLayerValue = v.fullName||"";
+            this.$emit("throwName",v);
+       }
+     
       },
       clickDom(v){
         let classN = v.path.filter(item => {

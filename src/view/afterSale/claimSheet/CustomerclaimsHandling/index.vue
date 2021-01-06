@@ -258,6 +258,7 @@
   }
   .form {
     margin-top: 10px;
+    margin-left: -5px;
   }
 }
 .ipt {
@@ -266,5 +267,12 @@
 }
 .btn {
   margin: 3px 10px;
+}
+.nav{
+margin-top: -15px;
+margin-bottom: -10px;
+}
+.con{
+  padding: 0 10px;
 }
 </style>

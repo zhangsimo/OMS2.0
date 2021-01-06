@@ -365,7 +365,7 @@ export default class Customs extends Vue {
   //回车搜索
 
   private throwNameFun(v) {
-    console.log(v)
+  
       this.getSupplierNamea(v);
     }
 
@@ -737,7 +737,7 @@ export default class Customs extends Vue {
   }
   //添加配件
   private getPartNameList(val) {
-    console.log(val)
+    
 
     let datas = [...val].map(el => {
       //el.orderQty = undefined;
