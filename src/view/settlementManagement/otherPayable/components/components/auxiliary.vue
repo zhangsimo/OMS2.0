@@ -806,7 +806,6 @@ export default {
         this.$refs.AssistTableDataGongYingShang.clearRadioRow()
         this.$refs.AssistTableDataGeRen.clearRadioRow()
         this.$refs.AssistTableDataOther.clearRadioRow()
-        console.log(this.oneAccountent,12312)
         if(this.oneAccountent[0].mateAccountCoding === "1221" || this.oneAccountent[0].mateAccountCoding === "2241" || this.oneAccountent[0].mateAccountCoding === "1532" || this.oneAccountent[0].mateAccountCoding === "1801"){
           this.Classification = true
         }else{
