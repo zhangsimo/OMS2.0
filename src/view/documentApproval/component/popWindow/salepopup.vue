@@ -169,7 +169,7 @@
             <Input v-model="invoice.applyMoney" class="ml5 w200" disabled />
           </FormItem>
           <FormItem label="开票说明" >
-            <Input v-model.trim="invoice.underTicketExplain" class="ml5 w200" />
+            <Input v-model.trim="invoice.underTicketExplain" class="ml5 w200" :disabled="modelType.type==3" />
           </FormItem>
         </div>
       </div>
