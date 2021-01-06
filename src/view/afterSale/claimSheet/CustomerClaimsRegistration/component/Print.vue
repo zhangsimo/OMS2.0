@@ -190,7 +190,8 @@
 <script lang="ts">
   import {Vue, Component, Watch} from "vue-property-decorator";
 import * as all from "@/api/afterSale/CustomerClaimsRegistration/index"
-  import moment from "moment"
+  import moment from "moment";
+    import * as tools from "@/utils/tools";
   @Component 
   
   export default class print extends Vue{
@@ -220,14 +221,9 @@ import * as all from "@/api/afterSale/CustomerClaimsRegistration/index"
       let res:any=await all.printSale(data);
       //console.log(res)
       if(res.code===0){
-       
-      res.data.details.forEach((ele)=>{
-          this.num+=ele.afterSaleQty
-      })
-      console.log(this.num)
       console.log(res.data)
         this.onelist=res.data;
-        this.onelist.printDate=moment(new Date()).format("yyyy-MM-dd HH:mm:ss")
+       this.onelist.printDate=tools.transTime(new Date())
         setTimeout(()=>{
           
           this.print()
