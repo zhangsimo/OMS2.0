@@ -65,6 +65,10 @@
             </Select>
           </div>
           <div class="db ml10">
+            <span>付款出纳:</span>
+            <Input v-model.trim="approveUname" type="text" clearable class="ml10 w150"/>
+          </div>
+          <div class="db ml10">
             <button class="ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
@@ -227,14 +231,26 @@
         >
           <vxe-table-column type="selection" width="50" fixed="left"></vxe-table-column>
           <vxe-table-column title="序号" type="seq" width="50" fixed="left"></vxe-table-column>
+          <vxe-table-column title="往来单位" field="guestName" width="120" fixed="left"></vxe-table-column>
+          <vxe-table-column title="对账单状态" field="statementStatusName" width="120" fixed="left">
+          </vxe-table-column>
+          <vxe-table-column title="计算结算类型" field="billingTypeName" width="120" fixed="left">
+          </vxe-table-column>
+          <vxe-table-column title="付款出纳" field="approveUname" width="80"></vxe-table-column>
+          <vxe-table-column title="对账申请人" field="applicant" width="100"></vxe-table-column>
+
           <vxe-table-column title="申请时间" field="createTime" width="140"></vxe-table-column>
           <vxe-table-column title="公司名称" field="orgName" width="120"></vxe-table-column>
           <vxe-table-column title="对账单号" field="accountNo" width="180"></vxe-table-column>
-          <vxe-table-column title="往来单位" field="guestName" width="120" fixed="left"></vxe-table-column>
           <vxe-table-column title="收付类型" field="paymentTypeName" width="120"></vxe-table-column>
           <vxe-table-column title="对账应收" field="accountsReceivable" width="120">
             <template v-slot="{row}">
               <span>{{row.accountsReceivable.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="应收已收金额" field="amountReceived" width="120">
+            <template v-slot="{row}">
+              <span>{{row.amountReceived.toFixed(2)}}</span>
             </template>
           </vxe-table-column>
           <vxe-table-column title="应收返利" field="receivableRebate" width="120">
@@ -260,6 +276,11 @@
           <vxe-table-column title="对账应付" field="reconciliation" width="120">
             <template v-slot="{row}">
               <span>{{row.reconciliation.toFixed(2)}}</span>
+            </template>
+          </vxe-table-column>
+          <vxe-table-column title="应付已付金额" field="amountPaid" width="120">
+            <template v-slot="{row}">
+              <span>{{row.amountPaid.toFixed(2)}}</span>
             </template>
           </vxe-table-column>
           <vxe-table-column title="应付返利" field="dealingRebates" width="120">
@@ -337,29 +358,15 @@
               <span>{{row.receiptPayment.toFixed(2)}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column title="已收金额" field="amountReceived" width="120">
-            <template v-slot="{row}">
-              <span>{{row.amountReceived.toFixed(2)}}</span>
-            </template>
-          </vxe-table-column>
-          <vxe-table-column title="未收金额" field="noCharOffAmt" width="120">
+          <vxe-table-column title="应收未收金额" field="noCharOffAmt" width="120">
             <template v-slot="{row}">
               <span>{{row.noCharOffAmt.toFixed(2)}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column title="已付金额" field="amountPaid" width="120">
-            <template v-slot="{row}">
-              <span>{{row.amountPaid.toFixed(2)}}</span>
-            </template>
-          </vxe-table-column>
-          <vxe-table-column title="未付金额" field="unpaidAmount" width="120">
+          <vxe-table-column title="应付未付金额" field="unpaidAmount" width="120">
             <template v-slot="{row}">
               <span>{{row.unpaidAmount.toFixed(2)}}</span>
             </template>
-          </vxe-table-column>
-          <vxe-table-column title="对账单状态" field="statementStatusName" width="120" fixed="left">
-          </vxe-table-column>
-          <vxe-table-column title="计算结算类型" field="billingTypeName" width="120" fixed="left">
           </vxe-table-column>
           <vxe-table-column title="最近一次回款时间" field="lastPaymentDate" width="120">
           </vxe-table-column>
@@ -772,6 +779,7 @@
         receivefalg: false,//收到配件/油品进项发票=含税配件/油品金额，不能点击进项登记及修改
         paymentId: '',//判定付款默认类型
         receiveGuestId: '',//获取往来单位id
+        approveUname:"",//付款出纳
         company: [],//查询到往来单位数据
         loading1: false,//查询时判断
         revokeReason: '',//撤销原因
@@ -1230,6 +1238,7 @@
           orgId: this.model1 == 0 ? "" : this.model1,
           statementStatus: this.Reconciliationtype,
           guestId: this.receiveGuestId,
+          approveUname:this.approveUname,
           accountNo: this.accountNo//对账单号
         };
         for (let key in obj) {
@@ -1565,6 +1574,7 @@
               orgId: this.model1,
               statementStatus: this.Reconciliationtype,
               guestId: this.receiveGuestId,
+              approveUname:this.approveUname,
               pagesize: this.pagetotal,
               accountNo: this.accountNo
             };
