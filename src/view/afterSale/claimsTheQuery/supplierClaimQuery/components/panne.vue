@@ -198,7 +198,7 @@
             data.orderEndDate =this.moreSearch["orderDate"][1]!=""?
               moment(this.moreSearch["orderDate"][1]).endOf('day').format("YYYY-MM-DD HH:mm:ss"):""
           }else if(key=="handleType"||key=="guestType"){
-            data[key]=data[key]==99?"":data[key]
+            data[key]=this.moreSearch[key]==99?"":this.moreSearch[key]
           } else {
             data[key] = this.moreSearch[key];
           }
