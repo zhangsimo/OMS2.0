@@ -163,6 +163,12 @@
 
             <vxe-table-column title="付款出纳" field="approveUname" width="80"></vxe-table-column>
 
+            <vxe-table-column
+              field="applicant"
+              width="100"
+              title="申请人"
+              fixed="left"
+            ></vxe-table-column>
             <vxe-table-column title="基本信息">
               <vxe-table-column
                 field="serviceId"
