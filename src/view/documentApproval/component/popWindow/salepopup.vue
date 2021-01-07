@@ -686,7 +686,7 @@ export default {
     },
     open(row){
       this.modal1 = true
-      this.row = row
+      this.row = Object.assign({},row)
     },
     // 引用上次申请信息
     quote() {
