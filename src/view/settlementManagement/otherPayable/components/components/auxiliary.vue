@@ -799,7 +799,6 @@ export default {
     },
     showOrhideModel(v){
       if(v){
-        console.log(this.oneAccountent,'sadf')
         this.formDynamic.fund="";
         this.formDynamic.code="";
         this.AssistAccounting = {};
