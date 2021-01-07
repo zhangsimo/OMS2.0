@@ -2,7 +2,6 @@
   <Modal title="因公借支核销" width="1000" footer-hide v-model="show">
     <Row>
       <Button :loading="disabled" :disabled="currRow==null" class="mr10" @click="submit">因公借支核销</Button>
-      备注：<i-input class="w180" maxlength="500" v-model.trim="remark"></i-input>
     </Row>
     <div class="mt20">
       <vxe-table
@@ -101,6 +100,14 @@
         <vxe-table-column field="paymentBalance" title="报销未核销余额"></vxe-table-column>
         <vxe-table-column field="summary" title="摘要"></vxe-table-column>
       </vxe-table>
+      <Row class="mt10">
+        <i-col span="1">
+          <span style="line-height: 30px">备注:</span>
+        </i-col>
+        <i-col span="23">
+          <i-input :value.sync="remark" maxlength="500" v-model.trim="remark"></i-input>
+        </i-col>
+      </Row>
       <Page
         class-name="mb10 mt10 fr"
         :current="page.num"

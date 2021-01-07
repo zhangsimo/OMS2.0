@@ -3,7 +3,6 @@
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
       <div class="clearfix mb20 ">
         <Button class="fl mr10" @click="openPClaimModal">选择单据</Button>
-        备注：<i-input class="w180" maxlength="500" v-model.trim="remark"></i-input>
         <div class="fr">
           <span><i style="color: red" class="mr5">*</i>款项分类：</span>
           <Select v-model="fund" placeholder="请选择" class="w200" clearable>
@@ -64,7 +63,14 @@
         <vxe-table-column title="未认领金额" width="100" field="unClaimedAmt" show-overflow="tooltip"></vxe-table-column>
         <vxe-table-column title="智能匹配往来单位" width="180" field="suppliers" show-overflow="tooltip"></vxe-table-column>
       </vxe-table>
-
+      <Row class="mt10">
+        <i-col span="1">
+          <span style="line-height: 30px">备注:</span>
+        </i-col>
+        <i-col span="23">
+          <i-input :value.sync="remark" maxlength="500" v-model.trim="remark"></i-input>
+        </i-col>
+      </Row>
       <div slot="footer">
         <Button type="primary" :disabled="isDis" @click="confirm">确定</Button>
         <Button @click="close">取消</Button>
