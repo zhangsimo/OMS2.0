@@ -19,8 +19,12 @@ import StatusModal from "./components/checkApprovalModal.vue";
 import GoodCus from "_c/allocation/GoodCus.vue";
 import printZF from "@/components/print/print.vue";
 import {showLoading, hideLoading} from "@/utils/loading"
+// @ts-ignore
+import distroyDom from "_mixins/distroyDom";
+
 
 @Component({
+  mixins:[distroyDom],
   components: {
     QuickDate,
     SelectSupplier,
@@ -33,7 +37,7 @@ import {showLoading, hideLoading} from "@/utils/loading"
     TabsModel,
     StatusModal,
     GoodCus,
-    printZF
+    printZF,
   }
 })
 export default class PlannedPurchaseOrder extends Vue {

@@ -623,6 +623,7 @@ import { getLeaseProlist, saveProduct } from "../../../api/lease/leaseApi";
 import QuickDate from "../../../components/getDate/dateget";
 // import {purchaseTypeList} from './goodsList'
 import { mixGoodsData } from "./mixGoodsList";
+import distroyDom from "_mixins/distroyDom";
 import SelectPartCom from "./components/selectPartCom";
 import SelectSupplier from "./components/supplier/selectSupplier";
 import { getParamsBrand } from "_api/purchasing/purchasePlan";
@@ -646,7 +647,7 @@ export default {
     GoodCus,
   },
   inject: ["reload"],
-  mixins: [mixGoodsData],
+  mixins: [mixGoodsData , distroyDom],
   data() {
     let price = (rule, value, callback) => {
       if (!value && value != 0) {
@@ -849,7 +850,6 @@ export default {
   },
   methods: {
     query2() {
-      console.log(this.formPlan.supplyName);
       this.ArrayList.forEach((el) => {
         if (el.value === this.formPlan.guestId) {
           this.formPlan.supplyName = el.label;

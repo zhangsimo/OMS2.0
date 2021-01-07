@@ -631,7 +631,6 @@ export default {
             this.bankAccount = false;
             this.disposeFinData();
             this.$Message.success("添加银行卡成功");
-            // console.log(this.data.staffAccountVoList,this.financeList,"???")
           } else {
             return this.$Message.error("该银行卡已添加过");
           }
