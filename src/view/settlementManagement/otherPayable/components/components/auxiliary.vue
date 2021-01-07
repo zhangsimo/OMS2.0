@@ -786,7 +786,7 @@ export default {
       let params = {};
       params.dictCode = "CW00131";
       kmType(params).then(res => {
-        this.fundListZanshi=res.data.filter(vb=>this.oneAccountent[0].mateAccountCoding.indexOf(vb.itemValueOne)!=-1)
+        this.fundListZanshi=res.data.filter(vb=>this.oneAccountent.titleCode.indexOf(vb.itemValueOne)!=-1)
       });
     },
     //其他新增
@@ -806,7 +806,7 @@ export default {
         this.$refs.AssistTableDataGongYingShang.clearRadioRow()
         this.$refs.AssistTableDataGeRen.clearRadioRow()
         this.$refs.AssistTableDataOther.clearRadioRow()
-        if(this.oneAccountent[0].mateAccountCoding === "1221" || this.oneAccountent[0].mateAccountCoding === "2241" || this.oneAccountent[0].mateAccountCoding === "1532" || this.oneAccountent[0].mateAccountCoding === "1801"){
+        if(this.oneAccountent.titleCode === "1221" || this.oneAccountent.titleCode === "2241" || this.oneAccountent.titleCode === "1532" || this.oneAccountent.titleCode === "1801"){
           this.Classification = true
         }else{
           this.Classification = false

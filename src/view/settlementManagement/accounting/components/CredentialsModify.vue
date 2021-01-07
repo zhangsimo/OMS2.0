@@ -1106,6 +1106,29 @@ import { hideLoading, showLoading } from '@/utils/loading';
                 }
               }
             })
+            if(this.tableData[i].rootCode === '601'){
+              if(this.tableData[i].amountDirection === 1 && this.tableData[i].lenderAmount){
+                saveBool = false
+                return this.$Message.error(`第${i+1}行，只能填写借方金额！`)
+              }
+              if(this.tableData[i].amountDirection === 0 && this.tableData[i].debitAmount){
+                saveBool = false
+                return this.$Message.error(`第${i+1}行，只能填写贷方金额！`)
+              }
+              if(this.tableData[i].direction === 0 && this.tableData[i].lenderAmount){
+                saveBool = false
+                return this.$Message.error(`第${i+1}行，只能填写借方金额！`)
+              }
+              if(this.tableData[i].direction === 1 && this.tableData[i].debitAmount){
+                saveBool = false
+                return this.$Message.error(`第${i+1}行，只能填写贷方金额！`)
+              }
+            }
+            if(this.tableData[i].auxiliaryAccountingName && !this.tableData[i].auxiliaryName){
+              saveBool = false
+              this.$Message.error(`第${i+1}行，辅助核算必填！`)
+              return 
+            }
             setTimeout(()=>{
               this.tableData = this.tableData.filter(item => item.subjectName)
               saveBool?this.SaveTwo():""
