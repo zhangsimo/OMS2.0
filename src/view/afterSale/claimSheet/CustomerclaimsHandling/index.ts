@@ -101,13 +101,16 @@ export default class Custom extends Vue {
           let params: any = {
             orderType: type,
           }
+          showLoading()
           let res: any = await all.Customerprocessing(params, this.claimSupplierSelData)
           if (res.code === 0) {
-            this.btnFlag=true
+            hideLoading()
+          
             this.getList()
             this.$Message.success("处理成功")
           }else{
-            this.btnFlag=true
+            hideLoading()
+          
           }
         },
         onCancel: () => {
@@ -168,6 +171,7 @@ export default class Custom extends Vue {
     //@ts-ignore
     let res: any = await all.CustomerprocessingQuery(params, this.body)
     if (res.code === 0) {
+       hideLoading()
       res.data.content.forEach(el => {
        if(el.thisTreatmentQty<1){
         el.thisTreatmentQty=1
@@ -175,8 +179,10 @@ export default class Custom extends Vue {
       });
       this.claimSupplierData= res.data.content
       this.page.total=res.data.totalElements
-      hideLoading()
+     
 
+    }else{
+      hideLoading()
     }
   }
   //导出
