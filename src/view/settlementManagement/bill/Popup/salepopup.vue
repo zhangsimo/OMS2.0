@@ -3,14 +3,12 @@
     <Button
       class="ivu-btn ivu-btn-default mr10"
       @click="preservation"
-      :loading="proserDis"
       v-has="'examine'"
     >保存草稿</Button>
     <Button
       class="ivu-btn ivu-btn-default mr10"
       v-noresub
       @click="submission"
-      :loading="proserDis"
       v-has="'examine'"
     >提交申请</Button>
     <!--<button-->
@@ -302,6 +300,8 @@ import {
 } from "@/api/bill/popup";
 import bus from "./Bus";
 import index from "../../../admin/roles";
+import {showLoading,hideLoading} from "../../../../utils/loading";
+
 export default {
   components: {
     approval,
@@ -360,7 +360,6 @@ export default {
       approvalTit: "开票申请流程", //审批流程
       popupTit: "选择必开销售单", //选择必开销售单弹框标题
       modal1: false, // 弹框开关
-      proserDis:false,//保存草稿 按钮接口返回前不可再次点击
       invoice: {
         consignee: "", //快递收件人
         receiptUnit: "", // 发票单位
@@ -612,17 +611,17 @@ export default {
         let arrData1 = [];
         let bbArr = oldPartData.filter(item => {
           if(orderNoArr.includes(item.outNo)){
+            item.ifNecessary = 1
             return item;
           }else{
             arrData1.push(item);
           }
         });
         if (this.$parent.salepopupList[0].isOilPart == 1){
-          this.accessoriesBillingData1 = bbArr.concat(arrData1)
+          this.accessoriesBillingData1 = [...bbArr,...arrData1]
         } else {
-          this.accessoriesBillingData2 = bbArr.concat(arrData1)
+          this.accessoriesBillingData2 = [...bbArr,...arrData1]
         }
-
       }
     },
 
@@ -840,16 +839,16 @@ export default {
 
           this.isCanRequest = !this.isCanRequest
           // console.log(obj , 888)
-          this.proserDis=true;
+          showLoading()
           saveDraft(obj).then(res => {
             this.isCanRequest = !this.isCanRequest
             if (res.code === 0) {
               this.$message.success("保存成功");
-              this.proserDis=false;
+              hideLoading()
               this.modal1 = false;
               this.$emit('getNewList',{})
             }else{
-              this.proserDis=false;
+              hideLoading()
             }
           });
         }
@@ -893,16 +892,16 @@ export default {
           if(obj.additionalTaxPoint){
             delete obj.additionalTaxPoint
           }
-          this.proserDis=true;
+          showLoading()
           submitDraft(obj).then(res => {
             this.isCanRequest = !this.isCanRequest
             if (res.code === 0) {
               this.$message.success("提交成功");
               this.modal1 = false;
-              this.proserDis=false;
+              hideLoading()
               this.$emit('getNewList',1)
             }else{
-              this.proserDis=false;
+              hideLoading()
             }
           });
         }
