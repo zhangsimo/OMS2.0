@@ -323,6 +323,7 @@ import {getOutStaffNew, addOutStaffeNew/**添加外部员工*/} from "@/api/syst
 import addOutStaff from "@/view/system/systemSetting/outStaffManagement/components/addOutStaff.vue"
 // import * as tools from "../../utils/tools";
 import bus from "../../../bill/Popup/Bus";
+import { isArray } from 'xe-utils/methods';
 export default {
   name: "AssistAccounting",
   props:['oneAccountent','assistTypeCode'],
@@ -786,7 +787,13 @@ export default {
       let params = {};
       params.dictCode = "CW00131";
       kmType(params).then(res => {
-        this.fundListZanshi=res.data.filter(vb=>this.oneAccountent[0].mateAccountCoding.indexOf(vb.itemValueOne)!=-1)
+        this.fundListZanshi=res.data.filter(vb=>{
+          if(Array.isArray(this.oneAccountent)){
+            return this.oneAccountent[0].mateAccountCoding.indexOf(vb.itemValueOne)!=-1
+          }else{
+            return this.oneAccountent.titleCode.indexOf(vb.itemValueOne)!=-1
+          }
+        })
       });
     },
     //其他新增
@@ -806,7 +813,9 @@ export default {
         this.$refs.AssistTableDataGongYingShang.clearRadioRow()
         this.$refs.AssistTableDataGeRen.clearRadioRow()
         this.$refs.AssistTableDataOther.clearRadioRow()
-        if(this.oneAccountent[0].mateAccountCoding === "1221" || this.oneAccountent[0].mateAccountCoding === "2241" || this.oneAccountent[0].mateAccountCoding === "1532" || this.oneAccountent[0].mateAccountCoding === "1801"){
+        if(this.oneAccountent.titleCode === "1221" || this.oneAccountent.titleCode === "2241" || this.oneAccountent.titleCode === "1532" || this.oneAccountent.titleCode === "1801"){
+          this.Classification = true
+        }else if(this.oneAccountent[0].mateAccountCoding === "1221" || this.oneAccountent[0].mateAccountCoding === "2241" || this.oneAccountent[0].mateAccountCoding === "1532" || this.oneAccountent[0].mateAccountCoding === "1801"){
           this.Classification = true
         }else{
           this.Classification = false

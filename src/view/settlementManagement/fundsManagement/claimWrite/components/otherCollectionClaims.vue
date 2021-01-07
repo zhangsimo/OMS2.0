@@ -7,11 +7,6 @@
         </i-col>
         <i-col span="18" class="tr">
           <Form :model="formValidate" inline ref="form" :rules="ruleValidate">
-            <FormItem label="备注：" :label-width="60" label-position="left" maxlength="500" show-word-limit  prop="remark">
-              <Row>
-                <i-input :value.sync="formValidate.remark" class="w180" maxlength="500" v-model.trim="formValidate.remark"></i-input>
-              </Row>
-            </FormItem>
             <FormItem label="选择辅助核算：" :label-width="120" label-position="left" prop="voucherInput">
               <Row>
                   <i-input :value.sync="formValidate.voucherInput" class="w200" v-model="formValidate.voucherInput"></i-input>
@@ -24,11 +19,6 @@
       <Row class="dbd" v-else>
         <i-col span="18">
           <Form :model="formValidate" ref="form" inline :rules="ruleValidate">
-            <FormItem label="备注：" :label-width="60" label-position="left" prop="remark">
-              <Row>
-                <i-input :value.sync="formValidate.remark" class="w180" maxlength="500" show-word-limit v-model.trim="formValidate.remark"></i-input>
-              </Row>
-            </FormItem>
             <FormItem label="选择辅助核算："  :label-width="120" label-position="left" prop="voucherInput">
               <Row>
                   <i-input :value.sync="formValidate.voucherInput" class="w200" v-model="formValidate.voucherInput"></i-input>
@@ -93,6 +83,14 @@
           align="center"
         ></vxe-table-column>
       </vxe-table>
+      <Row class="mt10">
+        <i-col span="1">
+          <span style="line-height: 30px">备注:</span>
+        </i-col>
+        <i-col span="23">
+          <i-input :value.sync="remark" maxlength="500" v-model.trim="remark"></i-input>
+        </i-col>
+      </Row>
       <div slot="footer">
         <Button type="primary" @click="openClimed('预收款认领')" class="mr10" v-if="claimTit=='预收款认领'">确定</Button>
         <Button type="primary" @click="openClimed('其他收款认领')" class="mr10" v-else>确定</Button>
@@ -169,11 +167,11 @@
         });
       };
       return {
+        remark: '',
         voucherinputModel: false,
-        formValidate: {voucherInput: "",remark: ""},
+        formValidate: {voucherInput: ""},
         ruleValidate: {
-          voucherInput: [{required: true, message: '必填项', trigger: ['blur','change']}],
-          remark: [{min: 0, max: 500, message: '备注信息500字符以内', trigger: ['blur','change']}]
+          voucherInput: [{required: true, message: '必填项', trigger: ['blur','change']}]
         },
         // 表格验证  本次认领金额  是否符合条件
         validRules: {
@@ -219,7 +217,7 @@
         this.modal = true;
         this.formValidate.voucherInput = ''
         this.$refs.voucherInput.AssistAccounting = ''
-        this.formValidate.remark = ''
+        this.remark = ''
         this.$nextTick(() => {
           this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0), "rpAmt")
         })
@@ -395,8 +393,8 @@
         let data = {};
         data.detailId = this.accrued[0].id;
         let objItem = this.$refs.voucherInput.voucherItem;
-        if(this.formValidate.remark){
-          data.remark = this.formValidate.remark
+        if(this.remark){
+          data.remark = this.remark
         }
         if (this.voucherinputModel) {
           let ajaxBool = true;
