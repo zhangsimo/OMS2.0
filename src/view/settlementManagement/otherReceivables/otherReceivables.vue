@@ -92,7 +92,7 @@
           v-has="'cancel'"
           class="ml10"
           @click="collectWirte"
-          :disabled="Boolean(currRow.writeOffReceiptNo)"
+          :disabled="Boolean(currRow.paymentBalance <= 0)"
           >其他收款核销</Button
         >
         <Button
@@ -952,6 +952,7 @@ export default {
     // 选中行
     currentChangeEvent({ row }) {
       this.currRow = row;
+      console.log(row)
       this.reconciliationStatement.accountNo = row.serviceId;
       this.serviceId = row.serviceId;
       this.$refs.Record.init();
