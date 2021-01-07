@@ -42,6 +42,10 @@
             <span>因公借支申请单号：</span>
             <Input v-model="requestCode" class="w120" />
           </div>
+          <div class="db ml10">
+            <span>付款出纳:</span>
+            <Input v-model.trim="approveUname" type="text" clearable class="ml10 w150"/>
+          </div>
           <div class="db ml20">
             <button
               class="mr10 ivu-btn ivu-btn-default"
@@ -150,6 +154,9 @@
                 title="申请人"
                 width="90"
               ></vxe-table-column>
+
+              <vxe-table-column title="付款出纳" field="approveUname" width="80"></vxe-table-column>
+
             </vxe-table-column>
             <vxe-table-column title="金额信息">
               <vxe-table-column
@@ -567,6 +574,7 @@ export default {
       company: [], //往来单位数组
       Branchstore: [{ id: "0", name: "全部", shortName: "全部" }], //分店名称
       requestCode: "", //申请单号
+      approveUname:"",//付款出纳
       currRow: null, //选中行
       claimModal: false, //认领弹框
       revoke: false, //撤回弹框
@@ -761,6 +769,7 @@ export default {
         : "";
       obj.orgid=this.BranchstoreId == "0" ? "" : this.BranchstoreId,
       obj.serviceId = this.requestCode;
+      obj.approveUname = this.approveUname;
       obj.searchval = this.$refs.quickDate.searchQuick;
       obj.pagesize = this.page.total;
       for (let d in obj) {
@@ -788,6 +797,7 @@ export default {
           : "",
         orgid: this.BranchstoreId == "0" ? "" : this.BranchstoreId,
         serviceId: this.requestCode,
+        approveUname:this.approveUname
         // guestId: this.companyId,
       };
       for (let d in data) {
