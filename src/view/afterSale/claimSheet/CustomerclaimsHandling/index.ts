@@ -16,7 +16,8 @@ import { showLoading, hideLoading } from "@/utils/loading"
 })
 export default class Custom extends Vue {
   private body: any = {}
-  private showit: Boolean = true
+  private showit: Boolean = true;
+  private  btnFlag:boolean=true
   private rightTableHeight: any = 440
   //表格数据
   private claimSupplierData: Array<any> = new Array<any>();
@@ -65,6 +66,7 @@ export default class Custom extends Vue {
   }
   //原货退换
   private async claim(type: number) {
+   
     if (this.claimSupplierSelData.length < 1) {
       return this.$message.error("最少选中一条数据进行处理！")
     }
@@ -95,13 +97,17 @@ export default class Custom extends Vue {
         title: '提示',
         content: `<p>是否确定${p}?</p>`,
         onOk: async () => {
+          this.btnFlag=false
           let params: any = {
             orderType: type,
           }
           let res: any = await all.Customerprocessing(params, this.claimSupplierSelData)
           if (res.code === 0) {
+            this.btnFlag=true
             this.getList()
             this.$Message.success("处理成功")
+          }else{
+            this.btnFlag=true
           }
         },
         onCancel: () => {
