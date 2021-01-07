@@ -166,12 +166,6 @@
       this.search.orderDate = value;
       this.query();
     }
-    private getDataQuick(v){
-      this.search.orderDate = v;
-    }
-    private async partBrandRemote(query: string) {
-      this.bandArr = await getBrandList(query)
-    }
     private query() {
       let data:any = {};
       for (let key in this.search) {
