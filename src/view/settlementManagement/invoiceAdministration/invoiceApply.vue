@@ -134,6 +134,10 @@
           <vxe-table-column field="applyNoSub" title="开票申请子单号" width="180"></vxe-table-column>
           <vxe-table-column field="guestName" title="往来单位" fixed="left" width="100"></vxe-table-column>
           <vxe-table-column field="applyDate" title="申请日期" width="100"></vxe-table-column>
+
+          <vxe-table-column field="applyDate" title="审核日期" width="100"></vxe-table-column>
+          <vxe-table-column field="approveDate" title="审核人" width="100"></vxe-table-column>
+
           <vxe-table-column field="accountNo" title="对账单号" width="180"></vxe-table-column>
           <vxe-table-column field="receiptUnit" title="发票单位" width="100"></vxe-table-column>
           <vxe-table-column field="additionalTaxPoint" title="税点" width="80"></vxe-table-column>
@@ -230,9 +234,13 @@
           <vxe-table-column title="开票清单类型" field="isOilPartText" width="120"></vxe-table-column>
           <vxe-table-column title="开票单位" field="invoiceUnitName" width="80"></vxe-table-column>
           <vxe-table-column title="收款方式" field="collectionTypeName" width="80"></vxe-table-column>
+          <vxe-table-column title="快递收件人" field="consignee" width="80"></vxe-table-column>
           <vxe-table-column title="收件地址" field="address" width="80"></vxe-table-column>
-          <vxe-table-column title="快递方式" field="sendingWayName" width="80"></vxe-table-column>
-          <vxe-table-column title="备注" field="remark" width="100"></vxe-table-column>
+          <vxe-table-column title="电话" field="phone" width="80"></vxe-table-column>
+          <vxe-table-column title="寄件方式" field="sendingWayName" width="80"></vxe-table-column>
+          <vxe-table-column title="费用承担" field="costBear" width="80"></vxe-table-column>
+          <vxe-table-column title="快递备注" field="remark" width="100"></vxe-table-column>
+          <vxe-table-column title="开票说明" field="underTicketExplain" width="100"></vxe-table-column>
         </vxe-table>
       </div>
     </section>

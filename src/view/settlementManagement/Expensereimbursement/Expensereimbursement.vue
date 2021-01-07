@@ -42,6 +42,10 @@
             <span>费用报销申请单号：</span>
             <Input v-model="requestCode" class="w120" />
           </div>
+          <div class="db ml10">
+            <span>付款出纳:</span>
+            <Input v-model.trim="approveUname" type="text" clearable class="ml10 w150"/>
+          </div>
           <div class="db ml20">
             <button
               class="mr10 ivu-btn ivu-btn-default"
@@ -83,7 +87,7 @@
           v-has="'claimRevoke'"
           >因公借支核销撤回
         </Button>
-        
+
         <Button class="ml10" @click="openRegEnter">进项登记及修改</Button>
       </div>
     </section>
@@ -134,6 +138,9 @@
                 title="申请人"
                 width="90"
               ></vxe-table-column>
+
+              <vxe-table-column title="付款出纳" field="approveUname" width="80"></vxe-table-column>
+
             </vxe-table-column>
             <vxe-table-column title="金额信息">
               <vxe-table-column
@@ -386,6 +393,7 @@ export default {
       company: [], //往来单位数组
       Branchstore: [{ id: "0", name: "全部", shortName: "全部" }], //分店名称
       requestCode: "", //费用报销申请单号
+      approveUname:"",//付款出纳
       currRow: null, //选中行
       claimModal: false, //认领弹框
       claimPayDis: false, //认领接口返回之前不可再次点击按钮
@@ -587,6 +595,7 @@ export default {
             : "",
           orgid: this.BranchstoreId == "0" ? "" : this.BranchstoreId,
           serviceId: this.requestCode,
+          approveUname:this.approveUname,
           pagesize: this.page.total,
         };
         let params = "";
@@ -616,6 +625,7 @@ export default {
           : "",
         orgid: this.BranchstoreId == "0" ? "" : this.BranchstoreId,
         serviceId: this.requestCode,
+        approveUname:this.approveUname
         // guestId: this.companyId,
       };
       // for (let d in data) {

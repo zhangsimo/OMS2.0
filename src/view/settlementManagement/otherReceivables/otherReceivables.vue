@@ -56,6 +56,10 @@
             </Select> -->
             <Input type="text" class="h30 w200" v-model="companyId" />
           </div>
+          <div class="db ml10">
+            <span>付款出纳:</span>
+            <Input v-model.trim="approveUname" type="text" clearable class="ml10 w150"/>
+          </div>
           <div class="db ml20">
             <button
               class="mr10 ivu-btn ivu-btn-default"
@@ -156,6 +160,9 @@
               title="往来单位"
               fixed="left"
             ></vxe-table-column>
+
+            <vxe-table-column title="付款出纳" field="approveUname" width="80"></vxe-table-column>
+
             <vxe-table-column title="基本信息">
               <vxe-table-column
                 field="serviceId"
@@ -578,6 +585,7 @@ export default {
       BranchstoreId: "", //分店名称
       company: [], //往来单位数组
       companyId: "", //往来单位
+      approveUname:"",//付款出纳
       Branchstore: [{ id: "0", name: "全部", shortName: "全部" }], //分店名称
       currRow: {}, //选中行
       claimModal: false, //认领弹框
@@ -830,6 +838,7 @@ export default {
           : "",
         orgid: this.BranchstoreId == "0" ? "" : this.BranchstoreId,
         guestName: this.companyId.trim(),
+        approveUname:this.approveUname,
       };
       for (let key in obj) {
         if (!obj[key]) {
@@ -1001,6 +1010,7 @@ export default {
         ? moment(this.value[1]).format("YYYY-MM-DD 23:59:59")
         : "";
       obj.guestName = this.companyId.trim();
+      obj.approveUname = this.approveUname;
       obj.searchval = this.$refs.quickDate.searchQuick;
       obj.pagesize = this.page.total;
       for (let d in obj) {
