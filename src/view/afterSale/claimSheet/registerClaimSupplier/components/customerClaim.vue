@@ -239,7 +239,7 @@
           return this.$Message.error("存在已添加的客户理赔登记单!")
         }
         par.formPlan.details=[...data,...par.formPlan.details];
-        par.partOrCustomerOnly=2;
+        par.formPlan.partOrCustomerOnly=2;
         let xtable:any=this.$refs.customerXtable
         xtable.clearCheckboxRow();
         xtable.updateData();
