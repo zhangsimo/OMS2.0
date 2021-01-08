@@ -142,7 +142,7 @@ export function noTaxAccount(data) {
   })
 }
 
-//引用上次申请信息
+//引用上次申请信息 销售开票含税
 export function informationCitation(params) {
   return axios.request({
     url: `${api.omsSettle}/invoiceApply/queryPre`,
@@ -150,7 +150,14 @@ export function informationCitation(params) {
     params
   })
 }
-
+//引用上次申请信息 销售开票不含税
+export function informationNoCitation(params) {
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApply/queryPreNoTax`,
+    method: 'get',
+    params
+  })
+}
 //开票配件
 export function partsInvoice(data) {
   return axios.request({

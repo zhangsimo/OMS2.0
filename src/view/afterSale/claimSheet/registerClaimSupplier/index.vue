@@ -237,6 +237,7 @@
                       v-model="row.afterSaleQty"
                       :precision="0"
                       :disabled="formPlan.orderSign!=0"
+                      :max="row.enterMainId?row.noChoiceQty:999999999999"
                       @change="afterSaleQtyChange(row)"
                       size="mini"
                     />

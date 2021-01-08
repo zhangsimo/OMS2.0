@@ -193,6 +193,7 @@
           data.enterMainId=data.mainId;
           data.processedQty=0;
           data.untreatedQty=el.noChoiceQty;
+          data.noChoiceQty=el.noChoiceQty;
           data.enterDetailId=data.id;
           delete data.id;
           delete data.mainId;
