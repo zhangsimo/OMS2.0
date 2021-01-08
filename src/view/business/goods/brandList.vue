@@ -389,7 +389,7 @@ import {
 } from "@/api/business/stockSearch";
 import { parse } from "qs";
 import brandCus from "_c/allocation/brandCus.vue"
-
+import distroyDom from "_mixins/distroyDom";
 import {showLoading, hideLoading} from '@/utils/loading'
 
 export default {
@@ -397,6 +397,7 @@ export default {
   components: {
     brandCus
   },
+  mixins: [distroyDom],
   data() {
     return {
       guestName: "",
