@@ -364,6 +364,7 @@ import "../../../goods/goodsList/goodsList.less";
 // import supplier from './compontents/supplier'
 import Cookies from "js-cookie";
 import { hideLoading, showLoading } from "@/utils/loading";
+import distroyDom from "_mixins/distroyDom";
 
 import {
   optGroup,
@@ -386,6 +387,7 @@ export default {
     GoodsInfo,
     SelectSupplier,
   },
+  mixins: [distroyDom],
   data() {
     let changeNumber = ({ cellValue }) => {
       const reg = /^[1-9]\d{0,}$/;

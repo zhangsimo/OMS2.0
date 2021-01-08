@@ -9,7 +9,6 @@
             @change="changeModel"
           >是否不生成预付款单号
           </Checkbox>
-          备注：<i-input class="w180" maxlength="500" v-model.trim="remark"></i-input>
         </i-col>
 
         <i-col span="10" v-show="voucherinputModel">
@@ -62,7 +61,6 @@
           <!-- @change="changeModel" -->
         </i-col>
         <i-col span="12" class="tr">
-          备注：<i-input class="w180 mr10" maxlength="500" v-model.trim="remark"></i-input>
           <Checkbox v-model="voucherinputModel" :checked.sync="voucherinputModel">是否不生成其他付款认领单号</Checkbox>
         </i-col>
       </Row>
@@ -152,6 +150,14 @@
             <vxe-table-column field="payTime" title="付款时间" v-if="claimTit=='其他付款认领'"></vxe-table-column>
             <vxe-table-column field="receiveRemark" title="付款备注"></vxe-table-column>
           </vxe-table>
+          <Row class="mt10">
+            <i-col span="1">
+              <span style="line-height: 30px">备注:</span>
+            </i-col>
+            <i-col span="23">
+              <i-input :value.sync="remark" maxlength="500" v-model.trim="remark"></i-input>
+            </i-col>
+          </Row>
           <Page
             class-name="mb10 mt10 fr"
             :current="page.num"

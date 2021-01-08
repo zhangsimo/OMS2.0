@@ -24,7 +24,10 @@ import GoodCus from "_c/allocation/GoodCus.vue"
 import { checkStore } from "@/api/system/systemApi";
 import { hideLoading, showLoading } from "@/utils/loading";
 import printZF from "@/components/print/print.vue";
+// @ts-ignore
+import distroyDom from "_mixins/distroyDom";
 @Component({
+  mixins:[distroyDom],
   components: {
     QuickDate,
     SelectSupplier,

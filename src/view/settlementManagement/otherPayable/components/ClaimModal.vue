@@ -3,7 +3,6 @@
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
       <div class="clearfix mb20">
         <Button class="fl mr10" @click="openPClaimModal">选择单据</Button>
-        备注：<i-input class="w180" maxlength="500" v-model.trim="remark"></i-input>
         <div class="fr" v-show="titleName!='其他付款支出认领'">
           <span style="color: red" class="mr5">*</span>
           <span>选择辅助核算：</span>
@@ -83,7 +82,14 @@
 
         </vxe-table-column>
       </vxe-table>
-
+      <Row class="mt10">
+        <i-col span="1">
+          <span style="line-height: 30px">备注:</span>
+        </i-col>
+        <i-col span="23">
+          <i-input :value.sync="remark" maxlength="500" v-model.trim="remark"></i-input>
+        </i-col>
+      </Row>
       <div slot="footer">
         <Button type="primary" :disabled="isDis" @click="confirm">确定</Button>
         <Button @click="close">取消</Button>

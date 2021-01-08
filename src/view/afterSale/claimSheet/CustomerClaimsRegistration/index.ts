@@ -283,10 +283,10 @@ export default class Customs extends Vue {
     this.purchaseType == 99 ? data.orderSign = "" : data.orderSign = this.purchaseType
     params.page = this.Left.page.num - 1;
     params.size = this.Left.page.size;
-     // showLoading()
+      showLoading()
     let res: any = await all.getListSale(params, data);
     if (res.code === 0) {
-      //  hideLoading()
+        hideLoading()
       if (res.data.content && res.data.content.length > 0) {
         this.tableList = res.data.content.map(el => {
           el.orderDate ? el.orderDate = moment(el.orderDate).format("YYYY-MM-DD") : el.orderDate = ""
@@ -326,7 +326,7 @@ export default class Customs extends Vue {
         this.$refs.xTable.setCurrentRow(row);
         //给表单赋值
         this.format(row)
-        // hideLoading()
+       
       } else {
         this.tableList = []
         this.details = []
@@ -334,6 +334,8 @@ export default class Customs extends Vue {
 
       }
 
+    }else{
+      hideLoading()
     }
   }
   //理赔原因
@@ -451,9 +453,10 @@ export default class Customs extends Vue {
     this.Leftcurrentrow.afterSaleDate = this.Leftcurrentrow.afterSaleDate
       ? moment(this.Leftcurrentrow.afterSaleDate).format("YYYY-MM-DD")
       : "";
+    showLoading()
     let res: any = await all.submitSale(this.Leftcurrentrow);
     if (res.code == 0) {
-      
+      hideLoading()
       this.getLeftLists()
       // this.$refs.xTable.setCurrentRow(this.highlight);
       this.yuan=true
@@ -707,8 +710,9 @@ export default class Customs extends Vue {
       ? moment(this.Leftcurrentrow.afterSaleDate).format("YYYY-MM-DD")
       : "";
      // showLoading()
+      showLoading()
     let res: any = await all.saveSale(this.Leftcurrentrow);
-    showLoading()
+   
     if (res.code == 0) {
       hideLoading()
       this.bcflag = false
