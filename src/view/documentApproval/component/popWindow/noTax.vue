@@ -58,37 +58,123 @@
       </Col>
     </Row>
     <h4 class="mt10 mb10">发票数据</h4>
-    <Form ref="formCustom" :model="invoice" :rules="invoiceRule" :label-width="80">
+
+    <Form ref="formCustom" :model="invoice" :rules="invoiceRule" :label-width="160">
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="不含税对账单未开金额" :label-width="160">
-            <Input v-model="information.notAmt" class="ml5 w150" disabled/>
+          <FormItem label="发票单位" prop="receiptUnit">
+            <Select
+              v-model="invoice.receiptUnit"
+              class="ml5 w200"
+              @on-change="invoiceChange"
+              :disabled="modelType.type==3"
+            >
+              <Option
+                v-for="item in receiptUnitList"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
           </FormItem>
-          <FormItem label="产生税费" :label-width="160">
-            <Input :value="getTaxesAndDues" class="ml5 w150" disabled/>
+          <FormItem label="税号" prop="taxNo">
+            <Input v-model="invoice.taxNo" class="ml5 w200" :disabled="modelType.type==3" />
+          </FormItem>
+          <FormItem label="地址电话" prop="tel">
+            <Input v-model="invoice.tel" class="ml5 w200" :disabled="modelType.type==3" />
+          </FormItem>
+          <FormItem label="开户行及账号" prop="bankName">
+            <Input v-model="invoice.bankName" class="ml5 w200" :disabled="modelType.type==3" />
+          </FormItem>
+          <FormItem label="开票单位" prop="issuingOfficeId">
+            <Select v-model.trim="invoice.issuingOfficeId" class="ml5 w200" @on-change="invoUnitChange" :disabled="modelType.type==3"  >
+              <Option
+                v-for="item in issuingOfficeList"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="开票税率" prop="invoiceTax">
+            <Input type="text" v-model.trim="invoice.invoiceTax" class="ml5 w200" disabled/>
+          </FormItem>
+          <FormItem label="票据类型" prop="invoiceType">
+            <Input type="text" v-model.trim="invoice.invoiceType" class="ml5 w200" disabled/>
+          </FormItem>
+          <FormItem label="收款方式" prop="collectionType">
+            <Select
+              v-model="invoice.collectionType"
+              class="ml5 w200"
+              :disabled="modelType.type==3"
+            >
+              <Option
+                v-for="item in paymentMethodList"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="本次不含税开票金额" prop="invoiceTaxAmt" :label-width="150">
-            <InputNumber :max="1000000000" :min="0" v-model="invoice.invoiceTaxAmt" class="ml10 w100" :disabled="modelType.type!==1" />
+          <FormItem label="快递收件人" prop="consignee">
+            <Input v-model="invoice.consignee" class="ml5 w200" :disabled="modelType.type==3" />
           </FormItem>
-          <FormItem label="本次实际申请开票金额" :label-width="150">
-            <Input :value="showPay" class="ml5 w100" disabled/>
+          <FormItem label="收件地址" prop="address">
+            <Input v-model="invoice.address" class="ml5 w200" :disabled="modelType.type==3" />
+          </FormItem>
+          <FormItem label="电话" prop="phone">
+            <Input v-model="invoice.phone" class="ml5 w200" :disabled="modelType.type==3" />
+          </FormItem>
+          <FormItem label="寄件方式" prop="sendingWay">
+            <Select v-model="invoice.sendingWay" class="ml5 w200" :disabled="modelType.type==3">
+              <Option
+                v-for="item in waySendingList"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="费用承担" prop="costBear">
+            <Select v-model="invoice.costBear" class="ml5 w200" :disabled="modelType.type==3">
+              <Option
+                v-for="item in bearingCostList"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="备注">
+            <Input v-model="invoice.remark" class="ml5 w200" :disabled="modelType.type==3" />
+          </FormItem>
+          <FormItem>
+            <span style="color:#0099FF;cursor:pointer;" @click="quote">引用上次申请信息</span>
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="申请税点" :label-width="150">
+          <FormItem label="不含税对账单未开金额">
+            <Input v-model="information.notAmt" class="ml5 w200" disabled/>
+          </FormItem>
+          <FormItem label="产生税费">
+            <Input :value="getTaxesAndDues" class="ml5 w200" disabled/>
+          </FormItem>
+          <FormItem label="本次不含税开票金额" prop="invoiceTaxAmt">
+            <InputNumber :max="1000000000" :min="0" v-model="invoice.invoiceTaxAmt" class="w200" style="margin-left:5px;" :disabled="modelType.type!==1" />
+          </FormItem>
+          <FormItem label="本次实际申请开票金额">
+            <Input :value="showPay" class="ml5 w200" disabled/>
+          </FormItem>
+          <FormItem label="申请税点">
             <InputNumber
               :min="0"
               :max="100"
               v-model="invoice.taxPoint"
-              class="ml5 w150"
+              style="margin-left:5px;"
+              class="w200"
               :formatter="value => `${value}%`"
               :parser="value => value.replace('%', '')"
             />
           </FormItem>
-          <FormItem label="申请说明" :label-width="150">
-            <Input v-model="invoice.remark" class="ml5 w150" :disabled="modelType.type!==1" />
+          <FormItem label="申请说明">
+            <Input v-model="invoice.underTicketExplain" class="ml5 w200" :disabled="modelType.type!==1" />
           </FormItem>
         </div>
       </div>
@@ -120,7 +206,8 @@
 import SeleteSale from "@/view/settlementManagement/bill/Popup/seleteSale";
 import saleAccount from "@/view/settlementManagement/bill/Popup/saleAccount";
 import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
-import { noTaxApplyNo, partsInvoice, submitNoTax } from "@/api/bill/popup";
+import { noTaxApplyNo, partsInvoice, submitNoTax,ditInvoices,findCurrentIssuing,informationNoCitation } from "@/api/bill/popup";
+import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import bus from "@/view/settlementManagement/bill/Popup/Bus";
 import moment from "moment";
 import flow from "../Flow.vue";
@@ -143,6 +230,19 @@ export default {
         callback(new Error("只能输入数字"));
       }
     };
+    const validPhone = (rule , value ,callback) => {
+      let phone = /^(\d{3,4}-)?\d{7,8}$/
+      let tel = /^1[3456789]\d{9}$/
+      if (value) {
+        if (phone.test(value) || tel.test(value)) {
+          callback();
+        } else {
+          callback(new Error("电话号码格式不对"));
+        }
+      } else {
+        callback(new Error("电话号码不能为空"));
+      }
+    }
     return {
       information: {
         orgName: "",
@@ -267,26 +367,121 @@ export default {
         }
       ], //开票配件
       accessoriesBillingData: [], //开票配件数据
+      bearingCostList: [
+        {
+          value: "0",
+          label: "现付"
+        },
+        {
+          value: "1",
+          label: "到付"
+        },
+        {
+          value: "2",
+          label: "自取"
+        }
+      ], //费用承担列表
+      paymentMethodList:[],
+      waySendingList:[],
+      issuingOfficeList:[],//开票单位列表
+      receiptUnitList: [], //发票单位列表
       invoice: {
+        consignee: "", //快递收件人
+        receiptUnit: "", // 发票单位
+        taxNo: "", //税号
+        tel: "", //地址电话
+        bankName: "", //开户行及账号
+        issuingOfficeId: "", //开票单位
+        invoiceType: "", //开票类型
+        typeBillingList: [], //开票类型列表
+        invoiceTax: "", //开票税率
+        rateBillingList: [], //开票税率列表
+        collectionType: "", //收款方式
+        costBear: "", //费用承担
+        address: "", //收件地址
+        remark: "", //备注
+        phone: "", //电话
+        amountExcludingTax: "", //不含税金额
+        sendingWay: "", //寄件方式
+        additionalTaxPoint: "", //外加税点
         taxPoint: 0, //申请税点
-        taxApplicationList: [
-          {
-            value: 0.06,
-            label: "6%"
-          },
-          {
-            value: 0.07,
-            label: "7%"
-          }
-        ], //申请税点列表
         accountNo: "", //对账单号
         taxation: "", //产生税费
         notAmt: "", //不含税对账单未开金额
         invoiceAmt: "", //实际增加开票金额
-        invoiceTaxAmt: "", //本次不含税开票金额
-        remark: "" //申请说明
+        invoiceTaxAmt: 0, //本次不含税开票金额
+        underTicketExplain: "" //申请说明
       }, //发票数据表单
       invoiceRule: {
+        consignee: [
+          {
+            required: true,
+            message: "快递收件人不能为空"
+          }
+        ],
+        receiptUnit: [
+          {
+            required: true,
+            message: "发票单位不能为空"
+          }
+        ],
+        taxNo: [
+          {
+            required: true,
+            message: "税号不能为空"
+          }
+        ],
+        tel: [
+          {
+            required: true,
+            message: "地址电话不能为空"
+          }
+        ],
+        bankName: [
+          {
+            required: true,
+            message: "开户行及账号不能为空"
+          }
+        ],
+        invoiceType: [
+          {
+            required: true,
+            message: "开票类型不能为空",
+            trigger: "change"
+          }
+        ],
+        collectionType: [
+          {
+            required: true,
+            message: "收款方式不能为空",
+            trigger: "change"
+          }
+        ],
+        costBear: [
+          {
+            required: true,
+            message: "费用承担不能为空"
+          }
+        ],
+        address: [
+          {
+            required: true,
+            message: "收件地址不能为空"
+          }
+        ],
+        phone: [
+          {
+            required: true,
+            validator: validPhone,
+          }
+        ],
+        sendingWay: [
+          {
+            required: true,
+            message: "寄件方式不能为空",
+            trigger: "blur"
+          }
+        ],
         taxPoint: [
           {
             required: true,
@@ -330,7 +525,36 @@ export default {
       // num: 0 //表格数量合计
     };
   },
-  mounted() {
+  async mounted() {
+    // 收款方式数据字典
+    getDataDictionaryTable({ dictCode: "RECEIVABLE_TYPE" }).then(res => {
+      res.data.map(item => {
+        this.paymentMethodList.push({
+          value: item.itemCode,
+          label: item.itemName
+        });
+      });
+    });
+    // 寄件方式数据字典
+    getDataDictionaryTable({ dictCode: "MAIL_TYPE" }).then(res => {
+      res.data.map(item => {
+        this.waySendingList.push({
+          value: item.itemCode,
+          label: item.itemName
+        });
+      });
+    });
+    // 开票单位
+    findCurrentIssuing().then(res => {
+      res.data.map(item => {
+        this.issuingOfficeList.push({
+          value: item.id,
+          label: item.name,
+          taxRateName:item.taxRateName,
+          invoiceTypeName:item.invoiceTypeName
+        });
+      });
+    });
     // 对账单
     bus.$on("accountNo", val => {
       this.invoice.taxPoint = 0.07;
@@ -379,6 +603,34 @@ export default {
       this.modal1 = true
       this.row = Object.assign({}, row);//对象浅拷贝row
     },
+    // 发票单位带出税号等信息
+    invoiceChange(val) {
+      this.receiptUnitList.map(item => {
+        if (item.value === val) {
+          this.invoice.taxNo = item.taxpayerCode;
+          this.invoice.tel = item.taxpayerTel;
+          this.invoice.bankName = item.accountBankNo;
+        }
+      });
+    },
+    invoUnitChange(option){
+      this.issuingOfficeList.map(el=>{
+        if(el.id==option.value){
+          this.invoice.invoiceTax=el.taxRateName;
+          this.invoice.invoiceType=el.invoiceTypeName;
+        }
+      })
+    },
+    // 引用上次申请信息
+    quote() {
+      informationNoCitation({ guestId: this.information.guestId }).then(res => {
+        if (res.code === 0) {
+          this.invoice.consignee = res.data.consignee;
+          this.invoice.address = res.data.address;
+          this.invoice.phone = res.data.phone;
+        }
+      });
+    },
     // 对话框是否显示
     async visChange(flag) {
       if (flag) {
@@ -423,15 +675,30 @@ export default {
             this.information.orgId = res.data.orgid;
             this.information.orgName = res.data.orgName;
             this.information.guestId = res.data.guestId;
+            this.information.guestIds = res.data.guestIds;
             this.information.noTaxApply = res.data.applyNo;
             this.information.guestName = res.data.guestName;
             this.information.accountNo = res.data.accountNo;
             this.information.applicationDate = res.data.applyDate;
             this.information.notAmt = res.data.notAmt;
             this.invoice = res.data;
+            this.invoice.taxPoint=Number(this.invoice.taxPoint)
+            this.invoice.invoiceTaxAmt=Number(this.invoice.invoiceTaxAmt)
+
             this.invoice.taxApplicationList = [{value: "0.06", label: "6%"}, {value: "0.07", label: "7%"}];
             this.accessoriesBillingData = res.data.partList;
             // this.remarks = res.data.applyReason
+            // 发票单位
+            let guestIdsOne=this.information.guestIds.replace('[',"").replace("]","").split(",")
+            ditInvoices(guestIdsOne).then(res2 => {
+              if (res2.code === 0) {
+                res2.data.map(item => {
+                  item.label = item.taxpayerName;
+                  item.value = item.id;
+                });
+                this.receiptUnitList = res2.data;
+              }
+            });
           }
         }
       }

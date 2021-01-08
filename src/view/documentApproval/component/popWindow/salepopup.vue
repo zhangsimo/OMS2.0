@@ -257,6 +257,19 @@ export default {
         callback();
       }
     };
+    const validPhone = (rule , value ,callback) => {
+      let phone = /^(\d{3,4}-)?\d{7,8}$/
+      let tel = /^1[3456789]\d{9}$/
+      if (value) {
+        if (phone.test(value) || tel.test(value)) {
+          callback();
+        } else {
+          callback(new Error("电话号码格式不对"));
+        }
+      } else {
+        callback(new Error("电话号码不能为空"));
+      }
+    }
     return {
       formInline: {
         applicant: "",
@@ -406,7 +419,7 @@ export default {
         phone: [
           {
             required: true,
-            message: "电话不能为空"
+            validator: validPhone,
           }
         ],
         sendingWay: [
