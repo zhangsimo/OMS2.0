@@ -98,7 +98,7 @@
         </button>
         <Button class="ml10" @click="saveSendingNumber" v-has="'saveSendingNumber'">保存</Button>
       </div>
-      <div class="mt20">
+      <div class="mt15">
         <Button class="mr10" :type="isActive===''?'info':'default'" @click="chooseTable('')">全部显示</Button>
         <Button class="mr10" :type="isActive==1?'info':'default'" @click="chooseTable(1)">已核销</Button>
         <Button :type="isActive===0?'info':'default'" @click="chooseTable(0)">未核销</Button>
@@ -116,7 +116,7 @@
           show-overflow="title"
           size="mini"
           :data="data"
-          max-height="400"
+          max-height="380"
           align="center"
           @checkbox-all="requires"
           @checkbox-change="requires"
@@ -172,7 +172,7 @@
           show-total
           size="small"
         />
-        <button class="mt30 ivu-btn ivu-btn-default" type="button">开票申请配件明细</button>
+        <button class="mt10 ivu-btn ivu-btn-default" type="button">开票申请配件明细</button>
         <vxe-table
           border
           auto-resize
@@ -182,7 +182,7 @@
           :data="data1"
           show-overflow="title"
           class="mt10"
-          max-height="400"
+          max-height="250"
           ref="parts"
         >
           <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
