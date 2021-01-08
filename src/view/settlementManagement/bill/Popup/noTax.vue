@@ -498,6 +498,7 @@
           let arrData1 = [];
           let bbArr = oldPartData.filter(item => {
             if (orderNoArr.includes(item.outNo)) {
+              item.ifNecessary = 1
               return item;
             } else {
               arrData1.push(item);

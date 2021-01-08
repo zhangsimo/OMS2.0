@@ -648,7 +648,7 @@
     <salepopup ref="salepopup" @getNewList="getNeWlist"/>
     <hedgingInvoice ref="hedgingInvoice" @getNewList="getNeWlist"/>
     <registrationEntry ref="registrationEntry" @getNewList="getNeWlist"/>
-    <settlementMoadl ref="settlementMoadl" @getNewList="getNeWlist"/>
+    <settlementMoadl ref="settlementMoadl" @getNewList="getNeWlist" :stateType="stateType"/>
     <no-tax ref="noTax" :information="reconciliationStatement" :parameter="{}"></no-tax>
     <!--    //人工对账-->
     <invoiceApplyTost ref="invoiceApplyTost" @getnewList="getNeWlist"></invoiceApplyTost>
@@ -712,6 +712,7 @@
     data() {
       return {
         type: 0,//对冲，冲减标识
+        stateType:1,//冲减、冲收
         accountType: false,
         statusData: [
           {name: "提交", status: "已提交"},
@@ -1482,6 +1483,7 @@
         if(this.salepopupList.length===1){
           this.reconciliationStatement=this.salepopupList[0]
         }
+        this.stateType=type;
         if (Object.keys(this.reconciliationStatement).length !== 0) {
           if (
             this.reconciliationStatement.pass &&
