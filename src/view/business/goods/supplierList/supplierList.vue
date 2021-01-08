@@ -468,6 +468,7 @@
   import {getSales} from "@/api/salesManagment/salesOrder";
   import {v4} from "uuid";
   import GoodCus from "_c/allocation/GoodCus.vue";
+  import distroyDom from "_mixins/distroyDom";
 
   export default {
     name: "supplierList",
@@ -479,6 +480,7 @@
       GoodCus,
       printZF
     },
+    mixins: [distroyDom],
     data() {
       let changeNumber = ({cellValue, row: {canReQty}}) => {
         // console.log(canReQty, cellValue);
