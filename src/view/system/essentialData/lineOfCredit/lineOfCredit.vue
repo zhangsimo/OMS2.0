@@ -156,6 +156,7 @@ export default {
     };
   },
   created() {
+    this.$refs.quickDate.searchQuick='1'
     this.getTable();
   },
   mounted() {
