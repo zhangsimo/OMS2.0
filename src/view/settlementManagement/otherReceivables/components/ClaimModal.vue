@@ -5,7 +5,7 @@
         <Button class="fl mr10" @click="openPClaimModal">选择单据</Button>
         <div class="fr">
           <span><i style="color: red" class="mr5">*</i>款项分类：</span>
-          <Select v-model="fund" placeholder="请选择" class="w200" clearable>
+          <Select v-model="fund" placeholder="请选择" class="w200" @on-change="fundChange" clearable>
             <Option
               v-for="item in fundList"
               :value="item.itemName"
@@ -99,6 +99,7 @@
         remark: '',
         visibal: false,
         fund: "",
+        fundCode: '',
         fundList: [],//款项分类数组
         tableData: [],
         outFlag: false,
@@ -164,6 +165,7 @@
         this.tableData = [];
         this.visibal = true;
         this.fund = "";
+        this.fundCode = ''
         this.remark = ''
         setTimeout(() => {
           let params = {
@@ -212,7 +214,7 @@
         if (this.titleName == "其他收款收回" && (this.thisClaimedAmtSum > this.$parent.currRow.paymentClaimAmt)) {
           return this.$Message.error("本次认领金额不可大于本次申请单认领金额")
         }
-        if (this.titleName == "其他付款认领" && this.fund == "") {
+        if (this.titleName == "其他付款认领" && this.fundCode == "") {
           this.$message.error('款项分类不可为空')
           return
         }
@@ -246,7 +248,7 @@
             one: this.dataOne,
             two: this.dataTwo,
             three: arr,
-            paymentTypeCode:this.fund
+            paymentTypeCode:this.fundCode
           }
           this.isDis = true
           saveAccount(data).then(res => {
@@ -262,7 +264,7 @@
             one: this.dataOne,
             two: this.dataTwo,
             three: arr,
-            paymentTypeCode:this.fund
+            paymentTypeCode:this.fundCode
           }
           this.isDis = true
           paymentRegain(data).then(res => {
@@ -325,6 +327,13 @@
         this.calculation = this.$refs.voucherInput.AssistAccounting;
         this.voucherItem = this.$refs.voucherInput.voucherItem
       },
+      fundChange(v){
+        this.fundList.forEach(item => {
+          if(item.itemName === this.fund){
+            this.fundCode = item.itemCode
+          }
+        })
+      } 
     },
   }
 </script>
