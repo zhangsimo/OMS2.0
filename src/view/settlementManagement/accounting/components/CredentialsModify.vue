@@ -1099,6 +1099,29 @@ import { hideLoading, showLoading } from '@/utils/loading';
                 saveBool=false;
                 return this.$Message.error("会计科目必选")
               }
+              if(item.rootCode === '601'){
+                if(item.amountDirection === 1 && item.lenderAmount){
+                  saveBool = false
+                  return this.$Message.error(`第${i+1}行，只能填写借方金额！`)
+                }
+                if(item.amountDirection === 0 && item.debitAmount){
+                  saveBool = false
+                  return this.$Message.error(`第${i+1}行，只能填写贷方金额！`)
+                }
+                if(item.direction === 0 && item.lenderAmount){
+                  saveBool = false
+                  return this.$Message.error(`第${i+1}行，只能填写借方金额！`)
+                }
+                if(item.direction === 1 && item.debitAmount){
+                  saveBool = false
+                  return this.$Message.error(`第${i+1}行，只能填写贷方金额！`)
+                }
+              }
+              if(item.auxiliaryAccountingName && !item.auxiliaryName){
+                saveBool = false
+                this.$Message.error(`第${i+1}行，辅助核算必填！`)
+                return 
+              }
               if(item.subjectName.trim()!==""){
                 if(!item.summary || item.summary.trim()==""){
                   saveBool=false
@@ -1106,29 +1129,6 @@ import { hideLoading, showLoading } from '@/utils/loading';
                 }
               }
             })
-            if(item.rootCode === '601'){
-              if(item.amountDirection === 1 && item.lenderAmount){
-                saveBool = false
-                return this.$Message.error(`第${i+1}行，只能填写借方金额！`)
-              }
-              if(item.amountDirection === 0 && item.debitAmount){
-                saveBool = false
-                return this.$Message.error(`第${i+1}行，只能填写贷方金额！`)
-              }
-              if(item.direction === 0 && item.lenderAmount){
-                saveBool = false
-                return this.$Message.error(`第${i+1}行，只能填写借方金额！`)
-              }
-              if(item.direction === 1 && item.debitAmount){
-                saveBool = false
-                return this.$Message.error(`第${i+1}行，只能填写贷方金额！`)
-              }
-            }
-            if(item.auxiliaryAccountingName && !item.auxiliaryName){
-              saveBool = false
-              this.$Message.error(`第${i+1}行，辅助核算必填！`)
-              return 
-            }
             setTimeout(()=>{
               this.tableData = this.tableData.filter(item => item.subjectName)
               saveBool?this.SaveTwo():""
