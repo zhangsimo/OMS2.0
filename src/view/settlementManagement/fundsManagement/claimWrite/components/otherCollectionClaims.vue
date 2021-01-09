@@ -2,40 +2,32 @@
   <div>
     <Modal v-model="modal" :title="claimTit" width="1000">
       <Row class="dbd" v-if="claimTit=='预收款认领'">
-        <i-col span="15">
+        <i-col span="6">
           <Checkbox v-model="voucherinputModel" :checked.sync="voucherinputModel">是否不生成预收款单号</Checkbox>
         </i-col>
-        <i-col span="9" class="tr">
-          <Form :model="formValidate" ref="form" :rules="ruleValidate">
-            <FormItem label="选择辅助核算：" prop="voucherInput">
+        <i-col span="18" class="tr">
+          <Form :model="formValidate" inline ref="form" :rules="ruleValidate">
+            <FormItem label="选择辅助核算：" :label-width="120" label-position="left" prop="voucherInput">
               <Row>
-                <i-col span="8">
-                  <i-input :value.sync="formValidate.voucherInput" v-model="MessageValue"></i-input>
-                </i-col>
-                <i-col span="2" class="ml10">
-                  <Button type="default" @click="openVoucherInput">辅助核算</Button>
-                </i-col>
+                  <i-input :value.sync="formValidate.voucherInput" class="w200" v-model="formValidate.voucherInput"></i-input>
+                  <Button type="default" @click="openVoucherInput" class="ml10">辅助核算</Button>
               </Row>
             </FormItem>
           </Form>
         </i-col>
       </Row>
       <Row class="dbd" v-else>
-        <i-col span="15">
-          <Form :model="formValidate" ref="form" :rules="ruleValidate">
-            <FormItem label="选择辅助核算：" prop="voucherInput">
+        <i-col span="18">
+          <Form :model="formValidate" ref="form" inline :rules="ruleValidate">
+            <FormItem label="选择辅助核算："  :label-width="120" label-position="left" prop="voucherInput">
               <Row>
-                <i-col span="8">
-                  <i-input :value.sync="formValidate.voucherInput" v-model="MessageValue"></i-input>
-                </i-col>
-                <i-col span="2" class="ml10">
-                  <Button type="default" @click="openVoucherInput">辅助核算</Button>
-                </i-col>
+                  <i-input :value.sync="formValidate.voucherInput" class="w200" v-model="formValidate.voucherInput"></i-input>
+                  <Button type="default" @click="openVoucherInput" class="ml10">辅助核算</Button>
               </Row>
             </FormItem>
           </Form>
         </i-col>
-        <i-col span="9" class="tr">
+        <i-col span="6" class="tr">
           <Checkbox v-model="voucherinputModel" :checked.sync="voucherinputModel">是否不生成预收款单号</Checkbox>
         </i-col>
       </Row>
@@ -91,6 +83,14 @@
           align="center"
         ></vxe-table-column>
       </vxe-table>
+      <Row class="mt10">
+        <i-col span="1">
+          <span style="line-height: 30px">备注:</span>
+        </i-col>
+        <i-col span="23">
+          <i-input :value.sync="remark" maxlength="500" v-model.trim="remark"></i-input>
+        </i-col>
+      </Row>
       <div slot="footer">
         <Button type="primary" @click="openClimed('预收款认领')" class="mr10" v-if="claimTit=='预收款认领'">确定</Button>
         <Button type="primary" @click="openClimed('其他收款认领')" class="mr10" v-else>确定</Button>
@@ -145,6 +145,11 @@
     components: {
       voucherInput, claim, settlement, claimGuest
     },
+    computed: {
+      MessageValue(){
+        return this.formValidate.voucherInput
+      }
+    },
     data() {
       const amtValid = ({cellValue, row}) => {
         return new Promise((resolve, reject) => {
@@ -162,10 +167,11 @@
         });
       };
       return {
+        remark: '',
         voucherinputModel: false,
         formValidate: {voucherInput: ""},
         ruleValidate: {
-          voucherInput: [{required: true, message: '必填项', trigger: 'blur'}]
+          voucherInput: [{required: true, message: '必填项', trigger: ['blur','change']}]
         },
         // 表格验证  本次认领金额  是否符合条件
         validRules: {
@@ -188,7 +194,6 @@
           opts: [20, 50, 100, 200]
         }, //分页
         serviceId: "", //给子组件传的值,
-        MessageValue: "",
         claimSelection: [],
         //this.claimTit == '预收款认领' ? this.accruedList[0].mateAccountCoding = "1123" : this.accruedList[0].mateAccountCoding = "1221"
         accruedList: [{mateAccountCoding: ""}],
@@ -210,8 +215,9 @@
         }
         this.oneSubject = {};
         this.modal = true;
-        this.MessageValue = ''
+        this.formValidate.voucherInput = ''
         this.$refs.voucherInput.AssistAccounting = ''
+        this.remark = ''
         this.$nextTick(() => {
           this.$refs.xTable.setActiveCell(this.$refs.xTable.getData(0), "rpAmt")
         })
@@ -234,7 +240,7 @@
       },
       async openClimed(claimTit) {
         this.getMessage()
-        if (this.MessageValue == "") {
+        if (this.formValidate.voucherInput == "") {
           this.$Message.error("请选择辅助核算")
         } else {
           const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
@@ -309,7 +315,7 @@
         if (flag) {
           this.outStaffSelect = item
         }
-        this.MessageValue = this.$refs.voucherInput.AssistAccounting;
+        this.formValidate.voucherInput = this.$refs.voucherInput.AssistAccounting;
       },
       //认领弹框认领
       claimPay() {
@@ -387,6 +393,9 @@
         let data = {};
         data.detailId = this.accrued[0].id;
         let objItem = this.$refs.voucherInput.voucherItem;
+        if(this.remark){
+          data.remark = this.remark
+        }
         if (this.voucherinputModel) {
           let ajaxBool = true;
           if (this.claimTit == "预收款认领") {
@@ -406,7 +415,7 @@
           } else {
             data.isAuxiliaryAccounting = 1
           }
-          data.auxiliaryName = this.MessageValue //辅助核算名称
+          data.auxiliaryName = this.formValidate.voucherInput //辅助核算名称
           data.auxiliaryCode = this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
           if (objItem.hasOwnProperty("id")) {
             data.suppliersBean = {
@@ -470,7 +479,7 @@
               data.externalEmployeeName = this.outStaffSelect.itemName
               data.auxiliaryTypeCode = this.outStaffSelect.auxiliaryTypeCode
             }
-            data.auxiliaryName = this.MessageValue //辅助核算名称
+            data.auxiliaryName = this.formValidate.voucherInput //辅助核算名称
             data.auxiliaryCode = this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
             if (ajaxBool) {
               showLoading('body', "保存中，请勿操作。。。")
@@ -511,7 +520,7 @@
               data.externalEmployeeName = this.outStaffSelect.itemName
               data.auxiliaryTypeCode = this.outStaffSelect.auxiliaryTypeCode
             }
-            data.auxiliaryName = this.MessageValue //辅助核算名称
+            data.auxiliaryName = this.formValidate.voucherInput //辅助核算名称
             data.auxiliaryCode = this.$refs.voucherInput.auxiliaryCode //辅助核算项目编码
             if (ajaxBool) {
               showLoading('body', "保存中，请勿操作。。。")

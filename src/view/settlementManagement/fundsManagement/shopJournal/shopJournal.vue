@@ -53,15 +53,15 @@
           </div>
           <div class="db ml15">
             <span>账户：</span>
-            <input type="text" class="h30" v-model="accountName" />
+            <input type="text" class="h30" v-model.trim="accountName" />
           </div>
           <div class="db ml15 mr10">
             <span>开户行：</span>
-            <input type="text" class="h30" v-model="bankName" />
+            <input type="text" class="h30" v-model.trim="bankName" />
           </div>
           <!--          <div class="db mr10">-->
           <!--            <span>对应科目：</span>-->
-          <!--            <Select v-model="subjectCode" filterable class="w150">-->
+          <!--            <Select v-model.trim="subjectCode" filterable class="w150">-->
           <!--              <Option-->
           <!--                v-for="item in subJectList"-->
           <!--                :value="item.id"-->
@@ -93,13 +93,13 @@
             <vxe-input
               type="float"
               class="w100 h30"
-              v-model="accountMoney"
+              v-model.trim="accountMoney"
               digits="2"
             ></vxe-input>
           </div>
           <div class="db mr10">
             <span>对方账号：</span>
-            <input type="text" class="h30" v-model="accountCode" />
+            <input type="text" class="h30" v-model.trim="accountCode" />
           </div>
           <div class="db mr10">
             <span>认领门店：</span>
@@ -114,7 +114,7 @@
           </div>
           <div class="db mr10">
             <span>往来单位：</span>
-            <input type="text" class="h30" v-model="suppliers" />
+            <input type="text" class="h30" v-model.trim="suppliers" />
             <!--<Select-->
             <!--v-model="guestId"-->
             <!--class="w150"-->
@@ -126,6 +126,10 @@
             <!--&gt;-->
             <!--<Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
             <!--</Select>-->
+          </div>
+          <div>
+            <span>对方户名:</span>
+            <Input v-model.trim="reciprocalAccountName" type="text" class="h30 w180" clearable/>
           </div>
           <div class="db ml15">
             <button
@@ -254,6 +258,7 @@
               align="center"
               size="mini"
               max-height="500"
+              :cell-style="setRowColor"
               :data="tableData"
               @checkbox-all="selectAllEvent"
               @checkbox-change="selectChangeEvent"
@@ -448,6 +453,7 @@
               ref="xTable2"
               align="center"
               size="mini"
+              :cell-style="setRowColor"
               max-height="500"
               :data="tableData1"
               @checkbox-all="selectAllEvent"
@@ -644,6 +650,7 @@
               align="center"
               size="mini"
               max-height="500"
+              :cell-style="setRowColor"
               :data="tableData2"
               @checkbox-all="selectAllEvent"
               :sort-config="{ trigger: 'cell', orders: ['desc', 'asc', null] }"
@@ -839,6 +846,7 @@
               align="center"
               size="mini"
               max-height="500"
+              :cell-style="setRowColor"
               :data="tableData3"
               @checkbox-all="selectAllEvent"
               :sort-config="{ trigger: 'cell', orders: ['desc', 'asc', null] }"
@@ -1034,6 +1042,7 @@
               size="mini"
               max-height="500"
               highlight-hover-row
+              :cell-style="setRowColor"
               :data="tableData4"
               @checkbox-all="selectAllEvent"
               :sort-config="{ trigger: 'cell', orders: ['desc', 'asc', null] }"
@@ -1282,6 +1291,7 @@ export default {
       subJectList: [{ id: 0, titleName: "全部" }], //科目列表
       // company: "", //往来单位
       companyId: "", //往来单位id
+      reciprocalAccountName:"",//对方户名
       formInline: {}, //统计数据
       tableData: [], //全部数据
       tableData1: [], //已审核数据
@@ -1302,7 +1312,7 @@ export default {
       claimShopName: "", //认领门店查询参数
       suppliers: "", //往来单位
       accountCode: "", //账号
-      getAccShopList: [{ shopCode: "-1", shopName: "请选择" }],
+      getAccShopList: [{ shopCode: "-1", shopName: "请选择", code: '-1' }],
       selectTableList: [], //勾选的表格数据
       page: {
         opts: [100, 300, 500, 800, 1000],
@@ -1383,6 +1393,14 @@ export default {
         this.Branchstore = [...this.Branchstore, ...res.data];
         this.setAreaDef();
         return this.Branchstore;
+      }
+    },
+    //根据内容显示行颜色
+    setRowColor(v) {
+      if (v.row.isRed === 1) {
+        return {
+          backgroundColor: "#ffd2d2"
+        };
       }
     },
     //当前非管理员状态情况下获取门店地址
@@ -1576,6 +1594,7 @@ export default {
       if (!data.startTime) {
         return this.$Message.error("请选择日期");
       }
+      data.reciprocalAccountName=this.reciprocalAccountName;
       //添加参数 切换状态 collateState：1已核销，0未核销;claimType:1已认领，0未认领;
       switch (this.tabName) {
         case "capitalChain1":
@@ -1619,34 +1638,23 @@ export default {
         showLoading(".loadingClass", "数据加载中，请勿操作");
         let res = await goList(params, data);
         if (res.code === 0) {
-          //if (res.data.page.content.length > 0) {
           this.allMoneyList = res.data.moneyList;
-          //}
           this.page.total = res.data.page.totalElements;
           this.tableData = res.data.page.content;
           this.tableData1 = res.data.page.content;
           this.tableData2 = res.data.page.content;
           this.tableData3 = res.data.page.content;
           this.tableData4 = res.data.page.content;
-          // res.data.page.content.forEach(item => {
-          //   if (item.collateState==1) {
-          //     this.tableData1.push(item)
-          //   } else {
-          //     this.tableData2.push(item)
-          //   }
-          //   if (item.claimType==1) {
-          //     this.tableData3.push(item)
-          //   } else {
-          //     this.tableData4.push(item)
-          //   }
-          // })
         }
         hideLoading();
       } catch (error) {
         hideLoading();
       }
     },
+    //isRed
+    isRed(){
 
+    },
     //查询
     query() {
       this.page.num = 1;
@@ -1664,7 +1672,7 @@ export default {
         return this.$Message.error("请选择一条数据");
       }
       this.oneList = this.selectTableList[0];
-      if(this.oneList.claimShopCode.indexOf(',') !== -1){
+      if(this.oneList.claimShopCode && this.oneList.claimShopCode.indexOf(',') !== -1){
         return this.$Message.error('该笔资金被人工分配至多家门店，请先撤销分配后修改')
       }
       // if (Object.keys(this.oneList).length < 1 ) return this.$Message.error('请至少选择一条数据')

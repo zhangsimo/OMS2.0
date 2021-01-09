@@ -10,6 +10,7 @@
           >是否不生成预付款单号
           </Checkbox>
         </i-col>
+
         <i-col span="10" v-show="voucherinputModel">
           <Form :model="formValidate" ref="form" :rules="ruleValidate">
             <FormItem label="选择辅助核算" prop="voucherInput">
@@ -26,7 +27,7 @@
         </i-col>
       </Row>
       <Row v-else>
-        <i-col span="14">
+        <i-col span="12">
           <Form :model="formValidate" :rules="ruleValidate" v-show="voucherinputModel">
             <FormItem label="选择辅助核算">
               <Row>
@@ -56,9 +57,10 @@
               </Row>
             </FormItem>
           </Form>
+
           <!-- @change="changeModel" -->
         </i-col>
-        <i-col span="10" class="tr">
+        <i-col span="12" class="tr">
           <Checkbox v-model="voucherinputModel" :checked.sync="voucherinputModel">是否不生成其他付款认领单号</Checkbox>
         </i-col>
       </Row>
@@ -148,6 +150,14 @@
             <vxe-table-column field="payTime" title="付款时间" v-if="claimTit=='其他付款认领'"></vxe-table-column>
             <vxe-table-column field="receiveRemark" title="付款备注"></vxe-table-column>
           </vxe-table>
+          <Row class="mt10">
+            <i-col span="1">
+              <span style="line-height: 30px">备注:</span>
+            </i-col>
+            <i-col span="23">
+              <i-input :value.sync="remark" maxlength="500" v-model.trim="remark"></i-input>
+            </i-col>
+          </Row>
           <Page
             class-name="mb10 mt10 fr"
             :current="page.num"
@@ -257,6 +267,7 @@
           balanceMoney: [{required: true, validator: amtValid}]
         },
         type: 3,
+        remark: '',
         modal: false, //模态框展示
         fundList: [],//款项分类数组
         fund:"",//款项分类选择项
@@ -324,6 +335,7 @@
       // 打开模态框
       open() {
         this.fund = ''
+        this.remark = ''
         this.currentAccountItem = []
         if (this.company.length == 0) {
           this.getOne();
@@ -487,6 +499,7 @@
           }
           let arr = [];
           let flag = false
+          let flag1 = false
           this.selectItem.map(el => {
             let obj = {};
             obj.id = el.id;
@@ -494,14 +507,28 @@
             if(Number(el.rpAmt) < 0){
               flag = true
             }
+            if(el.rpAmt > el.unClaimedAmt){
+              flag1 = true
+            }
             arr.push(obj)
           })
           if(flag){
             this.$message.error('本次认领金额不可小于零')
             return
           }
+          if(flag1){
+            this.$message.error('本次认领金额不可大于未认领金额')
+            return
+          }
           if(!this.dataOne || !this.dataTwo){
             return this.$Message.error("没有对冲数据")
+          }
+          if(this.remark){
+            if(this.remark.length > 500){
+              return this.$message.error('备注500字符以内')
+            }else{
+              this.dataOne.remark = this.remark
+            }
           }
           let data = {
             one: this.dataOne,
@@ -680,6 +707,13 @@
           // }else{
           //   data.claimMoney=this.accrued[0].balanceMoney
           // }
+          if(this.remark){
+            if(this.remark.length > 500){
+              return this.$message.error('备注在500字以内')
+            }else{
+              data.remark = this.remark
+            }
+          }
           if (this.claimTit == "预付款认领") {
             data.claimMoney = this.accrued[0].rpAmt
             data.subjectCode = "2203";

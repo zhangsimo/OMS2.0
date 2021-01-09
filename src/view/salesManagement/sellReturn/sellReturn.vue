@@ -764,7 +764,7 @@
           let planFormH = this.$refs.planForm.offsetHeight;
           //获取左侧侧表格高度
           this.leftTableHeight = wrapH - 110;
-          this.rightTableHeight = wrapH - planFormH - 120;
+          this.rightTableHeight = wrapH - planFormH - 150;
         });
       },
       //检验仓位（参照采购入库）

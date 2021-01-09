@@ -2878,7 +2878,9 @@
     name: "PrintShow",
     data() {
       return {
-        onelist: {}, //打印数据
+        onelist: {
+          name:""
+        }, //打印数据
         num: "12323.09",
         num2: 78723,
         routeN: ""
@@ -2894,7 +2896,7 @@
       }
     },
     beforeCreate() {
-      this.onelist.name = 'null';
+      // this.onelist.name = 'null';
     },
     mounted() {
       // this.openModal(this.$route.query).then(() => {

@@ -83,8 +83,8 @@
           @on-selection-change="selectTab"
           @on-select-all="selectTab"
           max-height="400"
+          :summary-method="handleSummary"
         ></Table>
-        <!--        :summary-method="handleSummary"-->
         <div class="clearfix">
           <Page
             class-name="fr mb10 mt10"
@@ -212,6 +212,7 @@
         partCodeOrName:'',
         columns: [
           {
+            key: 'id',
             type: 'selection',
             width: 40,
             className: "tc",
@@ -280,7 +281,7 @@
             key: "code",
             className: "tc",
             resizable: true,
-            width: 150,
+            width: 200,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -326,7 +327,7 @@
             key: "orderCode",
             className: "tc",
             resizable: true,
-            width: 100,
+            width: 200,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -675,7 +676,6 @@
       },
       // 表格合计方式
       handleSummary({columns, data}) {
-        //   console.log(columns,data)
         const sums = {};
         columns.forEach((column, index) => {
           const key = column.key;
@@ -687,11 +687,21 @@
             return;
           }
           const values = data.map(item => Number(item[key]));
-          if (index === 11) {
-            sums[key] = {
-              key,
-              value: this.total[key] == null ? " " : this.total[key]
-            };
+          if (index === 13) {
+            if (!values.every(value => isNaN(value))) {
+              const v = values.reduce((prev, curr) => {
+                const value = Number(curr);
+                if (!isNaN(value)) {
+                  return prev + curr;
+                } else {
+                  return prev;
+                }
+              }, 0);
+              sums[key] = {
+                key,
+                value: v.toFixed(2)
+              };
+            }
           } else {
             sums[key] = {
               key,
@@ -817,7 +827,6 @@
         if(this.partCodeOrName){
           obj.partCode = this.partCodeOrName;
         }
-        // console.log(this.value)
         showLoading(".loadingClass", "数据加载中，请勿操作")
         if (this.type === "050101") {
           (obj.enterDateStart = this.value[0]
@@ -904,7 +913,6 @@
       },
       // 选中总表查询明细
       election(row) {
-        //console.log(row,11111)
         this.detailLoading=true;
         if (this.type === "050201" || row.enterTypeId=="050201") {
           getOutStockPart({mainId: row.id}).then(res => {

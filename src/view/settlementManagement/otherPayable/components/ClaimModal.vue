@@ -2,7 +2,7 @@
   <div>
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
       <div class="clearfix mb20">
-        <Button class="fl" @click="openPClaimModal">选择单据</Button>
+        <Button class="fl mr10" @click="openPClaimModal">选择单据</Button>
         <div class="fr" v-show="titleName!='其他付款支出认领'">
           <span style="color: red" class="mr5">*</span>
           <span>选择辅助核算：</span>
@@ -82,9 +82,16 @@
 
         </vxe-table-column>
       </vxe-table>
-
+      <Row class="mt10">
+        <i-col span="1">
+          <span style="line-height: 30px">备注:</span>
+        </i-col>
+        <i-col span="23">
+          <i-input :value.sync="remark" maxlength="500" v-model.trim="remark"></i-input>
+        </i-col>
+      </Row>
       <div slot="footer">
-        <Button type="primary" @click="confirm">确定</Button>
+        <Button type="primary" :disabled="isDis" @click="confirm">确定</Button>
         <Button @click="close">取消</Button>
       </div>
     </Modal>
@@ -107,8 +114,17 @@ export default {
     voucherInput,
   },
   props: ['titleName','amountType'],
+  watch: {
+    titleName(val, oldVal){
+      if(val !== oldVal){
+        this.titleName = val
+      }
+    }
+  },
   data(){
     return {
+      isDis: false,
+      remark: '',
       visibal: false,
       calculation: '', //选中辅助计算的名称
       tableData: [],
@@ -180,7 +196,9 @@ export default {
       this.voucherItem = {} //打开时清空上次选中的辅助核算数据
       this.calculation = '' //打开时清空上次辅助核算名称
       this.visibal = true
-      if(this.titleName.trim()=='其他付款支出认领'){
+      this.remark = ''
+      this.fund = ''
+      if(this.titleName=='其他付款支出认领'){
         wirteAccount({accountNo:this.$parent.serviceId,sign:11,id:this.$parent.currRow.id}).then(res=>{
           if(res.code===0){
             res.data.one.furposeName = res.data.one.furpose.name;
@@ -188,6 +206,7 @@ export default {
             this.dataOne = res.data.one;
             res.data.two.map(item => {
               item.businessTypeName = item.businessType.name;
+              return item
             });
             this.dataTwo = res.data.two;
           }
@@ -205,7 +224,6 @@ export default {
 
     //点击确认按钮后
     confirm(){
-      console.log(this.$refs.voucherInput)
       if(this.tableData.length === 0){
         this.$message.error('请点击选择单据按钮，选择数据')
         return
@@ -239,6 +257,11 @@ export default {
         o.thisClaimedAmt = v.thisClaimedAmt + ''
         this.financeAccountCashList.push(o)
       })
+      if(this.remark){
+        if(this.remark.length > 500){
+          return this.$message.error('备注500字符以内')
+        }
+      }
       if(this.titleName=='其他收款认领'){
         let obj = {
           financeAccountCashList: this.financeAccountCashList,
@@ -249,13 +272,16 @@ export default {
           auxiliaryCode: this.$refs.voucherInput.AssistAccounting.auxiliaryCode,
           auxiliaryName: this.$refs.voucherInput.AssistAccounting.auxiliaryName,
           auxiliaryTypeCode: this.$refs.voucherInput.AssistAccounting.auxiliaryTypeCode,
+          remark: this.remark,
         }
+        this.isDis = true
         addClaim(obj).then(res => {
           if(res.code === 0){
             this.$message.success('认领成功')
             this.visibal = false
             this.$parent.getQuery()
           }
+          this.isDis = false
         })
       }else if(this.titleName=='其他付款支出认领'){
         let arr=[];
@@ -271,12 +297,15 @@ export default {
           three:arr,
           paymentTypeCode:this.fund
         }
+        this.dataOne.remark = this.remark
+        this.isDis = true
         expenditureClaim(data).then(res=>{
           if(res.code===0){
             this.$message.success("认领成功")
             this.visibal = false
             this.$parent.getQuery()
           }
+          this.isDis = false
         })
       }
 

@@ -421,20 +421,13 @@
         <vxe-table-column field="noAccountAmt" title="前期未对账金额" align="center" width="120"></vxe-table-column>
         <vxe-table-column field="noAccountQty" title="前期未对账数量" align="center" width="120"></vxe-table-column>
         <vxe-table-column
-          field="thisNoAccountQty"
-          title="本次不对账数量"
-          :edit-render="{name: 'input', attrs: {type: 'number'},immediate:true,events: {input: updateFooterEvent},defaultValue:0}"
-          align="center"
-          width="140"
-        ></vxe-table-column>
-        <vxe-table-column
           field="thisNoAccountAmt"
           title="本次不对账金额"
           align="center"
           width="140"
         >
           <template v-slot="{ row }">
-            <span>{{ row.thisNoAccountQty*row.price | priceFilters }}</span>
+            <vxe-input type="float" digits="2" v-model="row.thisNoAccountAmt" :controls="false" style="height: 20px;" :max="row.noAccountAmt==0?0:(row.noAccountAmt>0?row.noAccountAmt:0)" :min="row.noAccountAmt==0?0:(row.noAccountAmt>0?0:row.noAccountAmt)" @blur="updateFooterEvent"></vxe-input>
           </template>
         </vxe-table-column>
         <vxe-table-column width="120" title="本次对账金额" align="center" field="thisAccountAmt">
@@ -1068,33 +1061,23 @@
       },
       // 在值发生改变时更新表尾合计
       updateFooterEvent(params) {
-        params.row.thisNoAccountAmt = params.row.thisNoAccountQty * params.row.price;
-        if (params.row.amount > 0) {
-          params.row.thisAccountAmt =
-            this.$utils.toNumber(params.row.amount) -
-            this.$utils.toNumber(params.row.accountAmt) -
-            this.$utils.toNumber(params.row.thisNoAccountQty) * params.row.price
-        } else {
-          params.row.thisAccountAmt =
-            this.$utils.toNumber(params.row.amount) -
-            this.$utils.toNumber(params.row.accountAmt) -
-            this.$utils.toNumber(params.row.thisNoAccountQty) * params.row.price
-        }
         let xTable = this.$refs.xTable;
         xTable.updateFooter();
+        let arr=xTable.footerData[0];
+        arr[12]=Number(arr[7])-Number(arr[11])
       },
       countAmount(row) {
         if (row.amount > 0) {
           return (
             this.$utils.toNumber(row.amount) -
             this.$utils.toNumber(row.accountAmt) -
-            this.$utils.toNumber(row.thisNoAccountQty) * row.price
+            this.$utils.toNumber(row.thisNoAccountAmt)
           ).toFixed(2);
         } else {
           return (
             this.$utils.toNumber(row.amount) -
             this.$utils.toNumber(row.accountAmt) -
-            this.$utils.toNumber(row.thisNoAccountQty) * row.price
+            this.$utils.toNumber(row.thisNoAccountAmt)
           ).toFixed(2);
         }
       },
@@ -1704,28 +1687,10 @@
         const errMap = await this.$refs.xTable.validate().catch(errMap => errMap)
         let sum = 0;
         let boolShow = true;
-        let reg = /^[1-9]\d*$/
-        let re = /^(0|\+?[1-9][0-9]*)$/
-        let flag = false
+        // let reg = /^[1-9]\d*$/
         this.Reconciliationcontent.map(item => {
-          if(!re.test(item.thisNoAccountQty)){
-            flag = true
-          }
-          item.thisNoAccountAmt = (this.$utils.toNumber(item.thisNoAccountQty) * item.price).toFixed(2)
           sum += item.thisNoAccountAmt * 1;
-          if (this.$utils.toNumber(item.thisNoAccountQty) > item.noAccountQty || this.$utils.toNumber(item.thisNoAccountQty) < 0) {
-            boolShow = false;
-          }
-          // if(item.thisNoAccountQty && !reg.test(item.thisNoAccountQty)){
-          //   boolShow=false;
-          // }
-          // if(item.diffeReason && item.diffeReason.trim()=="" || !item.diffeReason){
-          //   boolShow=false;
-          // }
         });
-        if(flag){
-          return this.$message.error('本次不对账请输入正整数')
-        }
         if (!errMap && boolShow) {
           const index = this.Reconciliationcontent[0].index;
           if (this.business === "销售退货" || this.business === "销售出库") {
@@ -1794,6 +1759,7 @@
             this.data2.forEach(item => {
               sum3 += parseFloat(item.thisAccountAmt)
             })
+            console.log(sum3,1111)
             this.totalpayment = sum3
             this.Actualtotalpayment = sum3
             this.setTempPaymentList(this.paymentlist);
@@ -2007,7 +1973,7 @@
           this.collectlist.map(item => {
             str += `serviceIdList=${item.serviceId}&`;
           });
-          location.href = payColMonthExportAcSta(str);
+          location.href = payColMonthExportAcSta(`${str}guestId=${this.companyInfo}&`);
         } else {
           // this.$message.error("请勾选要导出的对账清单");
           this.$message({

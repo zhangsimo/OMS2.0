@@ -153,6 +153,7 @@
         }
         if(this.search.month===0){
           this.search.year = new Date().getFullYear()-1;
+          this.search.month = 12;
         }else{
           this.search.year = new Date().getFullYear();
         }

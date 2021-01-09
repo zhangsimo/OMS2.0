@@ -1,7 +1,7 @@
 <template>
   <Modal title="因公借支核销" width="1000" footer-hide v-model="show">
     <Row>
-      <Button :loading="submitDis" :disabled="selectArr.length <= 0" @click="submit">保存</Button>
+      <Button :loading="submitDis" class="mr10" :disabled="selectArr.length <= 0" @click="submit">保存</Button>
     </Row>
     <Row class="mt20">
       <vxe-table
@@ -81,6 +81,14 @@
         <vxe-table-column field="applyTime" title="借支日期"></vxe-table-column>
         <vxe-table-column field="summary" title="摘要"></vxe-table-column>
       </vxe-table>
+      <Row class="mt10">
+        <i-col span="1">
+          <span style="line-height: 30px">备注:</span>
+        </i-col>
+        <i-col span="23">
+          <i-input :value.sync="remark" maxlength="500" v-model.trim="remark"></i-input>
+        </i-col>
+      </Row>
     </Row>
     <Modal title="因公借支申请查询" width="800" v-model="showChild">
       <Row>
@@ -181,6 +189,7 @@
             {required: true, validator: amtValid} // message: "因公借支核销金额必填" ,
           ]
         },
+        remark: '',
         show: false,
         showChild: false,
         submitDis: false,//保存接口返回之前按钮不可点击
@@ -233,6 +242,7 @@
       },
       init() {
         this.currRow = null;
+        this.remark = ''
         this.dates = [];
         this.tbdataChild = [];
         this.selectTmpArr = [];
@@ -386,10 +396,16 @@
         if (errMap) {
         } else {
           if(enbleAjax){
+            if(this.remark){
+              if(this.remark.length > 500){
+                return this.$message.error('备注500字符以内')
+              }
+            }
             let data = {
               sourceDto: {
                 id: this.tableData[0].id,
-                rpAmt: this.totalfooter
+                rpAmt: this.totalfooter,
+                remark: this.remark,
               },
               wrtiteOffDtos: this.selectArr.map(el => {
                 return {id: el.id, rpAmt: el.writeOffAmount};

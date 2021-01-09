@@ -75,9 +75,10 @@
             this.tableData = (res.data.content || []).map(el => {
               return el;
             });
-            
+
             this.page.total = res.data.totalElements;
             this.$emit("si");
+            hideLoading()
           } else {
             this.page.total = 0;
             this.tableData = [];

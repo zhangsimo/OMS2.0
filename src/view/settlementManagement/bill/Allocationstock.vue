@@ -75,7 +75,7 @@
           show-summary
           :summary-method="handleSummary"
           highlight-row
-          max-height=500
+          max-height='500'
           @on-row-click="election"
           @on-selection-change="selectTab"
           @on-select-all="selectTab"
@@ -217,7 +217,7 @@
             key: "serviceId",
             className: "tc",
             resizable: true,
-            width: 150,
+            width: 200,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -240,7 +240,7 @@
             key: "guestName",
             className: "tc",
             resizable: true,
-            width: 100,
+            width: 160,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -263,7 +263,7 @@
             key: "code",
             className: "tc",
             resizable: true,
-            width: 150,
+            width: 200,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -461,18 +461,17 @@
       },
       // 表格合计方式
       handleSummary({columns, data}) {
-        //   console.log(columns,data)
         const sums = {};
         columns.forEach((column, index) => {
           const key = column.key;
           if (index === 0) {
             sums[key] = {
               key,
-              value: "总合计"
+              value: "合计"
             };
             return;
           }
-          if (index === 11) {
+          if (index === 12) {
             sums[key] = {
               key,
               value: this.total[key] == null ? " " : this.total[key]

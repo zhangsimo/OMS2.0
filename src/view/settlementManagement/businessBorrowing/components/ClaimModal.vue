@@ -2,7 +2,7 @@
   <div>
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
       <div class="clearfix mb20">
-        <Button class="fl" @click="openPClaimModal">选择单据</Button>
+        <Button class="fl mr10" @click="openPClaimModal">选择单据</Button>
         <!-- <div class="fr" v-if="this.$route.name !== 'settlementManagementExpensereimbursement'">
           <span style="color: red" class="mr5">*</span>
           <span>选择辅助核算：</span>
@@ -72,7 +72,14 @@
 
         </vxe-table-column>
       </vxe-table>
-
+      <Row class="mt10">
+        <i-col span="1">
+          <span style="line-height: 30px">备注:</span>
+        </i-col>
+        <i-col span="23">
+          <i-input :value.sync="remark" maxlength="500" v-model.trim="remark"></i-input>
+        </i-col>
+      </Row>
       <div slot="footer">
         <Button type="primary" @click="confirm">确定</Button>
         <Button @click="close">取消</Button>
@@ -96,6 +103,7 @@ export default {
   props: ['titleName','amountType'],
   data(){
     return {
+      remark: '',
       visibal: false,
       calculation: '',
       tableData: [],
@@ -144,6 +152,7 @@ export default {
 
     //弹框打开
     open(){
+      this.remark = ''
       this.tableData = []
       this.visibal = true
     },
@@ -180,8 +189,6 @@ export default {
         this.$message.error('认领金额输入错误，不可为空')
         return
       }
-      
-      
       this.financeAccountCashList = []
       this.tableData.forEach(v => {
         let o = {}
@@ -193,6 +200,13 @@ export default {
         financeAccountCashList: this.financeAccountCashList,
         loanId:this.$parent.loanId,
         claimType: this.$parent.claimType
+      }
+      if(this.remark){
+        if(this.remark.length > 500){
+          return this.$message.error('备注500字符以内')
+        }else{
+          obj.remark = this.remark
+        }
       }
       addClaim(obj).then(res => {
         if(res.code === 0){

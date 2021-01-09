@@ -252,6 +252,7 @@
         ],
         columns: [
           {
+            key: 'id',
             type: 'selection',
             width: 60,
             align: 'center',
@@ -259,6 +260,7 @@
             resizable: true,
           },
           {
+            key: 'index',
             title: "序号",
             key: "num",
             width: 40,
@@ -313,7 +315,7 @@
           },
           {
             title: "对账单收付款单号",
-            width: 140,
+            width: 200,
             slot: "fno",
             className: "tc",
             resizable: true,
@@ -739,10 +741,10 @@
         const sums = {};
         columns.forEach((column, index) => {
           const key = column.key;
-          if (index === 1) {
+          if (index === 0) {
             sums[key] = {
               key,
-              value: "总合计"
+              value: "合计"
             };
             return;
           }

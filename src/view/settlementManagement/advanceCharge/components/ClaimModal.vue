@@ -1,7 +1,7 @@
 <template>
   <div>
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
-      <div class="clearfix mb20">
+      <div class="flex-jb mb20">
         <Button class="fl" @click="openPClaimModal">选择单据</Button>
       </div>
 
@@ -52,7 +52,10 @@
         <vxe-table-column title="未认领金额" width="100" field="unClaimedAmt" show-overflow="tooltip"></vxe-table-column>
         <vxe-table-column title="智能匹配往来单位" width="180" field="suppliers" show-overflow="tooltip"></vxe-table-column>
       </vxe-table>
-
+      <div class="mt10">
+        <span class="mr10">备注:</span>
+        <Input v-model.trim="remark" type="text" show-word-limit maxlength="500" style="width: 925px;" />
+      </div>
       <div slot="footer">
         <Button type="primary" @click="confirm">确定</Button>
         <Button @click="close">取消</Button>
@@ -80,6 +83,7 @@
         tableData: [],
         outFlag: false,
         type: this.amountType,
+        remark:"",
         financeAccountCashList: [], //选中待认领的数组
         currentRow: {}, // 报销认领弹框中选中的行
         validRules: {
@@ -129,6 +133,7 @@
       //弹框打开
       open() {
         this.tableData = []
+        this.remark="";
         this.visibal = true;
         setTimeout(()=>{
           let params={
@@ -181,6 +186,11 @@
         if(this.titleName=="预付款收回认领" && (this.thisClaimedAmtSum>this.$parent.currRow.claimAmt)){
           return this.$Message.error("本次认领金额不可大于本次已认领金额")
         }
+        if(this.remark){
+          if(this.remark.length > 500){
+            return this.$message.error('备注500字符以内')
+          }
+        }
         this.financeAccountCashList = []
         this.tableData.forEach(v => {
           let o = {}
@@ -200,6 +210,7 @@
           two: this.dataTwo,
           three: arr
         }
+        data.one.remark=this.remark;
         saveAccount(data).then(res => {
           if (res.code === 0) {
             this.$message.success("认领成功")
@@ -267,5 +278,9 @@
   .el-input-number {
     width: 100px;
   }
-
+  .flex-jb{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 </style>
