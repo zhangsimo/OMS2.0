@@ -135,7 +135,7 @@
           <vxe-table-column field="guestName" title="往来单位" fixed="left" width="100"></vxe-table-column>
           <vxe-table-column field="applyDate" title="申请日期" width="100"></vxe-table-column>
 
-          <vxe-table-column field="applyDate" title="审核日期" width="100"></vxe-table-column>
+          <vxe-table-column field="approveDate" title="审核日期" width="100"></vxe-table-column>
           <vxe-table-column field="approveUname" title="审核人" width="100"></vxe-table-column>
 
           <vxe-table-column field="accountNo" title="对账单号" width="180"></vxe-table-column>
