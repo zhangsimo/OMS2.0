@@ -1106,25 +1106,25 @@ import { hideLoading, showLoading } from '@/utils/loading';
                 }
               }
             })
-            if(this.tableData[i].rootCode === '601'){
-              if(this.tableData[i].amountDirection === 1 && this.tableData[i].lenderAmount){
+            if(item.rootCode === '601'){
+              if(item.amountDirection === 1 && item.lenderAmount){
                 saveBool = false
                 return this.$Message.error(`第${i+1}行，只能填写借方金额！`)
               }
-              if(this.tableData[i].amountDirection === 0 && this.tableData[i].debitAmount){
+              if(item.amountDirection === 0 && item.debitAmount){
                 saveBool = false
                 return this.$Message.error(`第${i+1}行，只能填写贷方金额！`)
               }
-              if(this.tableData[i].direction === 0 && this.tableData[i].lenderAmount){
+              if(item.direction === 0 && item.lenderAmount){
                 saveBool = false
                 return this.$Message.error(`第${i+1}行，只能填写借方金额！`)
               }
-              if(this.tableData[i].direction === 1 && this.tableData[i].debitAmount){
+              if(item.direction === 1 && item.debitAmount){
                 saveBool = false
                 return this.$Message.error(`第${i+1}行，只能填写贷方金额！`)
               }
             }
-            if(this.tableData[i].auxiliaryAccountingName && !this.tableData[i].auxiliaryName){
+            if(item.auxiliaryAccountingName && !item.auxiliaryName){
               saveBool = false
               this.$Message.error(`第${i+1}行，辅助核算必填！`)
               return 
