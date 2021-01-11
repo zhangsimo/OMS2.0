@@ -212,6 +212,7 @@
           {{row.invoiceNotAmt | priceFilters}}
         </template>
       </vxe-table-column>
+      <vxe-table-column field="applyNoTaxAmt" title="本次不含税开票金额"></vxe-table-column>
       <vxe-table-column field="applyAmt" title="申请开票金额" :edit-render="{autofocus: '.vxe-input--inner'}">
         <template v-slot:edit="{ row }">
           <vxe-input type="float" v-model="row.applyAmt" :max="row.saleAmt" digits="2"></vxe-input>
