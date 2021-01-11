@@ -104,6 +104,7 @@
             ref="xTable"
             @current-change="currentChangeEvent"
             :data="tableData"
+            max-height="500"
             align="center"
             show-footer
             :footer-method="footerMethod"

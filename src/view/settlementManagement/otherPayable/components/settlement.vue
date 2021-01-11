@@ -320,7 +320,7 @@
     methods: {
       accountHedNo2(val) {
         this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + ';' + val.serviceId;
-        let jsonArr = [val]
+        let jsonArr = [JSON.parse(JSON.stringify(val))]
         if (jsonArr.length >= 1) {
           jsonArr.map(item => {
             item.orgName = this.reconciliationStatement.orgName;
@@ -412,7 +412,6 @@
               //   this.BusinessType[0].rpAmt = this.tableData[0].paidMoney;
               //   this.BusinessType[0].unAmtLeft = this.BusinessType[0].unAmt - this.BusinessType[0].rpAmt;
               // }
-              // console.log(this.tableData)
               this.checkComputed();
             }
           });
@@ -452,7 +451,6 @@
           .catch(errMap => errMap);
         if (errMap) return this.$Message.error("表格校验错误");
         if (!Number(this.check)) {
-          // console.log(this.$parent.Types)
           if (this.$parent.Types == '其他付款核销') {
             if (errMap) {
               this.$XModal.Message({status: 'error', message: '校验不通过！'})
