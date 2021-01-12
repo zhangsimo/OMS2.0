@@ -319,6 +319,15 @@
     },
     methods: {
       accountHedNo2(val) {
+        let flag22 = false
+        this.BusinessType.forEach(i => {
+          if(i.accountNo == val.serviceId){
+            flag22 = true
+          }
+        })
+        if(flag22){
+          return this.$message.error('已经存在重复单据')
+        }
         this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + ';' + val.serviceId;
         let jsonArr = [JSON.parse(JSON.stringify(val))]
         if (jsonArr.length >= 1) {
