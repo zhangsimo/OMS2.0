@@ -80,8 +80,8 @@
       </div>
     </Modal>
 
-    <voucherInput ref="voucherInput" :oneAccountent="accruedList" @callBackFun="getCallBack" :assistTypeCode="assistTypeCode"></voucherInput>
-    <subject ref="subject" @ChildContent="ChildContent"/>
+    <voucherInput ref="voucherInput" :oneAccountent="accruedList" :assistTypeCode="assistTypeCode"></voucherInput>
+    <subject ref="subject" @ChildContent="getSubjectList" />
   </div>
 </template>
 
@@ -89,22 +89,23 @@
 import voucherInput from "./components/voucherInput";
 import subject from "@/view/settlementManagement/otherPayable/components/components/subjects"
 import bus from "@/view/settlementManagement/bill/Popup/Bus"
+import { TurnToTheProfitAndLoss } from "_api/settlementManagement/fundsManagement/claimWrite.js";
+import {showLoading, hideLoading} from "@/utils/loading"
 export default {
   components: {
     voucherInput,
     subject,
   },
-  props: ['titleName','amountType'],
+  props: ['amountType'],
   data(){
     return {
       isDis: false,
       remark: '',
       visibal: false,
-      calculation: '', //选中辅助计算的名称
+      calculation: '', //选中会计科目的名称
       tableData: [],
       outFlag: false,
       type: this.amountType,
-      financeAccountCashList: [], //选中待认领的数组
       currentRow: {}, // 报销认领弹框中选中的行
       validRules: {
         thisClaimedAmt: [
@@ -112,7 +113,6 @@ export default {
           { type: 'number', message: '请输入数字' }
         ]
       },
-      fund:"",
       thisClaimedAmtSum:0,//其他付款支出认领 本次认领金额 合计  this.$parent.currRow.expenditureAmt
       dataOne:[],//其他付款支出认领 one 对账单
       dataTwo:[],//会计科目
@@ -120,6 +120,8 @@ export default {
       accruedList:[{mateAccountCoding:""}],
       voucherItem:{}, //获取辅助计算选中的数据
       assistTypeCode: '4',
+      subjectObj: {}, //获取到的会计科目对象
+      auxiliaryObj: {},  //获取到的辅助核算对象
     }
   },
   computed: {
@@ -127,19 +129,26 @@ export default {
   },
   mounted() {
     bus.$on("ChildContent", val => {    //获取辅助核算选择的对象
-      console.log(val,'辅助核算')
+      this.auxiliaryObj = val
+    })
+    bus.$on('hedInfo', val =>{  //获取会计科目选择的对象
+      this.subjectObj = val
+      this.calculation  = val.titleName
     })
   },
   methods: {
-    
+    getSubjectList(val){
+      this.subjectObj = val
+      this.calculation  = val.titleName
+    },
     //弹框打开
     open(){
       this.voucherItem = {} //打开时清空上次选中的辅助核算数据
       this.calculation = '' //打开时清空上次辅助核算名称
+      this.subjectObj = {}
+      this.auxiliaryObj = {}
       this.visibal = true
       this.remark = ''
-      this.fund = ''
-      if(this.titleName=='其他付款支出认领'){
         // wirteAccount({accountNo:this.$parent.serviceId,sign:11,id:this.$parent.currRow.id}).then(res=>{
         //   if(res.code===0){
         //     res.data.one.furposeName = res.data.one.furpose.name;
@@ -152,10 +161,8 @@ export default {
         //     this.dataTwo = res.data.two;
         //   }
         // })
-      }else{
         this.accruedList[0].mateAccountCoding = "2241"
         this.$refs.voucherInput.Classification = true;
-      }
     },
 
     //弹框关闭
@@ -164,7 +171,7 @@ export default {
     },
 
     //点击确认按钮后
-    confirm(){
+    async confirm(){
       let flag1 = this.tableData.some(v => {
         return v.thisClaimedAmt < 0 || v.thisClaimedAmt > v.unClaimedAmt
       })
@@ -180,32 +187,69 @@ export default {
         return
       }
       if(this.calculation==""){
-        this.$Message.error('请选择辅助核算')
+        this.$Message.error('请选择会计科目')
         return
       }
-      this.financeAccountCashList = []
-      this.tableData.forEach(v => {
-        let o = {}
-        o.id = v.id
-        o.thisClaimedAmt = v.thisClaimedAmt + ''
-        this.financeAccountCashList.push(o)
-      })
       if(this.remark){
         if(this.remark.length > 500){
           return this.$message.error('备注500字符以内')
         }
       }
+      let data = {
+        detailId: this.tableData[0].id,
+        subjectName :  this.subjectObj.titleName,
+        subjectCode :  this.subjectObj.titleCode,
+        subjectId :  this.subjectObj.id,
+        claimType: 8,
+        claimMoney: this.tableData[0].thisClaimedAmt,
+        remark: this.remark
+      }
+      if(Object.keys(this.auxiliaryObj).length != 0){
+        data.auxiliaryTypeCode = this.auxiliaryObj.auxiliaryTypeCode == 2?1:this.auxiliaryObj.auxiliaryTypeCode //辅助核算选中哪一个
+        if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
+          data.isAuxiliaryAccounting=0 //是否辅助核算类
+        }else{
+          data.isAuxiliaryAccounting=1
+        }
+        data.auxiliaryName=this.auxiliaryObj.auxiliaryName //辅助核算名称
+        data.auxiliaryCode=this.auxiliaryObj.auxiliaryCode //辅助核算项目编码
+        data.paymentTypeName = this.auxiliaryObj.paymentName
+        data.paymentTypeCode = this.auxiliaryObj.paymentCode
+        if(this.auxiliaryObj.hasOwnProperty("id")){
+          data.suppliersBean = {
+            guestSourceName:this.auxiliaryObj.fullName||"",
+            guestSourceId:this.auxiliaryObj.id||""
+          }
+        }else {
+          this.$refs.voucherInput.subjectModelShowassist = true;
+          setTimeout(() =>{
+            this.$Message.warning("请选择辅助核算");
+          },500)
+          return;
+        }
+      }
+      try {
+        showLoading('body',"保存中，请勿操作。。。")
+        let res = await TurnToTheProfitAndLoss(data);
+        if (res.code === 0) {
+          this.visibal = false;
+          hideLoading()
+          this.$Message.success("转益成功");
+          //刷新本店待认领款 列表
+          this.$parent.queryClaimed()
+        }else{
+          hideLoading()
+        }
+      } catch (error) {
+        hideLoading()
+      }
+      
       
 
     },
-
+    //选择会计科目
     chooseSubject(){
       this.$refs.subject.subjectModelShow = true
-    },
-
-    // 选择辅助计算弹框
-    chooseAuxiliary(){
-      this.$refs.voucherInput.subjectModelShowassist = true;
     },
 
     // 改变认领款值触发
@@ -217,17 +261,14 @@ export default {
         this.$message.error('本次认领金额录入错误，请重新输入')
       }
     },
-    ChildContent(val){    //获取会计科目获取的对象
-      console.log(val,'会计科目')
-    },
-    getCallBack() {
-      this.getMessage();
-    },
-    getMessage() {
-      this.calculation = this.$refs.voucherInput.AssistAccounting.fullName || this.$refs.voucherInput.AssistAccounting.itemName || this.$refs.voucherInput.AssistAccounting.userName || this.$refs.voucherInput.AssistAccounting[0].name;
-      this.voucherItem = this.$refs.voucherInput.AssistAccounting
-    },
-  },
+    // getCallBack() {
+    //   this.getMessage();
+    // },
+    // getMessage() {
+    //   this.calculation = this.$refs.voucherInput.AssistAccounting.fullName || this.$refs.voucherInput.AssistAccounting.itemName || this.$refs.voucherInput.AssistAccounting.userName || this.$refs.voucherInput.AssistAccounting[0].name;
+    //   this.voucherItem = this.$refs.voucherInput.AssistAccounting
+    // },
+  }
 }
 </script>
 
