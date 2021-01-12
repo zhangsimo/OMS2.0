@@ -24,7 +24,7 @@
           v-for="item in brandArr"
           :value="item.label"
           :key="item.value"
-          
+
           >{{ item.label }}</Option
         >
       </Select>
@@ -46,9 +46,9 @@
       />
       <Button @click="query">查询</Button>
       <!-- <Button v-has="'export'">导出</Button> -->
-     
+
       <Poptip placement="bottom-start" v-model="moreModel" @on-popper-hide="poperHide">
-              <Button class="mr10" @click="moreOpen">更多查询</Button>
+              <Button class="mr10" @click="moreOpen" v-has="'moreSearch'">更多查询</Button>
               <div slot="content">
                 <Form :label-width="80" class="pl5 h270" :label-position="'left'" style="overflow-y: scroll;overflow-x: visible;">
                   <FormItem label="处理日期: " class="h20">
@@ -107,7 +107,7 @@
               </div>
             </Poptip>
     </div>
-    
+
     <div class="footer">
       <vxe-table
         border
@@ -123,7 +123,7 @@
         <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
         <vxe-table-column field="shortName" title="分店名称" width="100"></vxe-table-column>
         <vxe-table-column field="serviceId" title="处理单号" width="100">  </vxe-table-column>
-      
+
         <vxe-table-column field="guestName" title="理赔单位" width="100"></vxe-table-column>
         <vxe-table-column field="orderDate" title="处理日期" width="100"></vxe-table-column>
         <vxe-table-column
@@ -140,7 +140,7 @@
           field="returnCode"
           title="返回单号"
           width="100"
-        ></vxe-table-column> 
+        ></vxe-table-column>
         <vxe-table-column field="partInnerId" title="配件内码" width="100"></vxe-table-column>
         <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
         <vxe-table-column
@@ -153,13 +153,13 @@
           title="OE码"
           width="100"
         >
-        </vxe-table-column> 
+        </vxe-table-column>
        <vxe-table-column
           field="partBrand"
           title="品牌"
           width="100"
         >
-        </vxe-table-column> 
+        </vxe-table-column>
          <vxe-table-column
           field="carModelName"
           title="品牌车型"

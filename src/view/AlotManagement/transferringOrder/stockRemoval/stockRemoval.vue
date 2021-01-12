@@ -366,7 +366,7 @@
                   <vxe-table-column
                     show-overflow="tooltip"
                     field="hasAcceptQty"
-                    :edit-render="{ name: 'input',autoselect: true , attrs: { disabled: false } }"
+                    :edit-render="{ name: '$input',autoselect: true ,props:{min:0,type:'integer',size:'mini'}, attrs: { disabled: false } }"
                     width="100"
                     title="受理数量"
                   ></vxe-table-column>
