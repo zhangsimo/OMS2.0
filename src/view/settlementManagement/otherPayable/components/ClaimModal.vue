@@ -11,7 +11,7 @@
         </div>
         <div class="fr" v-show="titleName=='其他付款支出认领'">
           <span><i style="color: red" class="mr5">*</i>款项分类：</span>
-          <Select v-model="fund" placeholder="请选择" class="w200" clearable>
+          <Select v-model="fund" placeholder="请选择" class="w200" @on-change="dynamicChange" clearable>
             <Option
               v-for="item in fundList"
               :value="item.itemName"
@@ -139,6 +139,7 @@ export default {
         ]
       },
       fund:"",
+      code: '',
       fundList:[],//款项分类数组
       thisClaimedAmtSum:0,//其他付款支出认领 本次认领金额 合计  this.$parent.currRow.expenditureAmt
       dataOne:[],//其他付款支出认领 one 对账单
@@ -162,6 +163,14 @@ export default {
       kmType(params).then(res => {
         this.fundList = res.data.filter(vb=>['2241'].includes(vb.itemValueOne))
       });
+    },
+    dynamicChange(v){
+      this.fundList.forEach(item => {
+        if(item.itemName === v){
+          console.log(item)
+          this.code = item.itemCode
+        }
+      })
     },
     // 弹框底部的合计
     addFooter({ columns, data }) {
@@ -198,6 +207,7 @@ export default {
       this.visibal = true
       this.remark = ''
       this.fund = ''
+      this.code = ''
       if(this.titleName=='其他付款支出认领'){
         wirteAccount({accountNo:this.$parent.serviceId,sign:11,id:this.$parent.currRow.id}).then(res=>{
           if(res.code===0){
@@ -295,7 +305,8 @@ export default {
           one:this.dataOne,
           two:this.dataTwo,
           three:arr,
-          paymentTypeCode:this.fund
+          paymentTypeName:this.fund,
+          paymentTypeCode:this.code,
         }
         this.dataOne.remark = this.remark
         this.isDis = true
