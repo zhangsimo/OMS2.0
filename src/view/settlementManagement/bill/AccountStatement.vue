@@ -1291,7 +1291,7 @@
       },
 
       // 点击总表查询明细
-      morevis({row, index}) {
+      morevis({row,rowIndex}) {
         this.taxArrearsfalg = false
         this.statementStatusflag = false
         this.hedgingfalg = false
@@ -1325,7 +1325,7 @@
 
         }
         this.reconciliationStatement = row;
-        this.reconciliationStatement.index = index;
+        this.reconciliationStatement.index = rowIndex;
         this.data2 = []
         this.data3 = []
         this.data4 = []
@@ -1339,7 +1339,7 @@
               }
               this.ifRecallWriteOff = !res.data.ifRecallWriteOff
               this.ifRecallHedge = !res.data.ifRecallHedge
-              this.data1[index].ifInvoiceApply=res.data.ifInvoiceApply
+              this.data1[rowIndex].ifInvoiceApply=res.data.ifInvoiceApply
             }
           }
         )
