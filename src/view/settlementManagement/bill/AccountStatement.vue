@@ -1453,8 +1453,19 @@
           };
           this.getRecord(obj);
           this.getdetailsDocuments(obj);
+          this.salepopupList = selection;
+        }else{
+          this.salepopupList = selection;
+          this.salepopupList.map(el=>{
+            setCanwithdraw({id: el.id}).then(
+              res => {
+                if (res.code === 0) {
+                  el.ifInvoiceApply=res.data.ifInvoiceApply
+                }
+              }
+            )
+          })
         }
-        this.salepopupList = selection;
       },
       // 查看对账单
       viewStatement() {
