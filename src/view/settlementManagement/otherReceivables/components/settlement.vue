@@ -308,7 +308,15 @@ export default {
   mounted() {
     // 对账单号
     bus.$on("accountHedNo", (val) => {
-      // console.log(val , 7879);
+      let flag22 = false
+      this.BusinessType.forEach(i => {
+        if(i.accountNo == val.serviceId){
+          flag22 = true
+        }
+      })
+      if(flag22){
+        return this.$message.error('已经存在重复单据')
+      }
       this.isSub = 0
       this.reconciliationStatement.accountNo =
         this.reconciliationStatement.accountNo + ";" + val.serviceId;

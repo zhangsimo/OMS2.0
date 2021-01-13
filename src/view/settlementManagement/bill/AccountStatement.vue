@@ -225,11 +225,11 @@
           max-height="400"
           ref="accountStatement"
           @current-change="morevis"
-          @select-change="distributionSelection"
-          @select-all="distributionSelection"
-          @select-cancel="distributionSelection"
+          @checkbox-change="distributionSelection"
+          @checkbox-all="distributionSelection"
+          @checkbox-cancel="distributionSelection"
         >
-          <vxe-table-column type="selection" width="50" fixed="left"></vxe-table-column>
+          <vxe-table-column type="checkbox" width="50" fixed="left"></vxe-table-column>
           <vxe-table-column title="序号" type="seq" width="50" fixed="left"></vxe-table-column>
           <vxe-table-column title="往来单位" field="guestName" width="120" fixed="left"></vxe-table-column>
           <vxe-table-column title="对账单状态" field="statementStatusName" width="120" fixed="left">
@@ -238,7 +238,6 @@
           </vxe-table-column>
           <vxe-table-column title="付款出纳" field="approveUname" width="80"></vxe-table-column>
           <vxe-table-column title="对账申请人" field="applicant" width="100"></vxe-table-column>
-
           <vxe-table-column title="申请时间" field="createTime" width="140"></vxe-table-column>
           <vxe-table-column title="公司名称" field="orgName" width="120"></vxe-table-column>
           <vxe-table-column title="对账单号" field="accountNo" width="180"></vxe-table-column>
@@ -1041,6 +1040,7 @@
         let guestNameAll = this.salepopupList[0].guestName;
         let boolShow = 0;
         let accountNos = "";
+        let accountNo = "";
         let guestNames = "";
         let guestIds = "";
         let idx = 0;
@@ -1059,15 +1059,19 @@
           if (el.ownSellOutList === 0) {
             boolShow = 3//存在 不包含销售出库单据的对账单
           }
-          if (0 >= el.statementAmtOwed) {
-            boolShow = 4//存在 剩余欠票金额为0的对账单
+          if (!el.ifInvoiceApply) {
+            accountNo+= `${el.accountNo};`
+            boolShow = 4//存在 剩余欠票金额为0的对账单 存在“含税配件欠票、含税油品欠票、不含税未开”字段为0的对账单
           }
+          // if (0 >= el.statementAmtOwed) {
+          //   boolShow = 4//存在 剩余欠票金额为0的对账单
+          // }
           if (!this.salepopupMulibool && el.guestName != guestNameAll) {
             boolShow = 5//角色不为“会计、核算会计、核算主管、核算经理、财务总监”
           }
-          if (Number(el.taxArrearsOfPart) == 0 && Number(el.taxArrearsOfOil) == 0 && Number(el.taxNotIncluded) == 0) {
-            boolShow = 6//存在“含税配件欠票、含税油品欠票、不含税未开”字段为0的对账单
-          }
+          // if (Number(el.taxArrearsOfPart) == 0 && Number(el.taxArrearsOfOil) == 0 && Number(el.taxNotIncluded) == 0) {
+          //   boolShow = 6//存在“含税配件欠票、含税油品欠票、不含税未开”字段为0的对账单
+          // }
           if (el.owned == 1) {
             boolShow = 7//存在 已在草稿单的对账单
             idx = index;
@@ -1133,14 +1137,14 @@
             this.$message.error('存在不包含销售出库单据的对账单，不能开票！');
             break;
           case 4:
-            this.$message.error('存在剩余欠票金额为0的对账单，不能开票！');
+            this.$message.error(`对账单号${accountNo}剩余未开票配件明细为空，不能申请开票！`);
             break;
           case 5:
             this.$message.error("请确认所选对账单为同一往来单位")
             break;
-          case 6:
-            this.$message.error("所选对账单存在含税配件欠票、含税油品欠票、不含税未开字段为0的对账单")
-            break;
+          // case 6:
+          //   this.$message.error("所选对账单存在含税配件欠票、含税油品欠票、不含税未开字段为0的对账单")
+          //   break;
           case 7:
             this.$message.error(`第${idx + 1}条对账单在${applicant}的草稿箱已存在,请先删除!`)
             break;
@@ -1287,7 +1291,7 @@
       },
 
       // 点击总表查询明细
-      morevis({row, index}) {
+      morevis({row,rowIndex}) {
         this.taxArrearsfalg = false
         this.statementStatusflag = false
         this.hedgingfalg = false
@@ -1321,7 +1325,7 @@
 
         }
         this.reconciliationStatement = row;
-        this.reconciliationStatement.index = index;
+        this.reconciliationStatement.index = rowIndex;
         this.data2 = []
         this.data3 = []
         this.data4 = []
@@ -1335,6 +1339,7 @@
               }
               this.ifRecallWriteOff = !res.data.ifRecallWriteOff
               this.ifRecallHedge = !res.data.ifRecallHedge
+              this.data1[rowIndex].ifInvoiceApply=res.data.ifInvoiceApply
             }
           }
         )
@@ -1367,8 +1372,7 @@
         this.getRecord(obj);
         this.getdetailsDocuments(obj);
       },
-      distributionSelection({selection,row,index}) {
-        this.salepopupList = selection;
+      distributionSelection({selection,row,rowIndex}) {
         if(selection.length===1){
           this.taxArrearsfalg = false
           this.statementStatusflag = false
@@ -1403,7 +1407,7 @@
 
           }
           this.reconciliationStatement = row;
-          this.reconciliationStatement.index = index;
+          this.reconciliationStatement.index = rowIndex;
           this.data2 = []
           this.data3 = []
           this.data4 = []
@@ -1417,6 +1421,7 @@
                 }
                 this.ifRecallWriteOff = !res.data.ifRecallWriteOff
                 this.ifRecallHedge = !res.data.ifRecallHedge
+                this.data1[rowIndex].ifInvoiceApply=res.data.ifInvoiceApply
               }
             }
           )
@@ -1449,6 +1454,7 @@
           this.getRecord(obj);
           this.getdetailsDocuments(obj);
         }
+        this.salepopupList = selection;
       },
       // 查看对账单
       viewStatement() {
