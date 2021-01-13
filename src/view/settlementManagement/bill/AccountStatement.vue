@@ -1045,7 +1045,7 @@
         let guestIds = "";
         let idx = 0;
         let applicant = "";
-        let statementAmtOwed=0;
+        let statementAmtOwed1=0;
         this.salepopupList.map((el, index) => {
           if (el.taxSign == 1 && el.isOilPart != isOilPartAll) {
             boolShow = 1;//所选对账单 不是  全部为配件类型或者全部为油品类型或者全部不含税
@@ -1080,7 +1080,7 @@
           accountNos += `${el.accountNo};`
           guestNames += `${el.guestName};`
           guestIds += `${el.guestId};`
-          statementAmtOwed+=Number(el.statementAmtOwed);
+          statementAmtOwed1+=Number(el.statementAmtOwed);
         })
         switch (boolShow) {
           case 0:
@@ -1093,7 +1093,7 @@
               this.$refs.salepopup.information.accountNos = accountNos;
               this.$refs.salepopup.information.guestNames = guestNames;
               this.$refs.salepopup.information.guestIds = guestIds;
-              this.$refs.salepopup.information.statementAmtOwed = parseFloat(statementAmtOwed).toFixed(2);
+              this.$refs.salepopup.information.statementAmtOwed = parseFloat(statementAmtOwed1).toFixed(2);
               this.$refs.salepopup.information.orgName = this.$store.state.user.userShopName;
               this.$refs.salepopup.information.applicationDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
               // 申请单号
@@ -1123,8 +1123,10 @@
               this.$refs.noTax.information.accountNos = accountNos;
               this.$refs.noTax.information.guestNames = guestNames;
               this.$refs.noTax.information.guestIds = guestIds;
-              this.$refs.noTax.information.statementAmtOwed = parseFloat(statementAmtOwed).toFixed(2);
-              this.$refs.noTax.init();
+              this.$refs.noTax.information.notAmt = parseFloat(statementAmtOwed1).toFixed(2);
+              setTimeout(() => {
+                this.$refs.noTax.init();
+              }, 500);
             }
             break;
           case 1:

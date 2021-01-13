@@ -123,7 +123,7 @@
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="不含税对账单未开金额">
-            <Input v-model="information.statementAmtOwed" class="ml5 w200" disabled/>
+            <Input v-model="information.notAmt" class="ml5 w200" disabled/>
           </FormItem>
           <FormItem label="产生税费">
             <Input :value="getTaxesAndDues" class="ml5 w200" disabled/>
@@ -247,7 +247,7 @@
     data() {
       const thisTaxChange = (rule, value, callback) => {
         if (value) {
-          if (value > this.information.statementAmtOwed) {
+          if (value > this.information.notAmt) {
             callback(new Error("不能大于不含税对账单未开票金额"));
           }
         } else {
@@ -523,7 +523,7 @@
         informationNoCitation({ guestId: this.information.guestId }).then(res => {
           if (res.code === 0) {
             for(let key in this.invoice){
-              if(key!="statementAmtOwed"&&key!="applyTaxAmt"){
+              if(key!="notAmt"&&key!="applyTaxAmt"){
                 if (res.data.hasOwnProperty(key)){
                   this.invoice[key] = res.data[key]
                 }
@@ -573,7 +573,7 @@
           this.information.noTaxApply = rep.data.applyNo || "";
           this.information.guestNames = rep.data.guestName || "";
           this.information.applicationDate = rep.data.applyDate || "";
-          this.information.statementAmtOwed = parseFloat(rep.data.notAmt).toFixed(2) || "";
+          this.information.notAmt = parseFloat(rep.data.notAmt).toFixed(2) || "";
           this.information.accountNo = rep.data.accountNo || "";
           this.information.id = rep.data.id;
           this.invoice.taxPoint = parseFloat(rep.data.taxPoint) || 0;
@@ -630,14 +630,12 @@
               this.copyData = res.data;
             }
           });
-        }else{
-          this.information.statementAmtOwed =0
         }
       },
       // 提交申请
       submission(type) { //type 1保存为草稿 2提交申请
         this.$refs.formCustom.validate(async val => {
-          if (this.invoice.invoiceTaxAmt > this.information.statementAmtOwed) return this.$Message.error('本次不含税开票金额不能大于不含税对账单未开票金额')
+          if (this.invoice.invoiceTaxAmt > this.information.notAmt) return this.$Message.error('本次不含税开票金额不能大于不含税对账单未开票金额')
           if (val) {
             let obj = {
               ...this.invoice,
@@ -650,7 +648,7 @@
                 guestNames: this.information.guestNames.split(";"),
                 partList: this.accessoriesBillingData,
                 applyDate: this.information.applicationDate,
-                notAmt: this.information.statementAmtOwed,
+                notAmt: this.information.notAmt,
                 accountNos: this.information.accountNos.split(";")
               }
             };
