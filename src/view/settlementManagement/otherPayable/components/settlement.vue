@@ -80,7 +80,7 @@
               width="140"
             >
               <template v-slot="{row}">
-                <vxe-input type="number" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
+                <vxe-input type="float" digits="2" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
               </template>
             </vxe-table-column>
             <vxe-table-column field="unAmtLeft" width="140" title="剩余未收/未付"></vxe-table-column>
@@ -336,7 +336,7 @@
             item.accountNo = item.serviceId;
             item.businessTypeName = item.businessType ? item.businessType.name : '';
             item.reconciliationAmt = item.paymentClaimAmt;
-            item.hasAmt = +item.paymentClaimAmt - +item.paymentBalance;
+            item.hasAmt = (+item.paymentClaimAmt - +item.paymentBalance).toFixed(2);
             item.unAmt = -item.paymentBalance;
             item.rpAmt = -item.paymentBalance;
             item.unAmtLeft = +item.rpAmt - +item.unAmt;

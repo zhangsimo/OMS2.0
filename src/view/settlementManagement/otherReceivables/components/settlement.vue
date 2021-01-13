@@ -144,7 +144,7 @@
               width="140"
             >
               <template v-slot="{row}">
-                <vxe-input type="number" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
+                <vxe-input type="float" digits="2" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
               </template>
             </vxe-table-column>
             <vxe-table-column field="unAmtLeft" width="140" title="剩余未收/未付"></vxe-table-column>
@@ -332,7 +332,7 @@ export default {
         // item.guestName = item.guestName;
         item.businessTypeName = item.orderTypeName;
         item.reconciliationAmt = -item.amountCollected; //对账金额
-        item.hasAmt = +item.amountCollected - +item.paymentBalance; //已收/付金额
+        item.hasAmt = (+item.amountCollected - +item.paymentBalance).toFixed(2); //已收/付金额
         item.unAmt = -item.paymentBalance; //未收/付金额
         item.rpAmt = -item.paymentBalance;
         item.unAmtLeft = item.unAmt - item.rpAmt;
