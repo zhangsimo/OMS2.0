@@ -204,24 +204,35 @@
     mounted() {
       // 对账单号
       bus.$on("accountHedNo", val => {
-        // console.log(this.BusinessType,1111)
-        if(this.reconciliationStatement.accountNo.indexOf(",")!=-1){
-          let accountNoList=this.reconciliationStatement.accountNo.split(",")
-          this.reconciliationStatement.accountNo =
-            accountNoList[0] + "," + val.accountNo;
-          val.two.map(item => {
-            item.isOldFlag=true;
-            item.businessTypeName = item.businessType.name;
-          });
-          this.BusinessType=this.BusinessType.filter(item => !item.isOldFlag)
-          this.BusinessType = [...this.BusinessType, ...val.two];
-          this.BusinessType = this.BusinessType.filter(item => item.reconciliationAmt != 0)
-          this.checkComputed();
+        if(this.stateType){
+          // console.log(this.BusinessType,1111)
+          if(this.reconciliationStatement.accountNo.indexOf(",")!=-1){
+            let accountNoList=this.reconciliationStatement.accountNo.split(",")
+            this.reconciliationStatement.accountNo =
+              accountNoList[0] + "," + val.accountNo;
+            val.two.map(item => {
+              item.isOldFlag=true;
+              item.businessTypeName = item.businessType.name;
+            });
+            this.BusinessType=this.BusinessType.filter(item => !item.isOldFlag)
+            this.BusinessType = [...this.BusinessType, ...val.two];
+            this.BusinessType = this.BusinessType.filter(item => item.reconciliationAmt != 0)
+            this.checkComputed();
+          }else{
+            this.reconciliationStatement.accountNo =
+              this.reconciliationStatement.accountNo + "," + val.accountNo;
+            val.two.map(item => {
+              item.isOldFlag=true;
+              item.businessTypeName = item.businessType.name;
+            });
+            this.BusinessType = [...this.BusinessType, ...val.two];
+            this.BusinessType = this.BusinessType.filter(item => item.reconciliationAmt != 0)
+            this.checkComputed();
+          }
         }else{
           this.reconciliationStatement.accountNo =
             this.reconciliationStatement.accountNo + "," + val.accountNo;
           val.two.map(item => {
-            item.isOldFlag=true;
             item.businessTypeName = item.businessType.name;
           });
           this.BusinessType = [...this.BusinessType, ...val.two];
