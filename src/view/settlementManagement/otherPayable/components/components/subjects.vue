@@ -1,4 +1,5 @@
-<template>
+<template>  
+<!-- 资金认领款核销转损益引用中 -->
   <Modal v-model="subjectModelShow" title="选择会计科目" width="750" @on-visible-change="showOrhideModel">
     <Form v-model="accountingSubject">
       <Tabs type="card" :animated="false">

@@ -5,7 +5,7 @@
         <Button class="fl mr10" @click="openPClaimModal">选择单据</Button>
         <div class="fr">
           <span><i style="color: red" class="mr5">*</i>款项分类：</span>
-          <Select v-model="fund" placeholder="请选择" class="w200" @on-change="fundChange" clearable>
+          <Select v-model="fund" placeholder="请选择" class="w200" @on-change="dynamicChange" clearable>
             <Option
               v-for="item in fundList"
               :value="item.itemName"
@@ -99,7 +99,7 @@
         remark: '',
         visibal: false,
         fund: "",
-        fundCode: '',
+        code: '',
         fundList: [],//款项分类数组
         tableData: [],
         outFlag: false,
@@ -131,6 +131,13 @@
         kmType(params).then(res => {
           this.fundList = res.data.filter(vb => ['1221'].includes(vb.itemValueOne))
         });
+      },
+      dynamicChange(v){
+        this.fundList.forEach(item => {
+          if(item.itemName === v){
+            this.code = item.itemCode
+          }
+        })
       },
       // 弹框底部的合计
       addFooter({columns, data}) {
@@ -165,7 +172,7 @@
         this.tableData = [];
         this.visibal = true;
         this.fund = "";
-        this.fundCode = ''
+        this.code = ''
         this.remark = ''
         setTimeout(() => {
           let params = {
@@ -248,7 +255,8 @@
             one: this.dataOne,
             two: this.dataTwo,
             three: arr,
-            paymentTypeCode:this.fundCode
+            paymentTypeName:this.fund,
+            paymentTypeCode:this.code,
           }
           this.isDis = true
           saveAccount(data).then(res => {
@@ -264,7 +272,8 @@
             one: this.dataOne,
             two: this.dataTwo,
             three: arr,
-            paymentTypeCode:this.fundCode
+            paymentTypeName:this.fund,
+            paymentTypeCode:this.code
           }
           this.isDis = true
           paymentRegain(data).then(res => {

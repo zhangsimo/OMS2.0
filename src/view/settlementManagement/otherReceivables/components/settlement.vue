@@ -144,7 +144,7 @@
               width="140"
             >
               <template v-slot="{row}">
-                <vxe-input type="number" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
+                <vxe-input type="float" digits="2" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
               </template>
             </vxe-table-column>
             <vxe-table-column field="unAmtLeft" width="140" title="剩余未收/未付"></vxe-table-column>
@@ -308,7 +308,15 @@ export default {
   mounted() {
     // 对账单号
     bus.$on("accountHedNo", (val) => {
-      // console.log(val , 7879);
+      let flag22 = false
+      this.BusinessType.forEach(i => {
+        if(i.accountNo == val.serviceId){
+          flag22 = true
+        }
+      })
+      if(flag22){
+        return this.$message.error('已经存在重复单据')
+      }
       this.isSub = 0
       this.reconciliationStatement.accountNo =
         this.reconciliationStatement.accountNo + ";" + val.serviceId;
@@ -317,14 +325,14 @@ export default {
       // });
       // this.BusinessType = [...this.BusinessType, ...val];
       // console.log(val)
-      let jsonArr = [val];
+      let jsonArr = [JSON.parse(JSON.stringify(val))];
       jsonArr.map((item) => {
         item.orgName = this.reconciliationStatement.orgName;
         item.accountNo = item.serviceId;
         // item.guestName = item.guestName;
         item.businessTypeName = item.orderTypeName;
         item.reconciliationAmt = -item.amountCollected; //对账金额
-        item.hasAmt = +item.amountCollected - +item.paymentBalance; //已收/付金额
+        item.hasAmt = (+item.amountCollected - +item.paymentBalance).toFixed(2); //已收/付金额
         item.unAmt = -item.paymentBalance; //未收/付金额
         item.rpAmt = -item.paymentBalance;
         item.unAmtLeft = item.unAmt - item.rpAmt;

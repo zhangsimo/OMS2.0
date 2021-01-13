@@ -1064,7 +1064,7 @@
         let xTable = this.$refs.xTable;
         xTable.updateFooter();
         let arr=xTable.footerData[0];
-        arr[12]=Number(arr[7])-Number(arr[11])
+        arr[12]=(Number(arr[7])-Number(arr[11])).toFixed(2)
       },
       countAmount(row) {
         if (row.amount > 0) {

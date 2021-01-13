@@ -920,6 +920,9 @@ import { hideLoading, showLoading } from '@/utils/loading';
         this.formPlan.period=tools.transMonth(this.formPlan.voucherTime)
       },
       thousands(num) {
+        if(!num && num!=0){
+          num = 0
+        }
         var str = num.toString();
         var reg = str.indexOf(".") > -1 ? /\B(?=(\d{3})+\.)/g : /\B(?=(\d{3})+$)/g;
         return str.replace(reg, ",");
@@ -1090,44 +1093,39 @@ import { hideLoading, showLoading } from '@/utils/loading';
         this.$refs.xTable.validate(() => {
           if (this.debitAmount == this.LendersCombined) {
             let saveBool=true;
-            this.tableData.map(item=>{
-              if(item.debitAmount && item.lenderAmount){
+            for(let i = 0; i < this.tableData.length; i++){
+              if(!saveBool){
+                return
+              }
+              if(this.tableData[i].debitAmount && this.tableData[i].lenderAmount){
                 saveBool=false;
                 return this.$Message.error("借方金额、贷方金额只可输入一项")
               }
-              if(item.subjectName && item.subjectName.trim()==""){
+              if(this.tableData[i].subjectName && this.tableData[i].subjectName.trim()==""){
                 saveBool=false;
                 return this.$Message.error("会计科目必选")
               }
-              if(item.subjectName.trim()!==""){
-                if(!item.summary || item.summary.trim()==""){
+              if(this.tableData[i].subjectName.trim()!==""){
+                if(!this.tableData[i].summary || this.tableData[i].summary.trim()==""){
                   saveBool=false
                   return this.$Message.error("编辑表格的摘要必填")
                 }
               }
-            })
-            if(item.rootCode === '601'){
-              if(item.amountDirection === 1 && item.lenderAmount){
-                saveBool = false
-                return this.$Message.error(`第${i+1}行，只能填写借方金额！`)
+              if(this.tableData[i].rootCode === '601'){
+                if(this.tableData[i].balanceDirection === 1 && this.tableData[i].debitAmount){
+                  saveBool = false
+                  return this.$Message.error(`第${i+1}行，只能填写贷方金额！`)
+                }
+                if(this.tableData[i].balanceDirection === 0 && this.tableData[i].lenderAmount){
+                  saveBool = false
+                  return this.$Message.error(`第${i+1}行，只能填写借方金额！`)
+                }
               }
-              if(item.amountDirection === 0 && item.debitAmount){
+              if(this.tableData[i].auxiliaryAccountingName && !this.tableData[i].auxiliaryName){
                 saveBool = false
-                return this.$Message.error(`第${i+1}行，只能填写贷方金额！`)
+                this.$Message.error(`第${i+1}行，辅助核算必填！`)
+                return 
               }
-              if(item.direction === 0 && item.lenderAmount){
-                saveBool = false
-                return this.$Message.error(`第${i+1}行，只能填写借方金额！`)
-              }
-              if(item.direction === 1 && item.debitAmount){
-                saveBool = false
-                return this.$Message.error(`第${i+1}行，只能填写贷方金额！`)
-              }
-            }
-            if(item.auxiliaryAccountingName && !item.auxiliaryName){
-              saveBool = false
-              this.$Message.error(`第${i+1}行，辅助核算必填！`)
-              return 
             }
             setTimeout(()=>{
               this.tableData = this.tableData.filter(item => item.subjectName)
@@ -1245,7 +1243,7 @@ import { hideLoading, showLoading } from '@/utils/loading';
       },
       //新增行
       async insertEventLast(row) {
-        this.tableData.push({ debitAmount: 0, lenderAmount: 0 ,summary:"",subjectName: ""});
+        this.tableData.push({ debitAmount: 0, lenderAmount: 0 ,summary:"",subjectName: "",balanceDirection: 2});
       },
       tabCode(){
         if(this.tabModal=="active1"){
@@ -1291,7 +1289,7 @@ import { hideLoading, showLoading } from '@/utils/loading';
       async insertEvent(row,rowIndex) {
         this.tableData.map((item,index)=>{
           if(index==rowIndex){
-            this.tableData.splice(index+1,0,{ debitAmount: 0, lenderAmount: 0 ,summary:"",subjectName: ""})
+            this.tableData.splice(index+1,0,{ debitAmount: 0, lenderAmount: 0 ,summary:"",subjectName: "",balanceDirection: 2})
           }
         })
       },
@@ -1741,6 +1739,14 @@ import { hideLoading, showLoading } from '@/utils/loading';
           this.oneAccountent.subjectName = this.accountingSubject;
           this.oneAccountent.subjectCode = this.subjectCode;
           this.oneAccountent.rootCode = this.rootCode;
+
+          this.oneAccountent.auxiliaryCode = ''
+          this.oneAccountent.auxiliaryName = ''
+          delete this.oneAccountent.amountDirection
+          // this.oneAccountent.auxiliaryTypeCode = this.currentAccounting.auxiliaryTypeCode
+          this.oneAccountent.auxiliaryAccountingName = this.currentAccounting.auxiliaryAccountingName
+          this.oneAccountent.auxiliaryAccountingCode = this.currentAccounting.auxiliaryAccountingCode
+          this.oneAccountent.isAuxiliaryAccounting = this.currentAccounting.isAuxiliaryAccounting
           this.subjectModelShow = false;
           this.oneAccountent.balanceDirection = this.balanceDirection; //会计科目是借方、还是贷方
         }

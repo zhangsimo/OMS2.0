@@ -815,7 +815,7 @@ export default {
         this.$refs.AssistTableDataOther.clearRadioRow()
         if(this.oneAccountent.titleCode === "1221" || this.oneAccountent.titleCode === "2241" || this.oneAccountent.titleCode === "1532" || this.oneAccountent.titleCode === "1801"){
           this.Classification = true
-        }else if(this.oneAccountent[0].mateAccountCoding === "1221" || this.oneAccountent[0].mateAccountCoding === "2241" || this.oneAccountent[0].mateAccountCoding === "1532" || this.oneAccountent[0].mateAccountCoding === "1801"){
+        }else if(Array.isArray(this.oneAccountent) && (this.oneAccountent[0].mateAccountCoding === "1221" || this.oneAccountent[0].mateAccountCoding === "2241" || this.oneAccountent[0].mateAccountCoding === "1532" || this.oneAccountent[0].mateAccountCoding === "1801")){
           this.Classification = true
         }else{
           this.Classification = false

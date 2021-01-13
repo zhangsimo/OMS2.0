@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="subjectModelShow" title="选择会计科目" width="800px">
+    <Modal v-model="subjectModelShow" title="选择会计科目11" width="800px">
       <div class="partCheck-hd" style="padding-bottom: 20px">
         <Input class="w200 mr10" v-model="subjectModel" placeholder="请输入科目" @on-enter="search"></Input>
         <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>

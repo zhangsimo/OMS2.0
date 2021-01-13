@@ -353,6 +353,11 @@ export default {
           // }
         },
         {
+          title: "本次不含税开票金额",
+          key: "applyNoTaxAmt",
+          className: "tc",
+        },
+        {
           title: "申请开票金额",
           key: "applyAmt",
           className: "tc",
