@@ -325,7 +325,7 @@ export default {
       // });
       // this.BusinessType = [...this.BusinessType, ...val];
       // console.log(val)
-      let jsonArr = [val];
+      let jsonArr = [JSON.parse(JSON.stringify(val))];
       jsonArr.map((item) => {
         item.orgName = this.reconciliationStatement.orgName;
         item.accountNo = item.serviceId;

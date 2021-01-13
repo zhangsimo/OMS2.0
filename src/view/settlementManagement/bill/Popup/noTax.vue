@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal1" title="增加不含税销售开票申请" width="1200">
+  <Modal v-model="modal1" title="增加不含税销售开票申请" width="1200" @on-visible-change="visChange">
     <Button
       class="ivu-btn ivu-btn-default mr10"
       @click="submission(1)"
@@ -533,7 +533,6 @@
         });
       },
       async init() {
-        this.information.statementAmtOwed =0
         this.$refs.xTable2.recalculate(true)
         if (this.information.owned) {
           this.modal1 = true;
@@ -631,6 +630,8 @@
               this.copyData = res.data;
             }
           });
+        }else{
+          this.information.statementAmtOwed =0
         }
       },
       // 提交申请
