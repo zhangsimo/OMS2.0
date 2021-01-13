@@ -1060,7 +1060,7 @@
             boolShow = 3//存在 不包含销售出库单据的对账单
           }
           if (!el.ifInvoiceApply) {
-            accountNo=el.accountNo;
+            accountNo+= `${el.accountNo};`
             boolShow = 4//存在 剩余欠票金额为0的对账单 存在“含税配件欠票、含税油品欠票、不含税未开”字段为0的对账单
           }
           // if (0 >= el.statementAmtOwed) {
@@ -1137,7 +1137,7 @@
             this.$message.error('存在不包含销售出库单据的对账单，不能开票！');
             break;
           case 4:
-            this.$message.error(`对账单号${accountNo}，剩余未开票配件明细为空，不能申请开票！`);
+            this.$message.error(`对账单号${accountNo}剩余未开票配件明细为空，不能申请开票！`);
             break;
           case 5:
             this.$message.error("请确认所选对账单为同一往来单位")
