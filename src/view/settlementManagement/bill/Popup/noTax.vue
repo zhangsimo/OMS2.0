@@ -548,6 +548,7 @@
               new Date()
             ).format("YYYY-MM-DD HH:mm:ss");
             this.information.orgName = this.$store.state.user.userShopName;
+            this.information.statementAmtOwed =0
             // 发票单位
             ditInvoices(this.information.guestIds.split(";") ).then(res => {
               if (res.code === 0) {
