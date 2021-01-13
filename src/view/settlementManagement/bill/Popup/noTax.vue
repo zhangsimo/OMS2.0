@@ -630,8 +630,6 @@
               this.copyData = res.data;
             }
           });
-        }else{
-          this.information.statementAmtOwed =0
         }
       },
       // 提交申请

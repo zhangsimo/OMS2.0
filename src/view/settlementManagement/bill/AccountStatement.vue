@@ -1124,7 +1124,9 @@
               this.$refs.noTax.information.guestNames = guestNames;
               this.$refs.noTax.information.guestIds = guestIds;
               this.$refs.noTax.information.statementAmtOwed = parseFloat(statementAmtOwed).toFixed(2);
-              this.$refs.noTax.init();
+              setTimeout(() => {
+                this.$refs.noTax.init();
+              }, 500);
             }
             break;
           case 1:
