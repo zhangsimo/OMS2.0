@@ -101,6 +101,15 @@ Vue.filter('toChies', function (values) {
   return arr + str2
 })
 
+
+Vue.filter('NumFormat', function(value) {
+  if(!value) return '0.00';
+  value = parseFloat(value).toFixed(2).toString().split(".");
+  value[0] = value[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");
+  return value.join(".");
+})
+
+
 // 自定义组件
 const requireComponents = require.context('_c/base', true, /\.vue/);
 requireComponents.keys().forEach(fileName => {

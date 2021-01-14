@@ -217,6 +217,9 @@
             this.recordLists = res.data;
             if (this.recordLists.length > 0) {
               this.$emit('Message', this.recordLists)
+            }else{
+              this.recordLists = []
+              this.$emit('Message',this.recordLists)
             }
             }
           }
