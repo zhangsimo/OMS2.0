@@ -1304,6 +1304,16 @@ export default [
         component: () => import("@/view/reportForm/salesAndInventorylist/index.vue"),
       },
       {
+        path: "/reportForm/hsSalesStatistics",
+        name: "hsSalesStatistics",
+        redirect: "",
+        mark: "7108",
+        meta: { keepAlive: true,
+          title: "华胜销售统计",
+        },
+        component: () => import("@/view/reportForm/hsSalesStatistics/index.vue"),
+      },
+      {
         path: "/reportForm/purchaseRepor/reporIndex",
         name: "reportFormProcurement ",
         redirect: "",

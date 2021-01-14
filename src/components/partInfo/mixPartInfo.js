@@ -272,6 +272,9 @@ export const mixPartInfo = {
         case 3:
           text = "华胜ERP";
           break;
+        case 4:
+          text = "佳配ERP";
+          break;
       }
       return text;
     }

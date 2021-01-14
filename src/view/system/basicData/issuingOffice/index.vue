@@ -355,6 +355,8 @@
             return item.shopName
           }).join(';');
           this.formValidate.strShopList = this.shopList;
+        }else{
+          Reflect.deleteProperty(this.formValidate,"id");
         }
       },
 
@@ -452,7 +454,6 @@
       submitForm(name){
         this.$refs[name].validate(async (valid) => {
           if (valid) {
-            console.log(this.formValidate)
             let rep = await issuingSaveOrUpdate(this.formValidate);
             if(rep.code==0){
               this.$Message.success('操作成功!');
