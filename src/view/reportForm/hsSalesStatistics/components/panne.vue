@@ -41,15 +41,16 @@
           <div class="db mr10">
             <span class="mr10">区域:</span>
             <Select
-              v-model="search.month"
+              v-model="search.areaId"
+              @on-change="changeArea"
               class="w120"
-              placeholder="月份"
+              placeholder="区域"
             >
               <Option
-                v-for="item in monthList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.name }}
+                v-for="item in areaList"
+                :value="item.id"
+                :key="item.id"
+              >{{ item.companyName }}
               </Option
               >
             </Select>
@@ -60,20 +61,18 @@
               v-model="search.orgid"
               class="w200"
               placeholder="门店"
-              filterable clearable
-              :disabled="selectShopList"
             >
               <Option
-                v-for="item in stores"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.name }}</Option>
+                v-for="item in storeList"
+                :value="item.id"
+                :key="item.id"
+              >{{ item.shortName }}</Option>
             </Select>
           </div>
           <div class="db mr10">
             <span class="mr10">华胜分店:</span>
             <el-select
-              v-model="search.hsStore"
+              v-model="search.guestId"
               filterable
               remote
               reserve-keyword
@@ -137,15 +136,25 @@
           month: (new Date()).getMonth() + 1,
           year: (new Date()).getFullYear(),
           orgid: "", // 供应商
-          hsStore:''
+          guestId:'',
+          //区域
+          areaId:'9999',
+          //分店
+          orgid:''
+
         },
         hsStoreData:[],
-        loading:false
+        loading:false,
+        //区域数据
+        areaList:[],
+        //门店数据
+        storeList:[]
       };
     },
     async mounted() {
+      this.getArea();
       let arrYear = []
-      for (let i = 2010; i < (new Date()).getFullYear()+20; i++) {
+      for (let i = 2020; i < (new Date()).getFullYear()+20; i++) {
         arrYear.push(i)
       }
       this.yearList = arrYear
@@ -160,8 +169,9 @@
           this.stores.push({value: key, name: data[key]})
         })
       }
-      var arr = await creat("", this.$store);
-      this.search.orgid = arr[1];
+      // var arr = await creat("", this.$store);
+      // this.search.orgid = arr[1];
+      this.query();
     },
     computed: {
       selectShopList() {
@@ -173,6 +183,44 @@
       }
     },
     methods: {
+
+      //获取区域
+      async getArea(){
+        let rep = await api.getComPanyArea();
+        if(rep.code==0){
+          let allJpStore = [];
+          (rep.data||[]).filter(item => item.companyVOList).map(item => {
+            item.companyVOList.map(item1 => {
+              allJpStore.push(item1);
+            })
+          });
+          //加入全部数据
+          let ObjData = {
+            companyName:'全部',
+            id:'9999',
+            companyVOList:allJpStore
+          }
+          rep.data.unshift(ObjData)
+          this.areaList = rep.data
+          this.getJpStore(this.search.areaId);
+        }
+      },
+
+      changeArea(v){
+        this.getJpStore(v);
+      },
+
+      //获取极配门店
+      getJpStore(id){
+        this.search.orgid = undefined;
+        let filterData = this.areaList.filter(item => item.id==id);
+        if (filterData.length>0){
+          this.storeList = filterData[0].companyVOList;
+        }else{
+          this.storeList = [];
+        }
+      },
+
       //获取全部表格数据
       async getlist(query) {
         if (query !== '') {
@@ -220,7 +268,11 @@
       },
       // 查询
       query() {
-        this.$emit("search", this.search);
+        let reqData = {...this.search};
+        if(reqData.areaId=='9999'){
+          delete reqData.areaId;
+        }
+        this.$emit("search", reqData);
       },
       getmoreData(data) {
         if (data != null) {

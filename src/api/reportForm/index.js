@@ -393,3 +393,32 @@ export function monthToMonth(params={}) {
     params,
   })
 }
+
+//华胜销售统计获取区域
+export function getComPanyArea(params={}) {
+  return axios.request({
+    url: `${api.wmsApi}/companyArea/findAllCompanyArea`,
+    method: 'get',
+    params,
+  })
+}
+
+//华胜销售统计获取列表
+export function getHarsonSaleReport(params={},data={}) {
+  return axios.request({
+    url: `${api.omsOrder}/omsHarsonSaleReport/queryByConditions`,
+    method: 'post',
+    params,
+    data
+  })
+}
+
+//华胜销售统计获取和值
+export function getHarsonSaleReportTotal(params={},data={}) {
+  return axios.request({
+    url: `${api.omsOrder}/omsHarsonSaleReport/queryTotal`,
+    method: 'post',
+    params,
+    data
+  })
+}
