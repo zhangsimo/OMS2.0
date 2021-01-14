@@ -20,7 +20,7 @@
     <!--v-has="'examine'"-->
     <!--&gt;增加不含税销售开票申请</button>-->
     <h4 class="mt10 mb10">基本信息</h4>
-    <Row style="border:1px solid #000c17;">
+    <!-- <Row style="border:1px solid #000c17;">
       <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;box-sizing:border-box;border-right:1px solid #000c17">
         <span>分店名称：{{information.orgName}}</span>
       </Col>
@@ -47,6 +47,30 @@
           <div style="width: 300px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
             对账单号：{{information.accountNos}}
           </div>
+        </Poptip>
+      </Col>
+    </Row> -->
+    <Row class="tableBox">
+      <Col class="inner" span="3">分店名称：</Col>
+      <Col class="inner" span="5">{{information.orgName}}</Col>
+      <Col class="inner" span="3">分店店号：</Col>
+      <Col class="inner" span="5">{{information.code}}</Col>
+      <Col class="inner" span="3">往来单位:</Col>
+      <Col class="inner" span="5">
+        <Poptip placement="top" trigger="hover" :content="information.guestNames" transfer>
+          {{information.guestNames}}
+        </Poptip>
+      </Col>
+    </Row>
+    <Row class="tableBox twoTable">
+      <Col class="inner" span="3">开票申请单号：</Col>
+      <Col class="inner" span="5">{{information.applyNo}}</Col>
+      <Col class="inner" span="3">申请时间：</Col>
+      <Col class="inner" span="5">{{information.applicationDate}}</Col>
+      <Col class="inner" span="3">对账单号：</Col>
+      <Col class="inner" span="5">
+        <Poptip placement="top" trigger="hover" :content="information.accountNos" transfer>
+          {{information.accountNos}}
         </Poptip>
       </Col>
     </Row>
@@ -1000,3 +1024,24 @@
     // }
   };
 </script>
+<style scoped lang="less">
+.tableBox {
+  line-height: 38px;
+  text-align: center;
+  border: #cccccc 1px solid;
+  border-right: none;
+  .inner {
+    border-right: #cccccc 1px solid;
+    height: 38px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .inner:nth-child(2n-1) {
+    background: #f9f9f9;
+  }
+}
+.twoTable {
+  border-top: none;
+}
+</style>
