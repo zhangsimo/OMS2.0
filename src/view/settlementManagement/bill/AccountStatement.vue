@@ -675,6 +675,7 @@
     settlement,
     settlementPreservation,
     setCanwithdraw,
+    setCanwithdrawList,
     setApply,
     setCancal,
     account,
@@ -726,6 +727,7 @@
         reconciliationStatement: {}, //点击主表获取当当前一行数据
         salepopupList: [],//销售开票数组
         salepopupMulibool: false,
+        salepopupBoolean:false,
         tableData: [],
         BusinessType: [],
         Settlement: false,
@@ -1034,6 +1036,7 @@
       },
       // 销售开票申请
       saleApplication() {
+        if(this.salepopupBoolean){return}
         if (Object.keys(this.salepopupList).length == 0) return this.$Message.error('请选择对账单')
         let isOilPartAll = this.salepopupList[0].isOilPart;
         let taxSignAll = this.salepopupList[0].taxSign;
@@ -1375,6 +1378,7 @@
         this.getdetailsDocuments(obj);
       },
       distributionSelection({selection,row,rowIndex}) {
+        // console.log(selection,1111)
         if(selection.length===1){
           this.taxArrearsfalg = false
           this.statementStatusflag = false
@@ -1456,17 +1460,30 @@
           this.getRecord(obj);
           this.getdetailsDocuments(obj);
           this.salepopupList = selection;
-        }else{
+        }else if(selection.length>1){
           this.salepopupList = selection;
+          let ids=[];
           this.salepopupList.map(el=>{
-            setCanwithdraw({id: el.id}).then(
-              res => {
-                if (res.code === 0) {
-                  el.ifInvoiceApply=res.data.ifInvoiceApply
-                }
-              }
-            )
+            let data={id:el.id}
+            ids.push(data)
           })
+          this.salepopupBoolean=true;
+          setCanwithdrawList(ids).then(
+            res => {
+              if (res.code === 0) {
+                this.salepopupList.map(el=>{
+                  res.data.map(el2=>{
+                    if(el.id==el2.id){
+                      el.ifInvoiceApply=el2.ifInvoiceApply
+                    }
+                  })
+                })
+                this.salepopupBoolean=false;
+              }else{
+                this.salepopupBoolean=false;
+              }
+            }
+          )
         }
       },
       // 查看对账单
