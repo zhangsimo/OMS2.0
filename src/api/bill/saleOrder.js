@@ -416,6 +416,14 @@ export function setCanwithdraw(params) {
     params
   })
 }
+//对账单销售开票按钮判断
+export function setCanwithdrawList(data) {
+  return axios.request({
+    url: `${api.omsSettle}/statement/master/judgeInvoiceApply`,
+    method: 'post',
+    data
+  })
+}
 
 //撤回申请
 export function setApply(params) {
