@@ -1376,6 +1376,7 @@
         };
         this.getRecord(obj);
         this.getdetailsDocuments(obj);
+        this.salepopupList =[]
       },
       distributionSelection({selection,row,rowIndex}) {
         // console.log(selection,1111)
