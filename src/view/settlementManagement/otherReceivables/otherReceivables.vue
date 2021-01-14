@@ -92,7 +92,7 @@
           v-has="'cancel'"
           class="ml10"
           @click="collectWirte"
-          :disabled="Boolean(currRow.writeOffReceiptNo)"
+          :disabled="Boolean(currRow.paymentBalance <= 0)"
           >其他收款核销</Button
         >
         <Button
@@ -163,6 +163,12 @@
 
             <vxe-table-column title="付款出纳" field="approveUname" width="80"></vxe-table-column>
 
+            <vxe-table-column
+              field="applicant"
+              width="100"
+              title="申请人"
+              fixed="left"
+            ></vxe-table-column>
             <vxe-table-column title="基本信息">
               <vxe-table-column
                 field="serviceId"

@@ -80,7 +80,7 @@
               width="140"
             >
               <template v-slot="{row}">
-                <vxe-input type="number" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
+                <vxe-input type="float" digits="2" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
               </template>
             </vxe-table-column>
             <vxe-table-column field="unAmtLeft" width="140" title="剩余未收/未付"></vxe-table-column>
@@ -319,6 +319,15 @@
     },
     methods: {
       accountHedNo2(val) {
+        let flag22 = false
+        this.BusinessType.forEach(i => {
+          if(i.accountNo == val.serviceId){
+            flag22 = true
+          }
+        })
+        if(flag22){
+          return this.$message.error('已经存在重复单据')
+        }
         this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + ';' + val.serviceId;
         let jsonArr = [JSON.parse(JSON.stringify(val))]
         if (jsonArr.length >= 1) {
@@ -327,7 +336,7 @@
             item.accountNo = item.serviceId;
             item.businessTypeName = item.businessType ? item.businessType.name : '';
             item.reconciliationAmt = item.paymentClaimAmt;
-            item.hasAmt = +item.paymentClaimAmt - +item.paymentBalance;
+            item.hasAmt = (+item.paymentClaimAmt - +item.paymentBalance).toFixed(2);
             item.unAmt = -item.paymentBalance;
             item.rpAmt = -item.paymentBalance;
             item.unAmtLeft = +item.rpAmt - +item.unAmt;

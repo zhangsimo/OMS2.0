@@ -50,7 +50,7 @@
             <Button type="warning" @click="query" class="mr5">查询</Button>
             <!--            <Button type="warning" @click="exportxls" class="mr5">导出</Button>-->
             <Poptip placement="bottom-start" v-model="moreModel" @on-popper-hide="poperHide">
-              <Button class="mr10" @click="moreOpen">更多查询</Button>
+              <Button class="mr10" @click="moreOpen" v-has="'moreSearch'">更多查询</Button>
               <div slot="content">
                 <Form :label-width="80" class="pl5 h270" :label-position="'left'" style="overflow-y: scroll;overflow-x: visible;">
                   <FormItem label="处理日期: " class="h20">
