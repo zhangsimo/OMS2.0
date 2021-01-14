@@ -1311,6 +1311,7 @@ export default [
         meta: { keepAlive: true,
           title: "华胜销售统计",
         },
+
         component: () => import("@/view/reportForm/hsSalesStatistics/index.vue"),
       },
       {
