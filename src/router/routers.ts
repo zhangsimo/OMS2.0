@@ -1307,7 +1307,7 @@ export default [
         path: "/reportForm/hsSalesStatistics",
         name: "hsSalesStatistics",
         redirect: "",
-        mark: "7108",
+        mark: "7111",
         meta: { keepAlive: true,
           title: "华胜销售统计",
         },
