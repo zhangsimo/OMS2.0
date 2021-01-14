@@ -1378,7 +1378,7 @@
         this.getdetailsDocuments(obj);
       },
       distributionSelection({selection,row,rowIndex}) {
-        console.log(selection,1111)
+        // console.log(selection,1111)
         if(selection.length===1){
           this.taxArrearsfalg = false
           this.statementStatusflag = false
