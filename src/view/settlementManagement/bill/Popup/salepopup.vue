@@ -959,7 +959,7 @@
             }
             if (['applyAmt'].includes(column.property)) {
               let num = this.$utils.sum(data, column.property)
-              this.$set(this.invoice, 'applyTaxAmt', num)
+              // this.$set(this.invoice, 'applyTaxAmt', num)
               this.$set(this.invoice, 'applyAmt', this.$utils.add(num, this.invoice.notTaxAmt))
 
 
@@ -967,7 +967,7 @@
             if (['orderQty', 'taxPrice', 'taxAmt', 'applyAmt', 'additionalTaxPoint'].includes(column.property)) {
               return this.$utils.sum(data, column.property)
             }
-            if (['thisAccountAmt'].includes(column.property)) {
+            if (['thisAccountAmt','applyTaxAmt'].includes(column.property)) {
               return this.$utils.sum(data, column.property).toFixed(2)
             }
             return null
