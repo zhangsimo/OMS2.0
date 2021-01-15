@@ -45,6 +45,7 @@
               @on-change="changeArea"
               class="w120"
               placeholder="区域"
+              :disabled="selectShopList"
             >
               <Option
                 v-for="item in areaList"
@@ -61,6 +62,9 @@
               v-model="search.orgid"
               class="w200"
               placeholder="门店"
+              filterable
+              :disabled="selectShopList"
+              clearable
             >
               <Option
                 v-for="item in storeList"
@@ -74,9 +78,12 @@
             <el-select
               v-model="search.guestId"
               filterable
+              clearable
               remote
+              @clear="clearHsList"
               reserve-keyword
               placeholder="请输入关键词"
+              size="small"
               :remote-method="getlist"
               :loading="loading">
               <el-option
@@ -141,20 +148,20 @@
           areaId:'9999',
           //分店
           orgid:''
-
         },
         hsStoreData:[],
         loading:false,
         //区域数据
         areaList:[],
         //门店数据
-        storeList:[]
+        storeList:[],
+
       };
     },
     async mounted() {
       this.getArea();
       let arrYear = []
-      for (let i = 2020; i < (new Date()).getFullYear()+20; i++) {
+      for (let i = 2020; i <= (new Date()).getFullYear(); i++) {
         arrYear.push(i)
       }
       this.yearList = arrYear
@@ -169,9 +176,6 @@
           this.stores.push({value: key, name: data[key]})
         })
       }
-      // var arr = await creat("", this.$store);
-      // this.search.orgid = arr[1];
-      this.query();
     },
     computed: {
       selectShopList() {
@@ -179,6 +183,13 @@
           return this.$store.state.user.userData.currentCompany.isMaster ? true : false
         } else {
           return true
+        }
+      },
+      selectShopArea() {
+        if (this.$store.state.user.userData.currentCompany != null) {
+          return this.$store.state.user.userData.currentCompany.supplierTypeSecond;
+        }else{
+          return "";
         }
       }
     },
@@ -196,7 +207,7 @@
           });
           //加入全部数据
           let ObjData = {
-            companyName:'全部',
+            companyName:'全连锁',
             id:'9999',
             companyVOList:allJpStore
           }
@@ -211,7 +222,7 @@
       },
 
       //获取极配门店
-      getJpStore(id){
+      async getJpStore(id){
         this.search.orgid = undefined;
         let filterData = this.areaList.filter(item => item.id==id);
         if (filterData.length>0){
@@ -219,6 +230,14 @@
         }else{
           this.storeList = [];
         }
+
+        let arr = await creat("", this.$store);
+        if(this.selectShopList){
+          this.search.orgid = arr[1];
+          this.search.areaId = this.selectShopArea;
+        }
+        this.query();
+
       },
 
       //获取全部表格数据
@@ -239,6 +258,9 @@
         } else {
           this.hsStoreData = [];
         }
+      },
+      clearHsList(){
+        this.hsStoreData = [];
       },
 
 
