@@ -455,7 +455,7 @@
         this.superior = []
       },
       editClick(pname, pid, data) {
-        let arr = this.groupsList.filter(el => (el.id != undefined && el.id == data.pId))
+        let arr = this.groupsList.filter(el => (el.id != undefined && el.id == pid))
         this.title = "修改组织";
         // this.parentName = pname;
         this.newGroup.pId = pid;
