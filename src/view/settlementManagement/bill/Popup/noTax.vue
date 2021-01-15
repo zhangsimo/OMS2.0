@@ -164,6 +164,8 @@
       ref="xTable2"
       auto-resize
       show-footer
+      size="small"
+      align="center"
       :footer-method="footerMethod"
       :data="accessoriesBillingData"
       :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -184,7 +186,7 @@
         </template>
       </vxe-table-column>
       <vxe-table-column field="taxRate" title="开票税率"></vxe-table-column>
-      <vxe-table-column field="outNo" title="出库单号"></vxe-table-column>
+      <vxe-table-column field="outNo" title="出库单号" show-overflow="title"></vxe-table-column>
       <vxe-table-column field="salePrice" title="销售单价">
         <template v-slot="{row}">
           {{row.salePrice | priceFilters}}

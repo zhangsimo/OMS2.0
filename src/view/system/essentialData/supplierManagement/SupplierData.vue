@@ -447,6 +447,7 @@
             let data = this.clientList;
             data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
             data.isClient ? (data.isClient = 1) : (data.isClient = 0);
+            data.shortName=data.fullName;
             showLoading()
             let res = await getNewSupplier(data);
             if (res.code === 0) {

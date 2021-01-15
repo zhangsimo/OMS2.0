@@ -1099,6 +1099,7 @@
               this.$refs.salepopup.information.statementAmtOwed = parseFloat(statementAmtOwed1).toFixed(2);
               this.$refs.salepopup.information.orgName = this.$store.state.user.userShopName;
               this.$refs.salepopup.information.applicationDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+              this.$refs.salepopup.isOilPart = isOilPartAll;
               // 申请单号
               applyNo().then(res => {
                 if (res.code === 0) {
