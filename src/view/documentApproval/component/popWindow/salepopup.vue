@@ -475,7 +475,8 @@ export default {
         {
           title: "出库单号",
           key: "outNo",
-          className: "tc"
+          className: "tc",
+          tooltip: true,
         },
         {
           title: "销售单价",
@@ -575,7 +576,8 @@ export default {
         {
           title: "出库单号",
           key: "outNo",
-          className: "tc"
+          className: "tc",
+          tooltip: true
         },
         {
           title: "销售单价",
@@ -964,7 +966,7 @@ export default {
                 return prev;
               }
             }, 0);
-            if (index !== 4 && index !== 14) {
+            if (index !== 4 && index !== 12 ) {
               sums[key] = {
                 key,
                 value: v.toFixed(2)

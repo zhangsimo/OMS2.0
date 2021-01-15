@@ -13,29 +13,27 @@
     >提交申请
     </Button>
     <h4 class="mt10 mb10">基本信息</h4>
-    <Row style="border:1px solid #000c17;">
-      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;box-sizing:border-box;border-right:1px solid #000c17">
-        <span>分店名称：{{information.orgName}}</span>
-      </Col>
-      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;border-right:1px solid #000c17">
-        <span>分店店号：{{information.code}}</span>
-      </Col>
-      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;">
-        <Poptip placement="top" trigger="hover" :content="information.guestNames" max-width="140">
-          <div style="width: 300px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">往来单位：{{information.guestNames}}</div>
+    <Row class="tableBox">
+      <Col class="inner" span="3">分店名称：</Col>
+      <Col class="inner" span="5">{{information.orgName}}</Col>
+      <Col class="inner" span="3">分店店号：</Col>
+      <Col class="inner" span="5">{{information.code}}</Col>
+      <Col class="inner" span="3">往来单位:</Col>
+      <Col class="inner" span="5">
+        <Poptip placement="top" trigger="hover" :content="information.guestNames" transfer>
+          {{information.guestNames}}
         </Poptip>
       </Col>
     </Row>
-    <Row style="border:1px solid #000c17;border-top: none;">
-      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;border-right:1px solid #000c17">
-        <span>不含税开票申请单号：{{information.noTaxApply}}</span>
-      </Col>
-      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;border-right:1px solid #000c17">
-        <span>申请时间：{{information.applicationDate}}</span>
-      </Col>
-      <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;">
-        <Poptip placement="top" trigger="hover" :content="information.accountNos" max-width="140">
-          <div style="width: 300px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">对账单号：{{information.accountNos}}</div>
+    <Row class="tableBox twoTable">
+      <Col class="inner" span="3">开票申请单号：</Col>
+      <Col class="inner" span="5">{{information.noTaxApply}}</Col>
+      <Col class="inner" span="3">申请时间：</Col>
+      <Col class="inner" span="5">{{information.applicationDate}}</Col>
+      <Col class="inner" span="3">对账单号：</Col>
+      <Col class="inner" span="5">
+        <Poptip placement="top" trigger="hover" :content="information.accountNos" transfer>
+          {{information.accountNos}}
         </Poptip>
       </Col>
     </Row>
@@ -166,6 +164,8 @@
       ref="xTable2"
       auto-resize
       show-footer
+      size="small"
+      align="center"
       :footer-method="footerMethod"
       :data="accessoriesBillingData"
       :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -186,7 +186,7 @@
         </template>
       </vxe-table-column>
       <vxe-table-column field="taxRate" title="开票税率"></vxe-table-column>
-      <vxe-table-column field="outNo" title="出库单号"></vxe-table-column>
+      <vxe-table-column field="outNo" title="出库单号" show-overflow="title"></vxe-table-column>
       <vxe-table-column field="salePrice" title="销售单价">
         <template v-slot="{row}">
           {{row.salePrice | priceFilters}}
@@ -835,4 +835,23 @@
     left: -26px;
     bottom: -5px;
   }
+  .tableBox {
+  line-height: 38px;
+  text-align: center;
+  border: #cccccc 1px solid;
+  border-right: none;
+  .inner {
+    border-right: #cccccc 1px solid;
+    height: 38px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .inner:nth-child(2n-1) {
+    background: #f9f9f9;
+  }
+}
+.twoTable {
+  border-top: none;
+}
 </style>

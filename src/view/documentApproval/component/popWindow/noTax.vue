@@ -318,7 +318,8 @@ export default {
         {
           title: "出库单号",
           key: "outNo",
-          className: "tc"
+          className: "tc",
+          tooltip: true
         },
         {
           title: "销售单价",

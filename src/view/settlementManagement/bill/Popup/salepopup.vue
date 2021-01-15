@@ -20,7 +20,7 @@
     <!--v-has="'examine'"-->
     <!--&gt;增加不含税销售开票申请</button>-->
     <h4 class="mt10 mb10">基本信息</h4>
-    <Row style="border:1px solid #000c17;">
+    <!-- <Row style="border:1px solid #000c17;">
       <Col span="8" class="pt10 pb10 pl10" style="padding: 10px;box-sizing:border-box;border-right:1px solid #000c17">
         <span>分店名称：{{information.orgName}}</span>
       </Col>
@@ -47,6 +47,30 @@
           <div style="width: 300px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
             对账单号：{{information.accountNos}}
           </div>
+        </Poptip>
+      </Col>
+    </Row> -->
+    <Row class="tableBox">
+      <Col class="inner" span="3">分店名称：</Col>
+      <Col class="inner" span="5">{{information.orgName}}</Col>
+      <Col class="inner" span="3">分店店号：</Col>
+      <Col class="inner" span="5">{{information.code}}</Col>
+      <Col class="inner" span="3">往来单位:</Col>
+      <Col class="inner" span="5">
+        <Poptip placement="top" trigger="hover" :content="information.guestNames" transfer>
+          {{information.guestNames}}
+        </Poptip>
+      </Col>
+    </Row>
+    <Row class="tableBox twoTable">
+      <Col class="inner" span="3">开票申请单号：</Col>
+      <Col class="inner" span="5">{{information.applyNo}}</Col>
+      <Col class="inner" span="3">申请时间：</Col>
+      <Col class="inner" span="5">{{information.applicationDate}}</Col>
+      <Col class="inner" span="3">对账单号：</Col>
+      <Col class="inner" span="5">
+        <Poptip placement="top" trigger="hover" :content="information.accountNos" transfer>
+          {{information.accountNos}}
         </Poptip>
       </Col>
     </Row>
@@ -167,6 +191,8 @@
           show-footer
           auto-resize
           ref="xTable1"
+          height="300"
+          max-height="300"
           :footer-method="footerMethod"
           :data="accessoriesBillingData1"
           :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -230,6 +256,8 @@
           ref="xTable2"
           auto-resize
           show-footer
+          height="300"
+          max-height="300"
           :footer-method="footerMethod"
           :data="accessoriesBillingData2"
           :edit-config="{trigger: 'click', mode: 'row'}"
@@ -373,6 +401,7 @@
         approvalTit: "开票申请流程", //审批流程
         popupTit: "选择必开销售单", //选择必开销售单弹框标题
         modal1: false, // 弹框开关
+        isOilPart:0,
         invoice: {
           consignee: "", //快递收件人
           receiptUnit: "", // 发票单位
@@ -629,7 +658,7 @@
               arrData1.push(item);
             }
           });
-          if (this.$parent.salepopupList[0].isOilPart == 1) {
+          if (this.isOilPart == 1) {
             this.accessoriesBillingData1 = [...bbArr, ...arrData1]
           } else {
             this.accessoriesBillingData2 = [...bbArr, ...arrData1]
@@ -647,7 +676,7 @@
 
             },
             onCancel: () => {
-              this.invoice.applyTaxAmt = ''
+              this.invoice.applyTaxAmt = 0
             }
           });
         }
@@ -684,7 +713,7 @@
         if (flag) {
           this.$refs.formCustom.resetFields();
           this.invoice.statementAmtOwed = this.information.statementAmtOwed
-          this.invoice.applyTaxAmt = this.invoice.statementAmtOwed;
+          this.invoice.applyTaxAmt = Number(this.invoice.statementAmtOwed)
           this.invoice.notTaxAmt = 0
           this.invoice.applyAmt = this.invoice.applyTaxAmt + this.invoice.notTaxAmt
           this.invoice.invoiceTax = "";
@@ -704,7 +733,6 @@
           //     bus.$emit('approval',res.data.operationRecords)
           //   }
           // });
-
           this.$nextTick(() => {
             if (this.information.owned == 1) {
               getDraftList({accountNo: this.information.accountNo}).then(res => {
@@ -733,21 +761,21 @@
                 if (res.code === 0) {
                   this.invoice.invoiceType = "";
                   this.invoice.invoiceTax = "";
-                  this.accessoriesBillingData = res.data;
                   this.copyData = res.data;
-
+                  this.accessoriesBillingData = res.data;
                   this.setTableData();
                 }
               });
             }
           })
-
-
+        }else{
+          this.invoice.underTicketExplain="";
+          this.invoice.remark="";
         }
       },
       //填充表格数据
       setTableData() {
-        if (this.$parent.salepopupList[0].isOilPart == 1) {
+        if (this.isOilPart == 1) {
           this.accessoriesBillingData1 = this.accessoriesBillingData
         } else {
           this.accessoriesBillingData2 = this.accessoriesBillingData
@@ -931,7 +959,7 @@
             }
             if (['applyAmt'].includes(column.property)) {
               let num = this.$utils.sum(data, column.property)
-              this.$set(this.invoice, 'applyTaxAmt', num)
+              // this.$set(this.invoice, 'applyTaxAmt', num)
               this.$set(this.invoice, 'applyAmt', this.$utils.add(num, this.invoice.notTaxAmt))
 
 
@@ -939,7 +967,7 @@
             if (['orderQty', 'taxPrice', 'taxAmt', 'applyAmt', 'additionalTaxPoint'].includes(column.property)) {
               return this.$utils.sum(data, column.property)
             }
-            if (['thisAccountAmt'].includes(column.property)) {
+            if (['thisAccountAmt','applyTaxAmt'].includes(column.property)) {
               return this.$utils.sum(data, column.property).toFixed(2)
             }
             return null
@@ -1000,3 +1028,24 @@
     // }
   };
 </script>
+<style scoped lang="less">
+.tableBox {
+  line-height: 38px;
+  text-align: center;
+  border: #cccccc 1px solid;
+  border-right: none;
+  .inner {
+    border-right: #cccccc 1px solid;
+    height: 38px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .inner:nth-child(2n-1) {
+    background: #f9f9f9;
+  }
+}
+.twoTable {
+  border-top: none;
+}
+</style>
