@@ -30,7 +30,7 @@
                 </Select>
               </FormItem>
               <FormItem label="客户简称:" prop="shortName">
-                <Input v-model="data.shortName" style="width: 180px" maxlength="30"  :disabled="dis" />
+                <Input v-model="shortName" style="width: 180px" maxlength="30"  disabled />
               </FormItem>
               <FormItem label="客户全称:" prop="fullName">
                 <Input v-model="data.fullName" style="width: 180px"  :disabled="dis" />
@@ -895,6 +895,9 @@ export default {
     spellCode(){
       let spell=this.data?(this.data.fullName?(this.data.fullName==""?"":pinyin.getCamelChars(this.data.fullName)):""):""
       return (this.data.pyName=spell)
+    },
+    shortName(){
+      return this.data.fullName
     }
   },
   mounted() {

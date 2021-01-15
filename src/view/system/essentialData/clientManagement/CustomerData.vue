@@ -436,6 +436,7 @@ export default {
         data.isSupplier ? (data.isSupplier = 1) : (data.isSupplier = 0);
         data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
         data.isFatCompany = data.isFatCompany ? 1 : 0
+        data.shortName=data.fullName;
         // data.tgrade = data.tgradeName
         // console.log(data,this.clientList)
         let res = await getNewClient(this.clientList);

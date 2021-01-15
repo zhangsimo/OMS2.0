@@ -35,7 +35,7 @@
                 </Col>
                 <Col span="12">
                   <FormItem label="供应商简称:" prop="shortName" class="h50">
-                    <Input v-model="data.shortName" style="width: 180px" :disabled="dis"/>
+                    <Input v-model="shortName" style="width: 180px" disabled/>
                   </FormItem>
                 </Col>
               </Row>
@@ -658,6 +658,9 @@
       spellCode(){
         let spell=this.data?(this.data.fullName?(this.data.fullName==""?"":pinyin.getCamelChars(this.data.fullName)):""):""
         return (this.data.pyName=spell)
+      },
+      shortName(){
+        return this.data.fullName
       }
     },
     methods: {
