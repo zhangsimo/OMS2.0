@@ -191,6 +191,8 @@
           show-footer
           auto-resize
           ref="xTable1"
+          height="300"
+          max-height="300"
           :footer-method="footerMethod"
           :data="accessoriesBillingData1"
           :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -254,6 +256,8 @@
           ref="xTable2"
           auto-resize
           show-footer
+          height="300"
+          max-height="300"
           :footer-method="footerMethod"
           :data="accessoriesBillingData2"
           :edit-config="{trigger: 'click', mode: 'row'}"
@@ -397,6 +401,7 @@
         approvalTit: "开票申请流程", //审批流程
         popupTit: "选择必开销售单", //选择必开销售单弹框标题
         modal1: false, // 弹框开关
+        isOilPart:0,
         invoice: {
           consignee: "", //快递收件人
           receiptUnit: "", // 发票单位
@@ -671,7 +676,7 @@
 
             },
             onCancel: () => {
-              this.invoice.applyTaxAmt = ''
+              this.invoice.applyTaxAmt = 0
             }
           });
         }
@@ -708,7 +713,7 @@
         if (flag) {
           this.$refs.formCustom.resetFields();
           this.invoice.statementAmtOwed = this.information.statementAmtOwed
-          this.invoice.applyTaxAmt = this.invoice.statementAmtOwed;
+          this.invoice.applyTaxAmt = Number(this.invoice.statementAmtOwed)
           this.invoice.notTaxAmt = 0
           this.invoice.applyAmt = this.invoice.applyTaxAmt + this.invoice.notTaxAmt
           this.invoice.invoiceTax = "";
@@ -728,7 +733,6 @@
           //     bus.$emit('approval',res.data.operationRecords)
           //   }
           // });
-
           this.$nextTick(() => {
             if (this.information.owned == 1) {
               getDraftList({accountNo: this.information.accountNo}).then(res => {
@@ -757,21 +761,21 @@
                 if (res.code === 0) {
                   this.invoice.invoiceType = "";
                   this.invoice.invoiceTax = "";
-                  this.accessoriesBillingData = res.data;
                   this.copyData = res.data;
-
-                  this.setTableData();
+                  // this.accessoriesBillingData = res.data;
+                  // this.setTableData();
                 }
               });
             }
           })
-
-
+        }else{
+          this.invoice.underTicketExplain="";
+          this.invoice.remark="";
         }
       },
       //填充表格数据
       setTableData() {
-        if (this.$parent.salepopupList[0].isOilPart == 1) {
+        if (this.isOilPart == 1) {
           this.accessoriesBillingData1 = this.accessoriesBillingData
         } else {
           this.accessoriesBillingData2 = this.accessoriesBillingData
