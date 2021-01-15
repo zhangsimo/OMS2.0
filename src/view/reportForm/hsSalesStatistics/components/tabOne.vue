@@ -1,8 +1,8 @@
 <template>
   <div style="flex: 1; height: 0px">
     <div class="pb10 show-list">
-      <Checkbox v-model="showArea" @on-change="hideCol" class="show-item">显示区域</Checkbox>
-      <Checkbox v-model="showStore" @on-change="hideCol" class="show-item">显示门店</Checkbox>
+      <Checkbox v-model="showArea" :disabled="selectShopList" @on-change="hideCol" class="show-item">显示区域</Checkbox>
+      <Checkbox v-model="showStore" :disabled="selectShopList" @on-change="hideCol" class="show-item">显示门店</Checkbox>
       <Checkbox v-model="showGuest" @on-change="hideCol" class="show-item">显示华胜分店</Checkbox>
       <Checkbox v-model="showBusinessUnit" @on-change="hideCol" class="show-item">显示事业部</Checkbox>
     </div>
@@ -125,10 +125,20 @@
       };
     },
     mounted() {
+      this.showArea = this.selectShopList?true:false;
+      this.showStore = this.selectShopList?true:false;
+      this.hideColCom();
       // this.getList();
     },
     methods: {
       hideCol(){
+        this.$nextTick(() => {
+          this.hideColCom()
+          this.page.num = 1;
+          this.getList();
+        })
+      },
+      hideColCom(){
         this.$nextTick(() => {
           if(this.showArea){
             this.$refs.xTable.showColumn(this.$refs.xTable.getColumnByField('area'));
@@ -150,8 +160,6 @@
           }else{
             this.$refs.xTable.hideColumn(this.$refs.xTable.getColumnByField('businessUnit'));
           }
-          this.page.num = 1;
-          this.getList();
         })
       },
       // 查询表
@@ -254,7 +262,23 @@
           })
         ];
       }
-    }
+    },
+    computed: {
+      selectShopList() {
+        if (this.$store.state.user.userData.currentCompany != null) {
+          return this.$store.state.user.userData.currentCompany.isMaster ? true : false
+        } else {
+          return true
+        }
+      },
+      selectShopArea() {
+        if (this.$store.state.user.userData.currentCompany != null) {
+          return this.$store.state.user.userData.currentCompany.supplierTypeSecond;
+        }else{
+          return "";
+        }
+      }
+    },
   };
 </script>
 <style type="less" scoped>
