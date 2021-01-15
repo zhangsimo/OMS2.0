@@ -39,6 +39,10 @@
             <span>往来单位：</span>
             <Input type="text" class="h30 w200" v-model="form.guestName"/>
           </div>
+          <div class="db ml20">
+            <span>开票申请单号：</span>
+            <Input type="text" class="h30 w200" clearable v-model.trim="form.applyNo"/>
+          </div>
           <div class="db ml10">
             <button class="ivu-btn ivu-btn-default" v-noresub="1000" @click="query" type="button">
               <i class="iconfont iconchaxunicon"></i>
@@ -192,6 +196,7 @@
           <vxe-table-column title="申请日期" field="applyDate" width="100"></vxe-table-column>
           <vxe-table-column title="对账单号" field="accountNo" width="100"></vxe-table-column>
           <vxe-table-column title="开票申请单号" field="applyNo" width="120"></vxe-table-column>
+          <vxe-table-column field="applyNoSub" title="开票申请子单号" width="180"></vxe-table-column>
           <vxe-table-column title="发票种类" field="invoiceKind" width="100"></vxe-table-column>
           <vxe-table-column title="发票单位" field="receiptUnitName" width="100"></vxe-table-column>
           <vxe-table-column title="税号" field="customDuty" width="100"></vxe-table-column>
@@ -314,6 +319,7 @@
           startDate: "",
           endDate: "",
           cancalStatus: '',
+          applyNo:""
         },
         details: {
           page: 0,
@@ -450,6 +456,7 @@
           startDate: this.form.startDate,
           endDate: this.form.endDate,
           cancalStatus: this.form.cancalStatus,
+          applyNo:this.form.applyNo
         };
         obj.orgId==undefined?delete obj.orgId:"";
         for (var i in obj) {
