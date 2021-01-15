@@ -420,15 +420,9 @@
               opts
             )
           ],
-          [
-            h("span", {
-                class:
-                  this.curId == data.id
-                    ? "ivu-tree-title-selected ivu-tree-title"
-                    : ""
-              },
-              data.orgName)
-          ]
+          // [
+          //   h("span",data.orgName)
+          // ]
         );
       },
       submit() {
