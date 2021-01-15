@@ -30,7 +30,7 @@
           </p>
           <div class="form-con-inner">
             <Form ref="loginForm" :model="form" :rules="rules">
-              <FormItem style="margin-bottom: 20px">
+              <FormItem class="mb30">
                 <Select v-model="form.scope">
                   <Option
                     v-for="item in accountTypeList"
@@ -39,7 +39,7 @@
                   >{{ item.label }}</Option>
                 </Select>
               </FormItem>
-              <FormItem prop="username" style="margin-bottom: 20px">
+              <FormItem prop="username" class="mb30">
                 <Input
                   v-model="form.username"
                   :class="{nodata:!form.username}"
