@@ -658,7 +658,7 @@
               arrData1.push(item);
             }
           });
-          if (this.$parent.salepopupList[0].isOilPart == 1) {
+          if (this.isOilPart == 1) {
             this.accessoriesBillingData1 = [...bbArr, ...arrData1]
           } else {
             this.accessoriesBillingData2 = [...bbArr, ...arrData1]
@@ -762,8 +762,8 @@
                   this.invoice.invoiceType = "";
                   this.invoice.invoiceTax = "";
                   this.copyData = res.data;
-                  // this.accessoriesBillingData = res.data;
-                  // this.setTableData();
+                  this.accessoriesBillingData = res.data;
+                  this.setTableData();
                 }
               });
             }
