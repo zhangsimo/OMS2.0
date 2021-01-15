@@ -136,8 +136,7 @@
     changeStaff,
     removeStaff
   } from "_api/admin/groupApi";
-  import {getUserAllCompany} from '@/api/base/user'
-
+  import {goshop} from '@/api/settlementManagement/shopList'
   export default {
     name: "group",
     components: {
@@ -230,18 +229,10 @@
     },
     methods: {
       async getCompanyList() {
-        let data = {}
-        data.size = 10000
-        data.page = 0
-        data.id = this.$store.state.user.userData.id
-        data.tenantCompanyName = "";
-        let res = await getUserAllCompany(data)
-        if (res.code == 0) {
-          this.companyList = res.data.content
-        }
+          let data = {}
+          let res = await goshop(data)
+          if (res.code === 0) return this.companyList = [...this.companyList, ...res.data]
       },
-
-
       staffSubmit() {
         let stop = this.$loading();
         changeStaff(this.curId, this.staff.checkedIds)
@@ -461,7 +452,11 @@
         this.newGroup.pId = pid;
         this.newGroup.id = data.id;
         this.newGroup.name = data.name;
-        this.superior = this.groupsList.filter(el => el.pId == arr[0].pId)
+        if(arr.length==0){
+          this.superior = [this.groupsList[0]]
+        }else{
+          this.superior = this.groupsList.filter(el => el.pId == arr[0].pId)
+        }
         this.modal = true;
       },
       flat(arr) {
