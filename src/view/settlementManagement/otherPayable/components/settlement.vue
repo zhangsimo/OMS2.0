@@ -80,7 +80,7 @@
               width="140"
             >
               <template v-slot="{row}">
-                <vxe-input type="number" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
+                <vxe-input type="float" digits="2" size="mini" v-model="row.rpAmt" @change="rpAmtChange(row)"></vxe-input>
               </template>
             </vxe-table-column>
             <vxe-table-column field="unAmtLeft" width="140" title="剩余未收/未付"></vxe-table-column>
@@ -319,15 +319,24 @@
     },
     methods: {
       accountHedNo2(val) {
+        let flag22 = false
+        this.BusinessType.forEach(i => {
+          if(i.accountNo == val.serviceId){
+            flag22 = true
+          }
+        })
+        if(flag22){
+          return this.$message.error('已经存在重复单据')
+        }
         this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + ';' + val.serviceId;
-        let jsonArr = [val]
+        let jsonArr = [JSON.parse(JSON.stringify(val))]
         if (jsonArr.length >= 1) {
           jsonArr.map(item => {
             item.orgName = this.reconciliationStatement.orgName;
             item.accountNo = item.serviceId;
             item.businessTypeName = item.businessType ? item.businessType.name : '';
             item.reconciliationAmt = item.paymentClaimAmt;
-            item.hasAmt = +item.paymentClaimAmt - +item.paymentBalance;
+            item.hasAmt = (+item.paymentClaimAmt - +item.paymentBalance).toFixed(2);
             item.unAmt = -item.paymentBalance;
             item.rpAmt = -item.paymentBalance;
             item.unAmtLeft = +item.rpAmt - +item.unAmt;
@@ -412,7 +421,6 @@
               //   this.BusinessType[0].rpAmt = this.tableData[0].paidMoney;
               //   this.BusinessType[0].unAmtLeft = this.BusinessType[0].unAmt - this.BusinessType[0].rpAmt;
               // }
-              // console.log(this.tableData)
               this.checkComputed();
             }
           });
@@ -452,7 +460,6 @@
           .catch(errMap => errMap);
         if (errMap) return this.$Message.error("表格校验错误");
         if (!Number(this.check)) {
-          // console.log(this.$parent.Types)
           if (this.$parent.Types == '其他付款核销') {
             if (errMap) {
               this.$XModal.Message({status: 'error', message: '校验不通过！'})

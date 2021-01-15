@@ -162,7 +162,7 @@
           </template>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column field="remarks" title="备注" min-width="60"></vxe-table-column>
+      <vxe-table-column field="remarks" show-overflow title="备注" min-width="60"></vxe-table-column>
     </vxe-table>
   </div>
 </template>
@@ -192,17 +192,14 @@
         this.$emit("selection", []);
       },
       selectAllEvent({ checked, records }) {
-        // console.log(checked ? "所有勾选事件" : "所有取消事件", records);
         this.$emit("selection", records);
       },
       selectChangeEvent({ checked, records }) {
-        // console.log(checked ? "勾选事件" : "取消事件", records);
         this.$emit("selection", records);
       },
       async getList(params){
         let res=await api.table6(params)
         if(res.code===0){
-          console.log(res,'resresresresresr')
           this.$parent.$parent.$parent.tableData6=res.data.content || [];
           this.$parent.$parent.$parent.page.total=res.data.totalElements
         }

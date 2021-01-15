@@ -2,10 +2,10 @@
   <div>
     <Modal class="claim" :title="titleName" width="1000" v-model="visibal">
       <div class="clearfix mb20 ">
-        <Button class="fl" @click="openPClaimModal">选择单据</Button>
+        <Button class="fl mr10" @click="openPClaimModal">选择单据</Button>
         <div class="fr">
           <span><i style="color: red" class="mr5">*</i>款项分类：</span>
-          <Select v-model="fund" placeholder="请选择" class="w200" clearable>
+          <Select v-model="fund" placeholder="请选择" class="w200" @on-change="dynamicChange" clearable>
             <Option
               v-for="item in fundList"
               :value="item.itemName"
@@ -63,9 +63,16 @@
         <vxe-table-column title="未认领金额" width="100" field="unClaimedAmt" show-overflow="tooltip"></vxe-table-column>
         <vxe-table-column title="智能匹配往来单位" width="180" field="suppliers" show-overflow="tooltip"></vxe-table-column>
       </vxe-table>
-
+      <Row class="mt10">
+        <i-col span="1">
+          <span style="line-height: 30px">备注:</span>
+        </i-col>
+        <i-col span="23">
+          <i-input :value.sync="remark" maxlength="500" v-model.trim="remark"></i-input>
+        </i-col>
+      </Row>
       <div slot="footer">
-        <Button type="primary" @click="confirm">确定</Button>
+        <Button type="primary" :disabled="isDis" @click="confirm">确定</Button>
         <Button @click="close">取消</Button>
       </div>
     </Modal>
@@ -88,8 +95,11 @@
     props: ['titleName'],
     data() {
       return {
+        isDis: false,
+        remark: '',
         visibal: false,
         fund: "",
+        code: '',
         fundList: [],//款项分类数组
         tableData: [],
         outFlag: false,
@@ -121,6 +131,13 @@
         kmType(params).then(res => {
           this.fundList = res.data.filter(vb => ['1221'].includes(vb.itemValueOne))
         });
+      },
+      dynamicChange(v){
+        this.fundList.forEach(item => {
+          if(item.itemName === v){
+            this.code = item.itemCode
+          }
+        })
       },
       // 弹框底部的合计
       addFooter({columns, data}) {
@@ -155,6 +172,8 @@
         this.tableData = [];
         this.visibal = true;
         this.fund = "";
+        this.code = ''
+        this.remark = ''
         setTimeout(() => {
           let params = {
             accountNo: this.$parent.serviceId,
@@ -202,13 +221,20 @@
         if (this.titleName == "其他收款收回" && (this.thisClaimedAmtSum > this.$parent.currRow.paymentClaimAmt)) {
           return this.$Message.error("本次认领金额不可大于本次申请单认领金额")
         }
-        if (this.titleName == "其他付款认领" && this.fund == "") {
+        if (this.titleName == "其他付款认领" && this.fundCode == "") {
           this.$message.error('款项分类不可为空')
           return
         }
         if (flag) {
           this.$message.error('认领金额输入错误，不可为空')
           return
+        }
+        if(this.remark){
+          if(this.remark.length > 500){
+            return this.$message.error('备注500字符以内')
+          }else{
+            this.dataOne.remark = this.remark
+          }
         }
         this.financeAccountCashList = []
         this.tableData.forEach(v => {
@@ -229,28 +255,34 @@
             one: this.dataOne,
             two: this.dataTwo,
             three: arr,
-            paymentTypeCode:this.fund
+            paymentTypeName:this.fund,
+            paymentTypeCode:this.code,
           }
+          this.isDis = true
           saveAccount(data).then(res => {
             if (res.code === 0) {
               this.$message.success("认领成功")
               this.visibal = false
               this.$parent.getQuery()
             }
+            this.isDis = false
           })
         } else {
           let data = {
             one: this.dataOne,
             two: this.dataTwo,
             three: arr,
-            paymentTypeCode:this.fund
+            paymentTypeName:this.fund,
+            paymentTypeCode:this.code
           }
+          this.isDis = true
           paymentRegain(data).then(res => {
             if (res.code === 0) {
               this.$message.success("认领成功")
               this.visibal = false
               this.$parent.getQuery()
             }
+            this.isDis = false
           })
         }
 
@@ -304,6 +336,13 @@
         this.calculation = this.$refs.voucherInput.AssistAccounting;
         this.voucherItem = this.$refs.voucherInput.voucherItem
       },
+      fundChange(v){
+        this.fundList.forEach(item => {
+          if(item.itemName === this.fund){
+            this.fundCode = item.itemCode
+          }
+        })
+      } 
     },
   }
 </script>

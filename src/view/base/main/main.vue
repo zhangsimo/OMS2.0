@@ -59,9 +59,9 @@
                     <router-view />
                   </keep-alive> -->
                   <keep-alive>
-                    <router-view v-if="$route.meta.keepAlive" />
+                    <router-view v-if="$route.meta.keepAlive" :max="10" ref="box"/>
                   </keep-alive>
-                  <router-view v-if="!$route.meta.keepAlive" />
+                  <router-view v-if="!$route.meta.keepAlive" :max="10" />
               </div>
             <!--            反馈模态框-->
             <Modal v-model="screenshot" fullscreen title="反馈意见">
@@ -373,27 +373,11 @@ export default {
 
     //确认添加
     async sureAdd() {
-      // let context = this.canvas.getContext('2d')
-      //   this.canvas.width = 400
-      //   this.canvas.height = 300
       let image = this.canvas.toDataURL("image/png");
-      // let list = this.$route;
-      // image = image.replace(/^data:image\/(png|jpg);base64,/, "");
-      // console.log(this.query)
-      // console.log(this.$route.meta.title)
-      // console.log(image)
-      // console.log(this.value17)
-      // console.log(window.location.pathname)
-      // base64编码的图片
-      //   console.log(image)
         const blob = this.dataURItoBlob(image)
-        // console.log(blob)
       let data = {};
-        // console.log(image , 888)
 
         //转换图片文件
-      // var imgFile = this.dataURLtoFile(image);
-      // console.log(imgFile , 9999)
       let ress = await up(blob);
       if(ress.data.code === 0) {
         data.fileUrl = ress.data.data.url;
@@ -448,20 +432,6 @@ export default {
           }
           return new Blob([ia], { type: mimeString });
       },
-    // base转为文件
-    // dataURLtoFile(dataurl) {
-    //   //将base64转换为文件
-    //   let filename = new Date()
-    //   var arr = ("data:image/png;base64," + dataurl).split(","),
-    //     mime = arr[0].match(/:(.*?);/)[1],
-    //     bstr = atob(arr[1]),
-    //     n = bstr.length,
-    //     u8arr = new Uint8Array(n);
-    //   while (n--) {
-    //     u8arr[n] = bstr.charCodeAt(n);
-    //   }
-    //   return new File([u8arr], filename, { type: mime });
-    // }
   },
   watch: {
     $route(newRoute) {

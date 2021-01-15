@@ -213,9 +213,14 @@
         } else {
           let res = await api.findByAccountNo({accountNo: this.$parent.serviceId});
           if (res.code == 0) {
+            if(res.data){
             this.recordLists = res.data;
             if (this.recordLists.length > 0) {
               this.$emit('Message', this.recordLists)
+            }else{
+              this.recordLists = []
+              this.$emit('Message',this.recordLists)
+            }
             }
           }
         }

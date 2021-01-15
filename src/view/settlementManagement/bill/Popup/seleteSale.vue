@@ -56,17 +56,12 @@ export default {
           key: "taxSignName",
           className: "tc"
         },
-        // {
-        //   title: "油品/配件",
-        //   key: "speciesName",
-        //   className: "tc"
-        // },
         {
           title: "单据金额",
           key: "accountAmt",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.accountAmt.toFixed(2));
+            return h("span", Number(params.row.accountAmt).toFixed(2));
           }
         }
       ], //选择单据表格
@@ -80,13 +75,16 @@ export default {
       if (flag) {
         let taxSign = 0
         if(this.popupTit === '选择必开销售单') taxSign = 1
-        saleSlip({accountNo:this.parameter.accountNo,taxSign}).then(res=>{
-          if(res.code===0){
-            res.data.map(item=>{
-              item.speciesName = item.species.name
-            })
+        let accountNos=[];
+        (this.parameter.accountNos.split(";") || []).map((el,index)=>{
+          if(el!=""){
+            accountNos.push(el)
           }
-          this.saleSingleData = res.data
+        })
+        saleSlip({accountNos:accountNos,taxSign}).then(res=>{
+          if(res.code===0){
+            this.saleSingleData = res.data
+          }
         })
       }
     },

@@ -7,6 +7,7 @@ import {
 } from "_api/system/partsExamine/partsExamineApi";
 import * as api from "_api/procurement/plan";
 export const mixSelectSupplier = {
+  props:['noSimply'],
   data() {
     return {
       params: "",
@@ -199,8 +200,17 @@ export const mixSelectSupplier = {
       if (!this.selectTableItem) {
         return this.$Message.error("请选择供应商");
       }
-      this.$emit("selectSupplierName", this.selectTableItem);
-      this.searchPartLayer = false;
+      if(this.noSimply){
+        if(this.selectTableItem.isInternalId==this.$store.state.user.userData.currentCompany.id){
+          return this.$message.error("不可选择当前机构")
+        }else{
+          this.$emit("selectSupplierName", this.selectTableItem);
+          this.searchPartLayer = false;
+        }
+      }else{
+        this.$emit("selectSupplierName", this.selectTableItem);
+        this.searchPartLayer = false;
+      }
       // console.log(this.selectTableItem)
     },
     //分页

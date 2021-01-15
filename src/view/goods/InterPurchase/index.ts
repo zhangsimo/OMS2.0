@@ -19,7 +19,10 @@ import ApportionmentExpenses from "../plannedPurchaseOrder/components/Apportionm
 import { hideLoading, showLoading } from "../../../utils/loading";
 import GoodCus from "_c/allocation/GoodCus.vue";
 import printZF from "@/components/print/print.vue";
+// @ts-ignore
+import distroyDom from "_mixins/distroyDom";
 @Component({
+  mixins:[distroyDom],
   components: {
     QuickDate,
     SelectSupplier,

@@ -37,7 +37,11 @@
             >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select> -->
-            <Input type="text" class="h30 w200 mr10" v-model="companyId" />
+            <Input type="text" class="h30 w200 mr10" v-model.trim="companyId" />
+          </div>
+          <div class="db ml10">
+            <span>付款出纳:</span>
+            <Input v-model.trim="approveUname" type="text" clearable class="ml10 w150"/>
           </div>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -112,6 +116,9 @@
             <vxe-table-column title="基本信息">
               <vxe-table-column field="orderNo" title="预付款采购订单号" width="140"></vxe-table-column>
               <vxe-table-column field="applicant" title="申请人" width="90"></vxe-table-column>
+
+              <vxe-table-column title="付款出纳" field="approveUname" width="80"></vxe-table-column>
+
             </vxe-table-column>
             <vxe-table-column title="金额信息">
               <vxe-table-column field="payAmt" title="预付款金额" width="100"></vxe-table-column>
@@ -218,7 +225,7 @@
           <span>撤回原因：</span>
         </Col>
         <Col span="20">
-          <Input v-model="revokeReason" />
+          <Input v-model.trim="revokeReason" />
         </Col>
       </Row>
     </Modal>
@@ -291,6 +298,7 @@ export default {
       titleName:"预付款认领",
       company: [], //往来单位
       companyId: '', //往来单位
+      approveUname:"",//付款出纳
       Branchstore: [{ id: "0", name: "全部",shortName:"全部" }], //分店名称
       BranchstoreId: "", //分店名称
       tableData: [], //总表数据
@@ -393,6 +401,7 @@ export default {
         ...obj,
         orgid: this.BranchstoreId == '0' ? '' : this.BranchstoreId,
         guestName: this.companyId.trim(),
+        approveUname:this.approveUname,
         size: this.page.size,
         page: this.page.num - 1
       };

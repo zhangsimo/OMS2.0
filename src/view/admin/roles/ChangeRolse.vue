@@ -6,7 +6,7 @@
           <Input v-model="list.displayName" placeholder="请输入角色名称" />
         </FormItem>
         <FormItem label="角色标识:">
-          <Select v-model="list.roleCode" style="width:200px">
+          <Select v-model="list.roleCodeList" multiple style="width:200px">
             <Option v-for="item in codeList" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
           </Select>
         </FormItem>

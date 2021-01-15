@@ -396,7 +396,7 @@
             </Tabs>
 
             <!-- 转当期损益 -->
-            <subject ref="subjecModal" :clime="claimedSubjectList"></subject>
+            <!-- <subject ref="subjecModal" :clime="claimedSubjectList"></subject> -->
             <!-- 预收款认领 collectionClaims-->
             <!-- 预付款认领 paymentClaim-->
             <!-- 其他收款认领 otherCollectionClaims  预收款认领 collectionClaims-->
@@ -420,6 +420,7 @@
     <expenditure ref="expenditure" :title="title" />
     <settlement ref="settlement" />
     <chargeAdvance ref="chargeAdvance" />
+    <ClaimModal ref="claimModal" :list="selectList" />
   </div>
 </template>
 <script>
@@ -429,6 +430,7 @@ import advance from "./components/Advance";
 import chargeAdvance from "./components/chargeAdvance";
 import expenditure from "./components/expenditure";
 import settlement from "./components/settlement";
+import ClaimModal from "./components/ClaimModal"
 import claim from "../../components/claimed";
 import accountNoWriteTable from "./components/accountNoWriteTable";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
@@ -447,7 +449,7 @@ import { goshop } from "@/api/settlementManagement/shopList";
 import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 import { creat } from "../../components";
 import bus from "../../bill/Popup/Bus";
-import subject from "./components/Subject";
+// import subject from "./components/Subject";
 import * as all from "_api/reportForm/index.js";
 import accrued from "./components/accrued";
 import otherCollectionClaims from "./components/otherCollectionClaims";
@@ -464,14 +466,15 @@ export default {
     accountNoWriteTable,
     claim,
     chargeAdvance,
-    subject,
     accrued,
     otherCollectionClaims,
     otherPaymentClaim,
     quickDate,
+    ClaimModal,
   },
   data() {
     return {
+      selectList: [],
       cancelDis: false, //控制撤销分配按钮禁用
       distributionLoading: false, //控制分配至本店按钮禁用
       model1: "", //未核销对账单 查询分店绑定model
@@ -1029,8 +1032,9 @@ export default {
       } else if (this.$refs.claim.currentClaimed.length > 1) {
         this.$message.error("只能为一条数据进行当前转益");
       } else {
-        this.claimedSubjectList = this.$refs.claim.currentClaimed;
-        this.$refs.subjecModal.open();
+        this.selectList = this.$refs.claim.currentClaimed
+        this.$refs.claimModal.tableData = this.$refs.claim.currentClaimed
+        this.$refs.claimModal.open();
       }
     },
     // 打开应收应付弹框
@@ -1196,7 +1200,6 @@ export default {
     },
     //分配至本店
     distributionShop() {
-      console.log(this.currentDistribution,'asdf')
       if (this.currentDistribution.length !== 0) {
         let obj = [];
         this.currentDistribution.map((item) => {

@@ -236,6 +236,9 @@ export default class Fittings extends Vue {
               case 3:
                 text = "华胜ERP";
                 break;
+              case 4:
+                text = "佳配ERP";
+                break;
             };
             return h('span',text);
           }
@@ -423,6 +426,9 @@ export default class Fittings extends Vue {
                 break;
               case 3:
                 text = "华胜ERP";
+                break;
+              case 4:
+                text = "佳配ERP";
                 break;
             };
             return h('span',text);

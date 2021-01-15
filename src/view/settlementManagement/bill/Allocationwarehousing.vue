@@ -208,7 +208,7 @@
             key: "serviceId",
             className: "tc",
             resizable: true,
-            width: 150,
+            width: 200,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -254,7 +254,7 @@
             key: "code",
             className: "tc",
             resizable: true,
-            width: 150,
+            width: 200,
             render: (h, params) => {
               return h('div', [
                 h('span', {
@@ -494,12 +494,12 @@
           if (index === 0) {
             sums[key] = {
               key,
-              value: "总合计"
+              value: "合计"
             };
             return;
           }
           const values = data.map(item => Number(item[key]));
-          if (index === 11) {
+          if (index === 12) {
             sums[key] = {
               key,
               value: this.total[key] == null ? " " : this.total[key]

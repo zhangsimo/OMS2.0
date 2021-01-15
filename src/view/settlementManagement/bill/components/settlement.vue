@@ -148,7 +148,7 @@
       </Col>
     </Row>
     <div slot="footer"></div>
-    <accountSelette ref="accountSelette" :accountNo="accountNo"/>
+    <accountSelette ref="accountSelette" :accountNo="accountNo" :stateType="stateType"/>
     <subjexts ref="subjexts"/>
   </Modal>
 </template>
@@ -168,6 +168,7 @@
       accountSelette,
       subjexts
     },
+    props:['stateType'],
     data() {
       const rpAmtValid = ({cellValue, row}) => {
         return new Promise((resolve, reject) => {
@@ -203,14 +204,41 @@
     mounted() {
       // 对账单号
       bus.$on("accountHedNo", val => {
-        this.reconciliationStatement.accountNo =
-          this.reconciliationStatement.accountNo + "," + val.accountNo;
-        val.two.map(item => {
-          item.businessTypeName = item.businessType.name;
-        });
-        this.BusinessType = [...this.BusinessType, ...val.two];
-        this.BusinessType = this.BusinessType.filter(item => item.reconciliationAmt != 0)
-        this.checkComputed();
+        if(this.stateType){
+          // console.log(this.BusinessType,1111)
+          if(this.reconciliationStatement.accountNo.indexOf(",")!=-1){
+            let accountNoList=this.reconciliationStatement.accountNo.split(",")
+            this.reconciliationStatement.accountNo =
+              accountNoList[0] + "," + val.accountNo;
+            val.two.map(item => {
+              item.isOldFlag=true;
+              item.businessTypeName = item.businessType.name;
+            });
+            this.BusinessType=this.BusinessType.filter(item => !item.isOldFlag)
+            this.BusinessType = [...this.BusinessType, ...val.two];
+            this.BusinessType = this.BusinessType.filter(item => item.reconciliationAmt != 0)
+            this.checkComputed();
+          }else{
+            this.reconciliationStatement.accountNo =
+              this.reconciliationStatement.accountNo + "," + val.accountNo;
+            val.two.map(item => {
+              item.isOldFlag=true;
+              item.businessTypeName = item.businessType.name;
+            });
+            this.BusinessType = [...this.BusinessType, ...val.two];
+            this.BusinessType = this.BusinessType.filter(item => item.reconciliationAmt != 0)
+            this.checkComputed();
+          }
+        }else{
+          this.reconciliationStatement.accountNo =
+            this.reconciliationStatement.accountNo + "," + val.accountNo;
+          val.two.map(item => {
+            item.businessTypeName = item.businessType.name;
+          });
+          this.BusinessType = [...this.BusinessType, ...val.two];
+          this.BusinessType = this.BusinessType.filter(item => item.reconciliationAmt != 0)
+          this.checkComputed();
+        }
       });
       //选择科目
       bus.$on("hedInfo", val => {
@@ -322,11 +350,11 @@
       accountNoClick() {
         this.$refs.accountSelette.isCanChange = this.showchange
         this.$refs.accountSelette.modal1 = true;
-        if (this.$parent.paymentId == "DYD" && [","].includes(this.reconciliationStatement.accountNo)) {
-          this.accountNo = this.reconciliationStatement.accountNo;
-        } else {
-          this.accountNo = this.reconciliationStatement.accountNo.split(",")[this.reconciliationStatement.accountNo.split(",").length - 1]
-        }
+        // if (this.$parent.paymentId == "DYD" && [","].includes(this.reconciliationStatement.accountNo)) {
+        //   this.accountNo = this.reconciliationStatement.accountNo;
+        // } else {
+        //   this.accountNo = this.reconciliationStatement.accountNo.split(",")[this.reconciliationStatement.accountNo.split(",").length - 1]
+        // }
         switch (this.$parent.paymentId) {
           case "YSK":
             this.$refs.accountSelette.paymentId = "YJDZ";
