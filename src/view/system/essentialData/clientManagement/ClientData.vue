@@ -29,7 +29,7 @@
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
-              <FormItem label="客户简称:" prop="shortName">
+              <FormItem label="客户简称:">
                 <Input v-model="shortName" style="width: 180px" maxlength="30"  disabled />
               </FormItem>
               <FormItem label="客户全称:" prop="fullName">
@@ -859,7 +859,7 @@ export default {
         //   { required: true, message: " 不能为空", trigger: "change" }
         // ],
         guestProperty: [{ required: true, message: " ", trigger: "change" }],
-        shortName: [{ required: true, message: " ", trigger: "blur" }],
+        // shortName: [{ required: true, message: " ", trigger: "blur" }],
         settTypeId: [{ required: true, message: " ", trigger: "change" }],
         billTypeId: [{ required: true, message: " ", trigger: "change" }],
         fullName: [{ required: true, validator: fullName, trigger: "blur" }],
