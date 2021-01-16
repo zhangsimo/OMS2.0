@@ -2,8 +2,12 @@
 <!-- 资金认领款核销转损益引用中 -->
   <Modal v-model="subjectModelShow" title="选择会计科目" width="750" @on-visible-change="showOrhideModel">
     <Form v-model="accountingSubject">
-      <Tabs type="card" :animated="false">
-        <TabPane label="资产">
+      <Tabs type="card" :animated="false" @on-click="tabCode" v-model="tabModal">
+        <div class="partCheck-hd" style="position: absolute;right:0;top:0;">
+          <Input class="w200 mr10" v-model="subjectModel" placeholder="请输入科目"/>
+          <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
+        </div>
+        <TabPane label="资产" name="active1">
           <div>
             <vxe-table
               border
@@ -27,7 +31,7 @@
             </vxe-table>
           </div>
         </TabPane>
-        <TabPane label="负债">
+        <TabPane label="负债" name="active2">
           <vxe-table
             border
             resizable
@@ -49,7 +53,7 @@
             <vxe-table-column field="titleLevel" title="层级"></vxe-table-column>
           </vxe-table>
         </TabPane>
-        <TabPane label="共同">
+        <TabPane label="共同" name="active3">
           <vxe-table
             border
             resizable
@@ -71,7 +75,7 @@
             <vxe-table-column field="titleLevel" title="层级"></vxe-table-column>
           </vxe-table>
         </TabPane>
-        <TabPane label="权益">
+        <TabPane label="权益" name="active4">
           <vxe-table
             border
             resizable
@@ -93,7 +97,7 @@
             <vxe-table-column field="titleLevel" title="层级"></vxe-table-column>
           </vxe-table>
         </TabPane>
-        <TabPane label="成本">
+        <TabPane label="成本" name="active5">
           <vxe-table
             border
             resizable
@@ -115,7 +119,7 @@
             <vxe-table-column field="titleLevel" title="层级"></vxe-table-column>
           </vxe-table>
         </TabPane>
-        <TabPane label="损益">
+        <TabPane label="损益" name="active6">
           <vxe-table
             border
             resizable
@@ -148,7 +152,7 @@
 </template>
 
 <script>
-import { getTableList } from "@/api/settlementManagement/VoucherInput";
+import { getTableList,getSubjectMsg } from "@/api/settlementManagement/VoucherInput";
 import auxiliary from "./auxiliary";
 import bus from '../../../bill/Popup/Bus'
 export default {
@@ -166,9 +170,59 @@ export default {
       accountingSubject: "", //定义一个容器装选中的值
       SendData: [], //给父组件发送的值
       assistTypeCode: '',
+      subjectModel: '',//搜索会计科目绑定的值
+      tabModal:"active1",
+      tabTypeCode:"101",//当前tab页code
     };
   },
   methods: {
+    //tab页点击触发
+    tabCode(){
+      switch(this.tabModal){
+        case 'active1': 
+          this.tabTypeCode="101"
+          break;
+        case 'active2': 
+          this.tabTypeCode="201"
+          break;
+        case 'active3': 
+          this.tabTypeCode="301"
+          break;
+        case 'active4': 
+          this.tabTypeCode="401"
+          break;
+        case 'active5': 
+          this.tabTypeCode="501"
+          break;
+        case 'active6': 
+          this.tabTypeCode="601"
+          break;
+      }
+    },
+    //科目查询
+    search(){
+      let data={}
+      //this.tabTypeCode
+      data.titleTypeCode=this.tabTypeCode
+      data.titleCode=this.subjectModel
+      getSubjectMsg(data).then(res=>{
+        if(res.code==0){
+          if(data.titleTypeCode=="101"){
+            this.subjectTableDataZiChan=res.data
+          }else if(data.titleTypeCode=="201"){
+            this.subjectTableDataFuZhai=res.data
+          }else if(data.titleTypeCode=="301"){
+            this.subjectTableDataGongTong=res.data
+          }else if(data.titleTypeCode=="401"){
+            this.subjectTableDataQuanYi=res.data
+          }else if(data.titleTypeCode=="501"){
+            this.subjectTableDataChengBen=res.data
+          }else if(data.titleTypeCode=="601"){
+            this.subjectTableDataSunYi=res.data
+          }
+        }
+      })
+    },
     //会计科目弹框资产初始化
     accountingGetListZiChan() {
       let params = {};

@@ -110,6 +110,15 @@ export function findById (params) {
   })
 }
 
+//转当期损益tab切换查询
+export function getSubjectMsg(data) {
+  return axios.request({
+    url: `${api.wmsApi}/financeManage/selectAccountList`,
+    method: "post",
+    data
+  });
+}
+
 //======================= 凭证修改页面 ===========================
 // 审核、作废
 export function processVoucher (data) {
