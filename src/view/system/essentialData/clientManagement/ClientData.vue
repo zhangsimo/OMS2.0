@@ -859,7 +859,7 @@ export default {
         //   { required: true, message: " 不能为空", trigger: "change" }
         // ],
         guestProperty: [{ required: true, message: " ", trigger: "change" }],
-        shortName: [{ required: true, message: " ", trigger: "blur" }],
+        // shortName: [{ required: true, message: " ", trigger: "blur" }],
         settTypeId: [{ required: true, message: " ", trigger: "change" }],
         billTypeId: [{ required: true, message: " ", trigger: "change" }],
         fullName: [{ required: true, validator: fullName, trigger: "blur" }],
