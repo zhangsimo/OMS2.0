@@ -1377,7 +1377,7 @@
         };
         this.getRecord(obj);
         this.getdetailsDocuments(obj);
-        this.salepopupList =[]
+        this.salepopupList=this.salepopupList.length>0?this.salepopupList:[];
       },
       distributionSelection({selection,row,rowIndex}) {
         // console.log(selection,1111)
