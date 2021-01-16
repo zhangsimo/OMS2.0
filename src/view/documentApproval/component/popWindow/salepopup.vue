@@ -472,11 +472,38 @@ export default {
           key: "taxRate",
           className: "tc"
         },
+        // {
+        //   title: "出库单号",
+        //   key: "outNo",
+        //   className: "tc",
+        //   tooltip: true,
+        // },
         {
-          title: "出库单号",
-          key: "outNo",
-          className: "tc",
+          title: '出库单号',
+          align: 'center',
           tooltip: true,
+          ellipsis: true,
+          key: 'outNo',
+          render: (h, params) => {
+            return h('Tooltip', {
+              props: {
+                placement: "top",
+              }
+            }, [
+              h("div", {
+                style: {
+                  display: 'inline-block',
+                  width: params.column._width * 0.8 + 'px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+              }, params.row.outNo),
+              h("div", {
+                slot: "content"
+              }, params.row.outNo)
+            ])
+          }
         },
         {
           title: "销售单价",
@@ -574,10 +601,31 @@ export default {
           className: "tc"
         },
         {
-          title: "出库单号",
-          key: "outNo",
-          className: "tc",
-          tooltip: true
+          title: '出库单号',
+          align: 'center',
+          tooltip: true,
+          ellipsis: true,
+          key: 'outNo',
+          render: (h, params) => {
+            return h('Tooltip', {
+              props: {
+                placement: "top",
+              }
+            }, [
+              h("div", {
+                style: {
+                  display: 'inline-block',
+                  width: params.column._width * 0.8 + 'px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+              }, params.row.outNo),
+              h("div", {
+                slot: "content"
+              }, params.row.outNo)
+            ])
+          }
         },
         {
           title: "销售单价",
@@ -1044,5 +1092,11 @@ export default {
 
 .twoTable {
   border-top: none;
+}
+/deep/.ivu-tooltip-inner>div{
+  width: 100%;
+  white-space:normal;
+  word-wrap:break-word;
+  color: white;
 }
 </style>
