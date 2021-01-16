@@ -47,7 +47,7 @@
     <Modal v-model="addNewModal" :title="changeTreeItemTitle" width="400">
       <Form ref="proModal" :model="formModelData" :rules="ruleModelData" :label-width="110">
         <FormItem label="类型编码：" prop="dictCode">
-          <Input class="w200" v-model="formModelData.dictCode"></Input>
+          <Input class="w200" v-model="formModelData.dictCode" disabled></Input>
         </FormItem>
         <FormItem label="类型名称：" prop="dictName">
           <Input class="w200" v-model="formModelData.dictName"></Input>
@@ -70,7 +70,7 @@
           {{formValidate.dicTypeName}}
         </FormItem>
         <FormItem label="字典项代码：" prop="dicCode">
-          <Input class="w200" v-model="formValidate.dicCode"></Input>
+          <Input class="w200" v-model="formValidate.dicCode" disabled></Input>
         </FormItem>
         <FormItem label="字典项名称：" prop="dicName">
           <Input class="w200" v-model="formValidate.dicName"></Input>

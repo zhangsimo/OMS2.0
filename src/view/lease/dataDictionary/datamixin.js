@@ -310,7 +310,6 @@ export const dataMixin = {
     //修改数据字典类型
     changeModelFun(){
       this.changeTreeItemTitle='修改字典类型';
-      console.log(this.selectTreeItem)
       if(this.selectTreeItem){
         this.addNewModal = true
         this.$refs.proModal.resetFields();
