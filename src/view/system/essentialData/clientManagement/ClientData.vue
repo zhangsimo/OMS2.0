@@ -29,7 +29,7 @@
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
-              <FormItem label="客户简称:" prop="shortName">
+              <FormItem label="客户简称:">
                 <Input v-model="shortName" style="width: 180px" maxlength="30"  disabled />
               </FormItem>
               <FormItem label="客户全称:" prop="fullName">

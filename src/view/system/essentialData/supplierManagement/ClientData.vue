@@ -34,7 +34,7 @@
                   </FormItem>
                 </Col>
                 <Col span="12">
-                  <FormItem label="供应商简称:" prop="shortName" class="h50">
+                  <FormItem label="供应商简称:" class="h50">
                     <Input v-model="shortName" style="width: 180px" disabled/>
                   </FormItem>
                 </Col>
