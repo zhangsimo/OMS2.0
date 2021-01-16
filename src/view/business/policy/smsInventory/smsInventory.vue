@@ -895,11 +895,6 @@ export default {
               this.$Message.error("只有草稿状态才能保存");
               return;
             }
-            for(let i = 0; i < this.formPlan.detailVOList.length; i++){
-              if(!Number(this.formPlan.detailVOList[i].trueQty)){
-                return this.$Message.error(`第${i + 1}行实盘数量不能为零`)
-              }
-            }
             this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
               "YYYY-MM-DD HH:mm:ss"
             );
@@ -1157,7 +1152,7 @@ export default {
         var datas=val;
        datas.map(item=>{
            delete item.id;
-           item.trueQty = 1;
+           item.trueQty = undefined;
           item.partName = item.partStandardName||"";
        })
       this.Right.tbdata = [...this.Right.tbdata, ...datas];
