@@ -137,6 +137,7 @@
     removeStaff
   } from "_api/admin/groupApi";
   import {goshop} from '@/api/settlementManagement/shopList'
+
   export default {
     name: "group",
     components: {
@@ -229,9 +230,9 @@
     },
     methods: {
       async getCompanyList() {
-          let data = {}
-          let res = await goshop(data)
-          if (res.code === 0) return this.companyList = [...this.companyList, ...res.data]
+        let data = {}
+        let res = await goshop(data)
+        if (res.code === 0) return this.companyList = [...this.companyList, ...res.data]
       },
       staffSubmit() {
         let stop = this.$loading();
@@ -409,11 +410,15 @@
                 }
               },
               opts
-            )
-          ],
-          // [
-          //   h("span",data.orgName)
-          // ]
+            ),
+            h("br"),
+            h("span", {
+              style: {
+                fontSize: "10px",
+                marginTop: "10px"
+              }
+            }, `所属门店:${data.orgName==null?'':data.orgName}`)
+          ]
         );
       },
       submit() {
@@ -452,9 +457,9 @@
         this.newGroup.pId = pid;
         this.newGroup.id = data.id;
         this.newGroup.name = data.name;
-        if(arr.length==0){
+        if (arr.length == 0) {
           this.superior = [this.groupsList[0]]
-        }else{
+        } else {
           this.superior = this.groupsList.filter(el => el.pId == arr[0].pId)
         }
         this.modal = true;
