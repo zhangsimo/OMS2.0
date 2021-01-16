@@ -42,7 +42,15 @@ export function getcompany (params) {
     url: `${api.authApi}/group/findRootGroup`,
     method: 'get',
     params
-  }) 
+  })
+}
+//部门
+export function getGroupBy(params) {
+  return axios.request({
+    url: `${api.authApi}/group/findShopGroup`,
+    method: 'get',
+    params
+  })
 }
 // // 选择辅助核算个人查询
 // https://tsapi2.g-parts.cn/gpart-passport-provider/staff/findAll
