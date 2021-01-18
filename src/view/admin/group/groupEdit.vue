@@ -9,7 +9,7 @@
       <Input placeholder="请填写组织名称" v-model='data.name'></Input>
     </FormItem>
     <FormItem label='所属门店:'>
-      <Select  v-model="data.orgId">
+      <Select  v-model="data.orgId" clearable>
         <Option v-for="item in company" :value="item.id">{{ item.shortName }}</Option>
       </Select>
     </FormItem>
