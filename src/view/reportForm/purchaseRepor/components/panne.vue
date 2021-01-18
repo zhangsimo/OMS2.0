@@ -166,7 +166,7 @@ export default {
     }
     var arr = await creat("", this.$store);
     this.search.orgid = arr[1];
-    this.query()
+    // this.query()
   },
   methods: {
     select1(option) {

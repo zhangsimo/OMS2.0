@@ -470,7 +470,7 @@
           page: this.page.num - 1,
           size: this.page.size
         };
-        showLoading()
+        showLoading('.content-oper')
         let obj = await api.getPjSellOutRtnMainDetailsCount(this.body, params)
         if (obj.code === 0){
           hideLoading()
