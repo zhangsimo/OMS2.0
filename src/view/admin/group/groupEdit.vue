@@ -2,7 +2,7 @@
   <Form :rules='rules' :label-width="80" ref='form' :model='data'>
     <FormItem label='上级组织:' prop="pId">
       <Select v-model="data.pId" :disabled="data.id==null">
-        <Option v-for="item in parentList" :value="item.id">{{ item.name }}</Option>
+        <Option v-for="item in parentList" :value="item.id" :key="item.id">{{ item.name }}</Option>
       </Select>
     </FormItem>
     <FormItem label='组织名称:' prop='name'>
@@ -10,7 +10,7 @@
     </FormItem>
     <FormItem label='所属门店:'>
       <Select  v-model="data.orgId" clearable>
-        <Option v-for="item in company" :value="item.id">{{ item.shortName }}</Option>
+        <Option v-for="item in company" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
       </Select>
     </FormItem>
   </Form>

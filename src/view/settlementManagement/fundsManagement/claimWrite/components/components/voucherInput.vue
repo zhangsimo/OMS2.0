@@ -312,6 +312,7 @@ import {
   getStaffList,
   getDataDictionaryType,
   getcompany,
+  getGroupBy,
   kmType,
   saveTreeDetailItem,
 } from "@/api/settlementManagement/VoucherInput"
@@ -416,14 +417,7 @@ export default {
     }
   },
   mounted() {
-    // this.OtherClickTable();
-    // this.fundGetList();
-    // this.OtherGetlist(); //其他初始化
-    // // this.SelectGetlistJi();
-    // // this.businessType();
-    // this.ClientgetList(); //客户初始化
-    // this.SupperliergetList(); //供应商初始化
-    // this.getListCompany(); // 公司
+
   },
   created(){
 
@@ -440,9 +434,7 @@ export default {
         if(this.AssistTableDataOther.length==0){
           this.OtherClickTable();
         }
-
           this.fundGetList();
-
         if(this.categoryArr.length==0){
           this.OtherGetlist(); //其他初始化
         }
@@ -460,8 +452,9 @@ export default {
         // if(this.AssistTableDataGongYingShang.length==0){
         //   this.SupperliergetList(); //供应商初始化
         // }
-        if(this.list.length==0){
-          this.getListCompany(); // 公司
+        if(this.list.length===0){
+          // this.getListCompany(); // 公司
+          this.getCompanyList();
         }
 
         if(this.fundList.length == 0){
@@ -477,13 +470,13 @@ export default {
             break
           case '3':
             this.currTab = 'department'
-            break 
+            break
           case '4':
             this.currTab = 'personage'
-            break 
+            break
           default:
             this.currTab = 'Other'
-            break          
+            break
         }
       }
     },
@@ -557,6 +550,48 @@ export default {
       data.shopId = this.$store.state.user.userData.shopId;
       let res = await getcompany(data);
       if (res.code === 0) {
+        let list = [];
+        res.data.childs.forEach(item => {
+          if (item.childs.length > 0) {
+            list.push({
+              value: item.id,
+              label: item.name,
+              children: item.childs,
+              groupCode: item.groupCode
+            });
+          } else {
+            list.push({
+              value: item.id,
+              label: item.name,
+              children: [],
+              groupCode: item.groupCode
+            });
+          }
+        });
+        list.forEach(item => {
+          if (item.children.length > 0) {
+            item.children.map(val => {
+              val.value = val.id;
+              val.label = val.name;
+              if (val.childs.length > 0) {
+                val.children = val.childs;
+                val.children.map(v => {
+                  v.value = v.id;
+                  v.label = v.name;
+                });
+              } else {
+                val.children = [];
+              }
+            });
+          }
+        });
+        this.list = list;
+      }
+    },
+    //部门”下拉选择框，下拉选项取“权限管理-组织管理”页面，“所属门店”字段为当前门店的最末级组织
+    async getCompanyList(){
+      let res= await getGroupBy()
+      if(res.code===0){
         let list = [];
         res.data.childs.forEach(item => {
           if (item.childs.length > 0) {
@@ -764,7 +799,7 @@ export default {
       this.dictName = item.dictName;
       if(this.dictName == "外部员工"){
         this.getAllStaffList()
-        return 
+        return
       }
       this.dictCode = item.dictCode;
       let params = {};

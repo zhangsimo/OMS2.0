@@ -212,7 +212,7 @@ export default {
       this.obj = val;
     });
     bus.$on("ChildContent", value => {
-      console.log(value,'asdf')
+      // console.log(value,'asdf')
       value.auxiliaryTypeCode = value.auxiliaryTypeCode == 2?1:value.auxiliaryTypeCode //辅助核算选中哪一个
       if(value.auxiliaryTypeCode=="1" || value.auxiliaryTypeCode=="2" || value.auxiliaryTypeCode=="3" || value.auxiliaryTypeCode=="4"){
         value.isAuxiliaryAccounting=0 //是否辅助核算类

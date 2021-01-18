@@ -1,7 +1,8 @@
 <template>
   <div>
     <!--选择辅助核算-->
-    <Modal v-model="subjectModelShowassist" title="选择辅助核算" width="750" @on-ok="confirmFuzhu" @on-visible-change="showOrhideModel">
+    <Modal v-model="subjectModelShowassist" title="选择辅助核算" width="750" @on-ok="confirmFuzhu"
+           @on-visible-change="showOrhideModel">
       <Form :value="AssistAccounting">
         <Tabs type="card" v-model="TabsChoose">
           <TabPane label="客户" name="client" :disabled="!['1','2','4'].includes(subjectChoose.auxiliaryAccountingCode)">
@@ -57,7 +58,8 @@
               </div>
             </div>
           </TabPane>
-          <TabPane label="供应商" name="supplier" :disabled="!['1','2','4'].includes(subjectChoose.auxiliaryAccountingCode)">
+          <TabPane label="供应商" name="supplier"
+                   :disabled="!['1','2','4'].includes(subjectChoose.auxiliaryAccountingCode)">
             <div>
               <div>
                 <Form inline :label-width="70" class="formBox">
@@ -117,7 +119,7 @@
                   :data="list"
                   v-model="groundIds"
                   placeholder="选择部门"
-                  style="width: 250px"
+                  style="width:250px;"
                   @on-change="ListChange"
                 ></Cascader>
               </FormItem>
@@ -129,7 +131,7 @@
               <!--                <Cascader :data="list" v-model="groundIds" placeholder="营销中心" style="width: 250px"></Cascader>-->
               <!--              </FormItem>-->
               <FormItem label="姓名:">
-                <Input v-model="personageName" placeholder="姓名" clearable class="w200" />
+                <Input v-model="personageName" placeholder="姓名" clearable class="w200"/>
               </FormItem>
               <FormItem>
                 <Button type="warning" class="mr10" @click="SearchPersonal">查询</Button>
@@ -172,7 +174,8 @@
               />
             </div>
           </TabPane>
-          <TabPane label="其他辅助核算" name="Other" :disabled="['1','2','3'].includes(subjectChoose.auxiliaryAccountingCode)">
+          <TabPane label="其他辅助核算" name="Other"
+                   :disabled="['1','2','3'].includes(subjectChoose.auxiliaryAccountingCode)">
             <div class="Other">
               <div class="OtherLeft">
                 <ul>
@@ -183,7 +186,8 @@
                     class="LiClass"
                     @click="LiClick(item,index)"
                     :class="[selectClass !== index ? 'weixuan':'xuan']"
-                  >{{ item.dictName }}</li>
+                  >{{ item.dictName }}
+                  </li>
                 </ul>
               </div>
               <div class="OtherRight">
@@ -260,7 +264,8 @@
                   v-for="item in fundListZanshi"
                   :value="item.itemName"
                   :key="item.id"
-                >{{ item.itemName }}</Option>
+                >{{ item.itemName }}
+                </Option>
               </Select>
             </FormItem>
           </Form>
@@ -275,304 +280,348 @@
 </template>
 
 <script>
-import {
-  queryGuestList,
-  queryCreditLike,
-  queryAllSupplier,
-  getcompany,
-  getStaffList,
-  getDataDictionaryType,
-  kmType,
-  saveTreeDetailItem,
-  getTableList,
-  BigSave,
-  putImgUrl,
-  getImgUrl,
-  downLoding
-} from "@/api/settlementManagement/VoucherInput";
-// import * as tools from "../../utils/tools";
-import bus from "../Popup/Bus";
-export default {
-  name: "AssistAccounting",
-  props: ["subjectChoose"],
-  data() {
-    return {
-      //其他辅助弹框表单验证
-      ruleformAdd: {
-        assistName: [
-          {
-            required: true,
-            type: "string",
-            message: "请选择输入名称",
-            trigger: "blur"
-          }
-        ]
-      },
-      AssistTableDataKeHu: [], //辅助弹框客户
-      AssistTableDataGongYingShang: [], //辅助弹框供应商
-      AssistTableDataGeRen: [], //辅助弹框个人
-      AssistTableDataOther: [], //辅助弹框其他
-      list: [], //部门列表
-      groundIds: [], //部门
-      personageName:"",//个人 查询 input框
-      AssistAccounting: "", //辅助核算弹框绑定值
-      FullNameOrCode: "", //客户编码或名称、全称
-      SupperlierNameOrCode: "", //供应商名称、全称
-      client: {
-        page: {
-          num: 1,
-          size: 100,
-          total: 0,
-          sizeOpts: [100, 200, 300, 400, 500]
-        } //分页
-      },
-      supplier: {
-        page: {
-          num: 1,
-          size: 100,
-          total: 0,
-          sizeOpts: [100, 200, 300, 400, 500]
-        } //分页
-      },
-      personage: {
-        page: {
-          num: 1,
-          size: 100,
-          total: 0,
-          sizeOpts: [100, 200, 300, 400, 500]
-        } //分页
-      },
-      Other: {
-        page: {
-          num: 1,
-          size: 100,
-          total: 0,
-          sizeOpts: [100, 200, 300, 400, 500]
-        } //分页
-      }, //其他辅助核算分页
-      subjectModelShowassist: false, //先隐藏弹框
-      categoryArr: [], //类别数组
-      dictCode: "CW00111", //用于保存dictCode
-      dictName: "长期股权投资", //用于保存dictName
-      accountingName: "", //核算名称
-      OtherModalAdd: false, //其他辅助核算新增弹框
-      formAdd: {
-        assistName: "" //新增辅助核算名称
-      },
-      auxiliaryTypeCode: "", //辅助弹框选的哪一个
-      selectClass: 0 ,//用于判断class
-      TabsChoose: 'client', //默认的tab页
-      Classification: false, //款项分类下拉框是否显示
-      formDynamic: {
-        fund: "", //款项分类,
-        code: ''
-      },
-      ruleValidateTwo: {
-        fund: [
-          {
-            required: true,
-            type: "string",
-            message: "请选择",
-            trigger: "change"
-          }
-        ]
-      },
-      fundList: [], //款项分类数组
-      fundListZanshi: [], //款项分类数组
-      // obj:{}
-    };
-  },
-  methods: {
-    dynamicChange(v){
-      this.fundListZanshi.forEach(item => {
-        if(item.itemName === v){
-          this.formDynamic.code = item.itemCode
-        }
-      })
+  import {
+    queryGuestList,
+    queryCreditLike,
+    queryAllSupplier,
+    getcompany,
+    getGroupBy,
+    getStaffList,
+    getDataDictionaryType,
+    kmType,
+    saveTreeDetailItem,
+    getTableList,
+    BigSave,
+    putImgUrl,
+    getImgUrl,
+    downLoding
+  } from "@/api/settlementManagement/VoucherInput";
+  // import * as tools from "../../utils/tools";
+  import bus from "../Popup/Bus";
+
+  export default {
+    name: "AssistAccounting",
+    props: ["subjectChoose"],
+    data() {
+      return {
+        //其他辅助弹框表单验证
+        ruleformAdd: {
+          assistName: [
+            {
+              required: true,
+              type: "string",
+              message: "请选择输入名称",
+              trigger: "blur"
+            }
+          ]
+        },
+        AssistTableDataKeHu: [], //辅助弹框客户
+        AssistTableDataGongYingShang: [], //辅助弹框供应商
+        AssistTableDataGeRen: [], //辅助弹框个人
+        AssistTableDataOther: [], //辅助弹框其他
+        list: [], //部门列表
+        groundIds: [], //部门
+        personageName: "",//个人 查询 input框
+        AssistAccounting: "", //辅助核算弹框绑定值
+        FullNameOrCode: "", //客户编码或名称、全称
+        SupperlierNameOrCode: "", //供应商名称、全称
+        client: {
+          page: {
+            num: 1,
+            size: 100,
+            total: 0,
+            sizeOpts: [100, 200, 300, 400, 500]
+          } //分页
+        },
+        supplier: {
+          page: {
+            num: 1,
+            size: 100,
+            total: 0,
+            sizeOpts: [100, 200, 300, 400, 500]
+          } //分页
+        },
+        personage: {
+          page: {
+            num: 1,
+            size: 100,
+            total: 0,
+            sizeOpts: [100, 200, 300, 400, 500]
+          } //分页
+        },
+        Other: {
+          page: {
+            num: 1,
+            size: 100,
+            total: 0,
+            sizeOpts: [100, 200, 300, 400, 500]
+          } //分页
+        }, //其他辅助核算分页
+        subjectModelShowassist: false, //先隐藏弹框
+        categoryArr: [], //类别数组
+        dictCode: "CW00111", //用于保存dictCode
+        dictName: "长期股权投资", //用于保存dictName
+        accountingName: "", //核算名称
+        OtherModalAdd: false, //其他辅助核算新增弹框
+        formAdd: {
+          assistName: "" //新增辅助核算名称
+        },
+        auxiliaryTypeCode: "", //辅助弹框选的哪一个
+        selectClass: 0,//用于判断class
+        TabsChoose: 'client', //默认的tab页
+        Classification: false, //款项分类下拉框是否显示
+        formDynamic: {
+          fund: "", //款项分类,
+          code: ''
+        },
+        ruleValidateTwo: {
+          fund: [
+            {
+              required: true,
+              type: "string",
+              message: "请选择",
+              trigger: "change"
+            }
+          ]
+        },
+        fundList: [], //款项分类数组
+        fundListZanshi: [], //款项分类数组
+        // obj:{}
+      };
     },
-    // 客户刷新初始化
-    ClientgetList() {
-      let params = {};
-      if (this.FullNameOrCode) {
-        params.searchName = this.FullNameOrCode;
-      }
-      params.searchType = 0;
-      params.page = this.client.page.num - 1;
-      params.size = this.client.page.size;
-      queryCreditLike(params).then(res => {
-        if (res.code === 0) {
-          this.AssistTableDataKeHu = res.data.content;
-          this.client.page.total = res.data.totalElements;
-        }
-      });
-    },
-    //客户搜索模糊查询
-    searchClient() {
-      this.ClientgetList();
-    },
-    //供应商刷新初始化
-    SupperliergetList() {
-      let params = {};
-      if (this.SupperlierNameOrCode) {
-        params.searchName = this.SupperlierNameOrCode;
-      }
-      params.searchType = 1;
-      params.page = this.supplier.page.num - 1;
-      params.size = this.supplier.page.size;
-      queryCreditLike(params).then(res => {
-        if (res.code === 0) {
-          this.AssistTableDataGongYingShang = res.data.content;
-          this.supplier.page.total = res.data.totalElements;
-        }
-      });
-    },
-    //供应商搜索模糊查询
-    searchSupperlier() {
-      this.SupperliergetList();
-    },
-    //获取公司
-    async getListCompany() {
-      let data = {};
-      data.groupId = this.$store.state.user.userData.tenantGroupId;
-      let res = await getcompany(data);
-      if (res.code === 0) {
-        let list = [];
-        res.data.childs.forEach(item => {
-          if (item.childs.length > 0) {
-            list.push({
-              value: item.id,
-              label: item.name,
-              children: item.childs
-            });
-          } else {
-            list.push({ value: item.id, label: item.name, children: [] });
-          }
-        });
-        list.forEach(item => {
-          if (item.children.length > 0) {
-            item.children.map(val => {
-              val.value = val.id;
-              val.label = val.name;
-              if (val.childs.length > 0) {
-                val.children = val.childs;
-                val.children.map(v => {
-                  v.value = v.id;
-                  v.label = v.name;
-                });
-              } else {
-                val.children = [];
-              }
-            });
-          }
-        });
-        this.list = list;
-      }
-    },
-    // 辅助弹框个人搜索
-    SearchPersonal() {
-      let stop = this.$loading();
-      let data = {};
-      data.size = this.personage.page.size;
-      data.page = this.personage.page.num - 1;
-      data.userName = "";
-      data.phone = "";
-      data.office = 0;
-      data.shopId = this.$store.state.user.userData.shopId;
-      // data.groundIds = this.groundIds[this.groundIds.length - 1] || "";
-      data.userName=this.personageName==""?"":this.personageName.trim();//个人查询 名字输入框
-      getStaffList(data)
-        .then(res => {
-          stop();
-          this.loading = false;
-          if (res.code == 0) {
-            this.AssistTableDataGeRen = res.data.content;
-            this.personage.page.total = res.data.totalElements;
+    methods: {
+      dynamicChange(v) {
+        this.fundListZanshi.forEach(item => {
+          if (item.itemName === v) {
+            this.formDynamic.code = item.itemCode
           }
         })
-        .catch(err => {
-          stop();
+      },
+      // 客户刷新初始化
+      ClientgetList() {
+        let params = {};
+        if (this.FullNameOrCode) {
+          params.searchName = this.FullNameOrCode;
+        }
+        params.searchType = 0;
+        params.page = this.client.page.num - 1;
+        params.size = this.client.page.size;
+        queryCreditLike(params).then(res => {
+          if (res.code === 0) {
+            this.AssistTableDataKeHu = res.data.content;
+            this.client.page.total = res.data.totalElements;
+          }
         });
-    },
-    //其他辅助核算初始化
-    OtherGetlist() {
-      let params = {};
-      getDataDictionaryType(params).then(res => {
-        if (res.code === 0) {
-          let NewArr = res.data.filter(item => item.dictCode == "CW0011X");
-          this.categoryArr = NewArr[0].children;
+      },
+      //客户搜索模糊查询
+      searchClient() {
+        this.ClientgetList();
+      },
+      //供应商刷新初始化
+      SupperliergetList() {
+        let params = {};
+        if (this.SupperlierNameOrCode) {
+          params.searchName = this.SupperlierNameOrCode;
         }
-      });
-    },
-    // 其他辅助核算左侧列表点击事件
-    LiClick(item, index) {
-      this.selectClass = index;
-      this.dictCode = item.dictCode;
-      this.dictName = item.dictName;
-      let params = {};
-      if (this.accountingName) {
-        params.itemName = this.accountingName;
-      }
-      if (item.dictCode) {
-        params.dictCode = item.dictCode;
-      }
-      kmType(params).then(res => {
+        params.searchType = 1;
+        params.page = this.supplier.page.num - 1;
+        params.size = this.supplier.page.size;
+        queryCreditLike(params).then(res => {
+          if (res.code === 0) {
+            this.AssistTableDataGongYingShang = res.data.content;
+            this.supplier.page.total = res.data.totalElements;
+          }
+        });
+      },
+      //供应商搜索模糊查询
+      searchSupperlier() {
+        this.SupperliergetList();
+      },
+      //获取公司
+      async getListCompany() {
+        let data = {};
+        data.groupId = this.$store.state.user.userData.tenantGroupId;
+        let res = await getcompany(data);
         if (res.code === 0) {
-          this.AssistTableDataOther = res.data;
+          let list = [];
+          res.data.childs.forEach(item => {
+            if (item.childs.length > 0) {
+              list.push({
+                value: item.id,
+                label: item.name,
+                children: item.childs
+              });
+            } else {
+              list.push({value: item.id, label: item.name, children: []});
+            }
+          });
+          list.forEach(item => {
+            if (item.children.length > 0) {
+              item.children.map(val => {
+                val.value = val.id;
+                val.label = val.name;
+                if (val.childs.length > 0) {
+                  val.children = val.childs;
+                  val.children.map(v => {
+                    v.value = v.id;
+                    v.label = v.name;
+                  });
+                } else {
+                  val.children = [];
+                }
+              });
+            }
+          });
+          this.list = list;
         }
-      });
-    },
-    //其他辅助核算查询
-    OtherClick() {
-      this.OtherClickTable();
-    },
-    //其他辅助核算表格初始化
-    OtherClickTable() {
-      let params = {};
-      if (this.accountingName) {
-        params.itemName = this.accountingName;
-      }
-      if (this.dictCode) {
-        params.dictCode = this.dictCode;
-      }
-      kmType(params).then(res => {
+      },
+      //部门”下拉选择框，下拉选项取“权限管理-组织管理”页面，“所属门店”字段为当前门店的最末级组织
+      async getCompanyList() {
+        let res = await getGroupBy()
         if (res.code === 0) {
-          this.AssistTableDataOther = res.data;
+          let list = [];
+          res.data.childs.forEach(item => {
+            if (item.childs.length > 0) {
+              list.push({
+                value: item.id,
+                label: item.name,
+                children: item.childs,
+                groupCode: item.groupCode
+              });
+            } else {
+              list.push({
+                value: item.id,
+                label: item.name,
+                children: [],
+                groupCode: item.groupCode
+              });
+            }
+          });
+          list.forEach(item => {
+            if (item.children.length > 0) {
+              item.children.map(val => {
+                val.value = val.id;
+                val.label = val.name;
+                if (val.childs.length > 0) {
+                  val.children = val.childs;
+                  val.children.map(v => {
+                    v.value = v.id;
+                    v.label = v.name;
+                  });
+                } else {
+                  val.children = [];
+                }
+              });
+            }
+          });
+          this.list = list;
         }
-      });
-    },
-    //点击单选框获取辅助核算客户
-    radioChangeEventClient({ row }) {
-      this.AssistAccounting = row;
-      this.auxiliaryTypeCode = "1";
-      this.AssistAccounting.auxiliaryTypeCode = "1";
-      // this.auxiliaryCode = row.code;
-    },
-    //点击单选框获取辅助核算供应商
-    radioChangeEventSupplier({ row }) {
-      this.AssistAccounting = row;
-      this.auxiliaryTypeCode = "2";
-      this.AssistAccounting.auxiliaryTypeCode = "2"
-      // this.auxiliaryCode = row.code;
-    },
-    //点击单选框获取辅助核算个人
-    radioChangeEventPersonage({ row }) {
-      this.AssistAccounting = row;
-      this.auxiliaryTypeCode = "4";
-      this.AssistAccounting.auxiliaryTypeCode = "4"
-      // this.auxiliaryCode = row.userName;
-    },
-    //点击单选框获取辅助核算其他
-    radioChangeEventOther({ row }) {
-      this.AssistAccounting = row;
-      this.auxiliaryTypeCode = "CW0011X";
-      // this.auxiliaryCode = row.itemCode;
-    },
-    //辅助核算确定弹框
-    confirmFuzhu() {
-      if(this.Classification){
-        this.$refs.formDynamic.validate(valid => {
-          if (valid) {
-              if(Object.keys(this.AssistAccounting).length === 0){
+      },
+      // 辅助弹框个人搜索
+      SearchPersonal() {
+        let stop = this.$loading();
+        let data = {};
+        data.size = this.personage.page.size;
+        data.page = this.personage.page.num - 1;
+        data.userName = "";
+        data.phone = "";
+        data.office = 0;
+        data.shopId = this.$store.state.user.userData.shopId;
+        // data.groundIds = this.groundIds[this.groundIds.length - 1] || "";
+        data.userName = this.personageName == "" ? "" : this.personageName.trim();//个人查询 名字输入框
+        getStaffList(data)
+          .then(res => {
+            stop();
+            this.loading = false;
+            if (res.code == 0) {
+              this.AssistTableDataGeRen = res.data.content;
+              this.personage.page.total = res.data.totalElements;
+            }
+          })
+          .catch(err => {
+            stop();
+          });
+      },
+      //其他辅助核算初始化
+      OtherGetlist() {
+        let params = {};
+        getDataDictionaryType(params).then(res => {
+          if (res.code === 0) {
+            let NewArr = res.data.filter(item => item.dictCode == "CW0011X");
+            this.categoryArr = NewArr[0].children;
+          }
+        });
+      },
+      // 其他辅助核算左侧列表点击事件
+      LiClick(item, index) {
+        this.selectClass = index;
+        this.dictCode = item.dictCode;
+        this.dictName = item.dictName;
+        let params = {};
+        if (this.accountingName) {
+          params.itemName = this.accountingName;
+        }
+        if (item.dictCode) {
+          params.dictCode = item.dictCode;
+        }
+        kmType(params).then(res => {
+          if (res.code === 0) {
+            this.AssistTableDataOther = res.data;
+          }
+        });
+      },
+      //其他辅助核算查询
+      OtherClick() {
+        this.OtherClickTable();
+      },
+      //其他辅助核算表格初始化
+      OtherClickTable() {
+        let params = {};
+        if (this.accountingName) {
+          params.itemName = this.accountingName;
+        }
+        if (this.dictCode) {
+          params.dictCode = this.dictCode;
+        }
+        kmType(params).then(res => {
+          if (res.code === 0) {
+            this.AssistTableDataOther = res.data;
+          }
+        });
+      },
+      //点击单选框获取辅助核算客户
+      radioChangeEventClient({row}) {
+        this.AssistAccounting = row;
+        this.auxiliaryTypeCode = "1";
+        this.AssistAccounting.auxiliaryTypeCode = "1";
+        // this.auxiliaryCode = row.code;
+      },
+      //点击单选框获取辅助核算供应商
+      radioChangeEventSupplier({row}) {
+        this.AssistAccounting = row;
+        this.auxiliaryTypeCode = "2";
+        this.AssistAccounting.auxiliaryTypeCode = "2"
+        // this.auxiliaryCode = row.code;
+      },
+      //点击单选框获取辅助核算个人
+      radioChangeEventPersonage({row}) {
+        this.AssistAccounting = row;
+        this.auxiliaryTypeCode = "4";
+        this.AssistAccounting.auxiliaryTypeCode = "4"
+        // this.auxiliaryCode = row.userName;
+      },
+      //点击单选框获取辅助核算其他
+      radioChangeEventOther({row}) {
+        this.AssistAccounting = row;
+        this.auxiliaryTypeCode = "CW0011X";
+        // this.auxiliaryCode = row.itemCode;
+      },
+      //辅助核算确定弹框
+      confirmFuzhu() {
+        if (this.Classification) {
+          this.$refs.formDynamic.validate(valid => {
+            if (valid) {
+              if (Object.keys(this.AssistAccounting).length === 0) {
                 this.$message.error('请选择辅助核算');
                 this.subjectModelShowassist = true
               } else {
@@ -582,241 +631,258 @@ export default {
                 bus.$emit("ChildContent", this.AssistAccounting);
                 this.subjectModelShowassist = false;
               }
-          } else {
+            } else {
               this.$Message.error("请选择款项分类!");
               this.subjectModelShowassist = true;
-          }
-        });
-      }else{
-        if (Object.keys(this.AssistAccounting).length === 0) {
-          this.$message.error("请选择辅助核算");
-          this.subjectModelShowassist = true;
-        } else {
-          this.$emit("ChildContent", this.AssistAccounting);
-          bus.$emit("ChildContent", this.AssistAccounting);
-          this.subjectModelShowassist = false;
-        }
-      }
-    },
-    //客户分页切换页数
-    selectNumClient(page) {
-      this.client.page.num = page;
-      this.ClientgetList();
-    },
-    //客户切换分页条数
-    selectPageClient(size) {
-      this.client.page.num = 1;
-      this.client.page.size = size;
-      this.ClientgetList();
-    },
-    //供应商切换页数
-    selectNumsupplier(page) {
-      this.supplier.page.num = page;
-      this.SupperliergetList();
-    },
-    //供应商切换分页条数
-    selectPagesupplier(size) {
-      this.supplier.page.num = 1;
-      this.supplier.page.size = size;
-      this.SupperliergetList();
-    },
-    //个人分页切换页数
-    selectNumpersonage(page) {
-      this.personage.page.num = page;
-      this.SearchPersonal();
-    },
-    //个人切换分页条数
-    selectPagepersonage(size) {
-      this.personage.page.num = 1;
-      this.personage.page.size = size;
-      this.SearchPersonal();
-    },
-    //部门改变
-    ListChange(val, selectedData) {
-      this.AssistAccounting = {}
-      if (selectedData.length == 1) {
-        this.AssistAccounting.auxiliaryTypeCode = '3'
-        this.AssistAccounting.shortName = selectedData[0].label;
-        this.AssistAccounting.fullName = selectedData[0].label;
-        this.AssistAccounting.code = selectedData[0].value;
-        this.auxiliaryTypeCode = "3";
-      } else {
-        this.AssistAccounting.shortName = selectedData[selectedData.length - 1].name;
-        this.AssistAccounting.fullName = selectedData[selectedData.length - 1].name;
-        this.AssistAccounting.code = selectedData[selectedData.length - 1].value;
-        this.AssistAccounting.auxiliaryTypeCode = '3'
-        this.auxiliaryTypeCode = "3";
-      }
-    },
-    //新增辅助核算名称保存
-    addAuxiliary() {
-      this.$refs.formAdd.validate(valid => {
-        if (valid) {
-          let data = {};
-          data.itemName = this.formAdd.assistName;
-          data.dictCode = this.dictCode;
-          // data.itemCode = tools.transTimess(new Date());
-          saveTreeDetailItem(data).then(res => {
-            if (res.code === 0) {
-              this.OtherClickTable();
-              this.formAdd.assistName = "";
-            } else {
-              this.formAdd.assistName = "";
             }
           });
-          this.$Message.success("新增成功!");
-          this.OtherModalAdd = false;
         } else {
-          this.OtherModalAdd = true;
-          this.$Message.error("请输入名称!");
+          if (Object.keys(this.AssistAccounting).length === 0) {
+            this.$message.error("请选择辅助核算");
+            this.subjectModelShowassist = true;
+          } else {
+            this.$emit("ChildContent", this.AssistAccounting);
+            bus.$emit("ChildContent", this.AssistAccounting);
+            this.subjectModelShowassist = false;
+          }
         }
-      });
-    },
-    //其他新增
-    ShowOtherAdd() {
-      this.OtherModalAdd = true;
-    },
-    showOrhideModel(v){
-      if(v){
+      },
+      //客户分页切换页数
+      selectNumClient(page) {
+        this.client.page.num = page;
+        this.ClientgetList();
+      },
+      //客户切换分页条数
+      selectPageClient(size) {
+        this.client.page.num = 1;
+        this.client.page.size = size;
+        this.ClientgetList();
+      },
+      //供应商切换页数
+      selectNumsupplier(page) {
+        this.supplier.page.num = page;
+        this.SupperliergetList();
+      },
+      //供应商切换分页条数
+      selectPagesupplier(size) {
+        this.supplier.page.num = 1;
+        this.supplier.page.size = size;
+        this.SupperliergetList();
+      },
+      //个人分页切换页数
+      selectNumpersonage(page) {
+        this.personage.page.num = page;
+        this.SearchPersonal();
+      },
+      //个人切换分页条数
+      selectPagepersonage(size) {
+        this.personage.page.num = 1;
+        this.personage.page.size = size;
+        this.SearchPersonal();
+      },
+      //部门改变
+      ListChange(val, selectedData) {
         this.AssistAccounting = {}
-        this.formDynamic = {fund: '',code: ''}
-          this.getListCompany();
+        if (selectedData.length == 1) {
+          this.AssistAccounting.auxiliaryTypeCode = '3'
+          this.AssistAccounting.shortName = selectedData[0].label;
+          this.AssistAccounting.fullName = selectedData[0].label;
+          this.AssistAccounting.code = selectedData[0].value;
+          this.auxiliaryTypeCode = "3";
+        } else {
+          this.AssistAccounting.shortName = selectedData[selectedData.length - 1].name;
+          this.AssistAccounting.fullName = selectedData[selectedData.length - 1].name;
+          this.AssistAccounting.code = selectedData[selectedData.length - 1].value;
+          this.AssistAccounting.auxiliaryTypeCode = '3'
+          this.auxiliaryTypeCode = "3";
+        }
+      },
+      //新增辅助核算名称保存
+      addAuxiliary() {
+        this.$refs.formAdd.validate(valid => {
+          if (valid) {
+            let data = {};
+            data.itemName = this.formAdd.assistName;
+            data.dictCode = this.dictCode;
+            // data.itemCode = tools.transTimess(new Date());
+            saveTreeDetailItem(data).then(res => {
+              if (res.code === 0) {
+                this.OtherClickTable();
+                this.formAdd.assistName = "";
+              } else {
+                this.formAdd.assistName = "";
+              }
+            });
+            this.$Message.success("新增成功!");
+            this.OtherModalAdd = false;
+          } else {
+            this.OtherModalAdd = true;
+            this.$Message.error("请输入名称!");
+          }
+        });
+      },
+      //其他新增
+      ShowOtherAdd() {
+        this.OtherModalAdd = true;
+      },
+      showOrhideModel(v) {
+        if (v) {
+          this.AssistAccounting = {}
+          this.formDynamic = {fund: '', code: ''}
+          // this.getListCompany();
+          this.getCompanyList();
           this.ClientgetList();
           this.SupperliergetList();
           this.OtherGetlist();
           this.OtherClickTable();
-        
-        this.fundGetList()
 
-        if(this.subjectChoose.titleCode === "1221" || this.subjectChoose.titleCode === "2241" || this.subjectChoose.titleCode === "1532" || this.subjectChoose.titleCode === "1801"){
-          this.Classification = true
-        }else{
-          this.Classification = false
-        }
+          this.fundGetList()
 
-        switch(this.subjectChoose.auxiliaryAccountingCode){
-          case '1':
-            this.TabsChoose = 'client'
-            break
-          case '2':
-            this.TabsChoose = 'supplier'
-            break
-          case '3':
-            this.TabsChoose = 'department'
-            break 
-          case '4':
-            this.TabsChoose = 'personage'
-            break 
-          default:
-            this.TabsChoose = 'Other'
-            break          
+          if (this.subjectChoose.titleCode === "1221" || this.subjectChoose.titleCode === "2241" || this.subjectChoose.titleCode === "1532" || this.subjectChoose.titleCode === "1801") {
+            this.Classification = true
+          } else {
+            this.Classification = false
+          }
+
+          switch (this.subjectChoose.auxiliaryAccountingCode) {
+            case '1':
+              this.TabsChoose = 'client'
+              break
+            case '2':
+              this.TabsChoose = 'supplier'
+              break
+            case '3':
+              this.TabsChoose = 'department'
+              break
+            case '4':
+              this.TabsChoose = 'personage'
+              break
+            default:
+              this.TabsChoose = 'Other'
+              break
+          }
         }
-      }
+      },
+      //其他辅助核算款项分类
+      fundGetList() {
+        let params = {};
+        params.dictCode = "CW00131";
+        kmType(params).then(res => {
+          this.fundList = res.data;
+          this.fundListZanshi = this.fundList.filter(vb => this.subjectChoose.titleCode.indexOf(vb.itemValueOne) != -1)
+          if (this.fundListZanshi.length < 1) {
+            this.Classification = false;
+          }
+        });
+      },
     },
-    //其他辅助核算款项分类
-    fundGetList() {
-      let params = {};
-      params.dictCode = "CW00131";
-      kmType(params).then(res => {
-        this.fundList = res.data;
-        this.fundListZanshi=this.fundList.filter(vb=>this.subjectChoose.titleCode.indexOf(vb.itemValueOne)!=-1)
-        if(this.fundListZanshi.length<1){
-          this.Classification=false;
-        }
-      });
-    },
-  },
-  mounted() {
-    // this.getListCompany();
-    // this.ClientgetList();
-    // this.SupperliergetList();
-    // this.OtherGetlist();
-    // this.OtherClickTable();
-  }
-};
+    mounted() {
+      // this.getListCompany();
+      // this.ClientgetList();
+      // this.SupperliergetList();
+      // this.OtherGetlist();
+      // this.OtherClickTable();
+    }
+  };
 </script>
 
 <style scoped>
-.flex {
-  display: flex;
-}
-.uploadbtn:hover {
-  color: #03a9f4;
-  border: 1px solid #ddd;
-}
-.items {
-  list-style: none;
-}
-.items .item {
-  display: flex;
-  justify-content: space-between;
-  height: 20px;
-}
-.header {
-  padding: 5px 0;
-  margin-left: 10px;
-  margin-right: 10px;
-  border: 1px #cccccc solid;
-}
-.Other {
-  display: flex;
-  height: 550px;
-}
-.OtherLeft {
-  flex: 1;
-  width: 103px;
-  border-right: 1px solid gray;
-}
-.OtherLeft > ul > li {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-top: 1px solid gray;
-  border-left: 1px solid gray;
-}
-.OtherLeft > ul > li:last-child {
-  border-bottom: 1px solid gray;
-}
-.OtherRight {
-  flex: 6;
-  width: 615px;
-}
-.changeDiv {
-  display: inline-block;
-  margin-left: 20px;
-}
-.xuan {
-  background: #e8eaec;
-  color: gray;
-  font-size: 15px;
-}
+  .flex {
+    display: flex;
+  }
+
+  .uploadbtn:hover {
+    color: #03a9f4;
+    border: 1px solid #ddd;
+  }
+
+  .items {
+    list-style: none;
+  }
+
+  .items .item {
+    display: flex;
+    justify-content: space-between;
+    height: 20px;
+  }
+
+  .header {
+    padding: 5px 0;
+    margin-left: 10px;
+    margin-right: 10px;
+    border: 1px #cccccc solid;
+  }
+
+  .Other {
+    display: flex;
+    height: 550px;
+  }
+
+  .OtherLeft {
+    flex: 1;
+    width: 103px;
+    border-right: 1px solid gray;
+  }
+
+  .OtherLeft > ul > li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid gray;
+    border-left: 1px solid gray;
+  }
+
+  .OtherLeft > ul > li:last-child {
+    border-bottom: 1px solid gray;
+  }
+
+  .OtherRight {
+    flex: 6;
+    width: 615px;
+  }
+
+  .changeDiv {
+    display: inline-block;
+    margin-left: 20px;
+  }
+
+  .xuan {
+    background: #e8eaec;
+    color: gray;
+    font-size: 15px;
+  }
 </style>
 <style scoped>
-.formBox .ivu-form-item {
-  margin-bottom: 5px;
-  margin-right: 5px;
-}
-.ModalBox .ivu-form-item {
-  margin-bottom: 2px;
-}
-.bottomZI {
-  margin-top: 20px;
-  margin-left: 40px;
-  font-size: 16px;
-  color: red;
-}
-.fund {
-  position: relative;
-  top: -650px;
-  left: 400px;
-}
-.LiClass {
-}
-/*.LiClass:first-child{*/
-/*background: #f8f8f8;*/
-/*border: 1px solid #ddd!important;*/
-/*}*/
-.LiClass:hover {
-  cursor: pointer;
-}
+  .formBox .ivu-form-item {
+    margin-bottom: 5px;
+    margin-right: 5px;
+  }
+
+  .ModalBox .ivu-form-item {
+    margin-bottom: 2px;
+  }
+
+  .bottomZI {
+    margin-top: 20px;
+    margin-left: 40px;
+    font-size: 16px;
+    color: red;
+  }
+
+  .fund {
+    position: relative;
+    top: -650px;
+    left: 400px;
+  }
+
+  .LiClass {
+  }
+
+  /*.LiClass:first-child{*/
+  /*background: #f8f8f8;*/
+  /*border: 1px solid #ddd!important;*/
+  /*}*/
+  .LiClass:hover {
+    cursor: pointer;
+  }
 </style>

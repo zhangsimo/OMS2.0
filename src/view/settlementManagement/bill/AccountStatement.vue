@@ -658,7 +658,6 @@
 <script>
   //往来单位 接口换成与 应收应付 一致
   import {findGuest} from "../../../api/settlementManagement/advanceCollection";
-
   import settlementMoadl from "./components/settlement";
   import hedgingInvoice from "./Popup/hedgingInvoice";
   import registrationEntry from "./Popup/registrationEntry";
@@ -712,7 +711,7 @@
     data() {
       return {
         type: 0,//对冲，冲减标识
-        stateType:1,//冲减、冲收
+        stateType: 1,//冲减、冲收
         accountType: false,
         statusData: [
           {name: "提交", status: "已提交"},
@@ -727,7 +726,7 @@
         reconciliationStatement: {}, //点击主表获取当当前一行数据
         salepopupList: [],//销售开票数组
         salepopupMulibool: false,
-        salepopupBoolean:false,
+        salepopupBoolean: false,
         tableData: [],
         BusinessType: [],
         Settlement: false,
@@ -781,7 +780,7 @@
         receivefalg: false,//收到配件/油品进项发票=含税配件/油品金额，不能点击进项登记及修改
         paymentId: '',//判定付款默认类型
         receiveGuestId: '',//获取往来单位id
-        approveUname:"",//付款出纳
+        approveUname: "",//付款出纳
         company: [],//查询到往来单位数据
         loading1: false,//查询时判断
         revokeReason: '',//撤销原因
@@ -883,11 +882,11 @@
       },
       //撤销申请
       withdrawTheApplication() {
-        if(this.salepopupList.length>1){
+        if (this.salepopupList.length > 1) {
           return this.$message.error("请选择一条数据")
         }
-        if(this.salepopupList.length===1){
-          this.reconciliationStatement=this.salepopupList[0]
+        if (this.salepopupList.length === 1) {
+          this.reconciliationStatement = this.salepopupList[0]
         }
         this.reTitle = '撤回申请'
         this.revokeReason = ''
@@ -896,11 +895,11 @@
 
       //撤回核销
       backCancel() {
-        if(this.salepopupList.length>1){
+        if (this.salepopupList.length > 1) {
           return this.$message.error("请选择一条数据")
         }
-        if(this.salepopupList.length===1){
-          this.reconciliationStatement=this.salepopupList[0]
+        if (this.salepopupList.length === 1) {
+          this.reconciliationStatement = this.salepopupList[0]
         }
         this.reTitle = '撤回核销'
         this.revokeReason = ''
@@ -945,11 +944,11 @@
       },
       //资金认领核销
       capitalWrite() {
-        if(this.salepopupList.length>1){
+        if (this.salepopupList.length > 1) {
           return this.$message.error("请选择一条数据")
         }
-        if(this.salepopupList.length===1){
-          this.reconciliationStatement=this.salepopupList[0]
+        if (this.salepopupList.length === 1) {
+          this.reconciliationStatement = this.salepopupList[0]
         }
         if (Object.keys(this.reconciliationStatement).length !== 0) {
           // bus.$emit('account',this.reconciliationStatement)
@@ -961,11 +960,11 @@
       },
       // 进项发票登记及修改
       registrationEntry() {
-        if(this.salepopupList.length>1){
+        if (this.salepopupList.length > 1) {
           return this.$message.error("请选择一条数据")
         }
-        if(this.salepopupList.length===1){
-          this.reconciliationStatement=this.salepopupList[0]
+        if (this.salepopupList.length === 1) {
+          this.reconciliationStatement = this.salepopupList[0]
         }
         if (
           Object.keys(this.reconciliationStatement).length !== 0 &&
@@ -988,11 +987,11 @@
       },
       // 进项发票核销
       queryEntry() {
-        if(this.salepopupList.length>1){
+        if (this.salepopupList.length > 1) {
           return this.$message.error("请选择一条数据")
         }
-        if(this.salepopupList.length===1){
-          this.reconciliationStatement=this.salepopupList[0]
+        if (this.salepopupList.length === 1) {
+          this.reconciliationStatement = this.salepopupList[0]
         }
         this.$refs.invoiceApplyTost.init(this.reconciliationStatement);
 
@@ -1004,11 +1003,11 @@
       },
       // 发票对冲
       hedgingInvoice() {
-        if(this.salepopupList.length>1){
+        if (this.salepopupList.length > 1) {
           return this.$message.error("请选择一条数据")
         }
-        if(this.salepopupList.length===1){
-          this.reconciliationStatement=this.salepopupList[0]
+        if (this.salepopupList.length === 1) {
+          this.reconciliationStatement = this.salepopupList[0]
         }
         if (Object.keys(this.reconciliationStatement).length !== 0) {
           this.$refs.hedgingInvoice.modal1 = true;
@@ -1035,125 +1034,147 @@
         }
       },
       // 销售开票申请
-      saleApplication() {
-        if(this.salepopupBoolean){return}
-        if (Object.keys(this.salepopupList).length == 0) return this.$Message.error('请选择对账单')
-        let isOilPartAll = this.salepopupList[0].isOilPart;
-        let taxSignAll = this.salepopupList[0].taxSign;
-        let guestNameAll = this.salepopupList[0].guestName;
-        let boolShow = 0;
-        let accountNos = "";
-        let accountNo = "";
-        let guestNames = "";
-        let guestIds = "";
-        let idx = 0;
-        let applicant = "";
-        let statementAmtOwed1=0;
-        this.salepopupList.map((el, index) => {
-          if (el.taxSign == 1 && el.isOilPart != isOilPartAll) {
-            boolShow = 1;//所选对账单 不是  全部为配件类型或者全部为油品类型或者全部不含税
-          }
-          if (el.taxSign != 1 && el.taxSign != taxSignAll) {
-            boolShow = 1;//所选对账单 不是  全部为配件类型或者全部为油品类型或者全部不含税
-          }
-          if (el.statementStatus.value == 1) {
-            boolShow = 2//存在 审核中的对账单
-          }
-          if (el.ownSellOutList === 0) {
-            boolShow = 3//存在 不包含销售出库单据的对账单
-          }
-          if (!el.ifInvoiceApply) {
-            accountNo+= `${el.accountNo};`
-            boolShow = 4//存在 剩余欠票金额为0的对账单 存在“含税配件欠票、含税油品欠票、不含税未开”字段为0的对账单
-          }
-          // if (0 >= el.statementAmtOwed) {
-          //   boolShow = 4//存在 剩余欠票金额为0的对账单
-          // }
-          if (!this.salepopupMulibool && el.guestName != guestNameAll) {
-            boolShow = 5//角色不为“会计、核算会计、核算主管、核算经理、财务总监”
-          }
-          // if (Number(el.taxArrearsOfPart) == 0 && Number(el.taxArrearsOfOil) == 0 && Number(el.taxNotIncluded) == 0) {
-          //   boolShow = 6//存在“含税配件欠票、含税油品欠票、不含税未开”字段为0的对账单
-          // }
-          if (el.owned == 1) {
-            boolShow = 7//存在 已在草稿单的对账单
-            idx = index;
-            applicant = el.applicant;
-          }
-          accountNos += `${el.accountNo};`
-          guestNames += `${el.guestName};`
-          guestIds += `${el.guestId};`
-          statementAmtOwed1+=Number(el.statementAmtOwed);
+      async saleApplication() {
+        let ids = [];
+        this.salepopupList.map(el => {
+          let data = {id: el.id}
+          ids.push(data)
         })
-        switch (boolShow) {
-          case 0:
-            if (taxSignAll === 1) {
-              let params={
-                accountNos:accountNos
+        this.salepopupBoolean = true;
+        let res = await setCanwithdrawList(ids)
+        if (res.code === 0) {
+          this.salepopupList.map(el => {
+            res.data.map(el2 => {
+              if (el.id == el2.id) {
+                el.ifInvoiceApply = el2.ifInvoiceApply
               }
-              this.$refs.salepopup.parameter = params;
-              this.$refs.salepopup.information = JSON.parse(JSON.stringify(this.reconciliationStatement));
-              this.$refs.salepopup.information.accountNos = accountNos;
-              this.$refs.salepopup.information.guestNames = guestNames;
-              this.$refs.salepopup.information.guestIds = guestIds;
-              this.$refs.salepopup.information.statementAmtOwed = parseFloat(statementAmtOwed1).toFixed(2);
-              this.$refs.salepopup.information.orgName = this.$store.state.user.userShopName;
-              this.$refs.salepopup.information.applicationDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
-              this.$refs.salepopup.isOilPart = isOilPartAll;
-              // 申请单号
-              applyNo().then(res => {
-                if (res.code === 0) {
-                  this.$refs.salepopup.information.applyNo = res.data.applyNo;
-                  this.$refs.salepopup.information.code = res.data.orgCode;
-                  if (this.salepopupList[0].statementType.value == 1) { //1 是配件 2 是油品
-                    this.$refs.salepopup.information.oilsListOrder = ""
-                    this.$refs.salepopup.information.partsListOrder = res.data.partsListOrder;
-                  } else if (this.salepopupList[0].statementType.value == 2) {
-                    this.$refs.salepopup.information.oilsListOrder = res.data.oilsListOrder;
-                    this.$refs.salepopup.information.partsListOrder = ""
-                  }
-                }
-              });
-              this.$refs.salepopup.accessoriesBillingData1 = []
-              this.$refs.salepopup.accessoriesBillingData2 = []
-              setTimeout(() => {
-                this.$refs.salepopup.modal1 = true;
-              }, 500);
-            } else {
-              let params={
-                accountNos:accountNos
-              }
-              this.$refs.noTax.parameter = params;
-              this.$refs.noTax.information.accountNos = accountNos;
-              this.$refs.noTax.information.guestNames = guestNames;
-              this.$refs.noTax.information.guestIds = guestIds;
-              this.$refs.noTax.information.notAmt = parseFloat(statementAmtOwed1).toFixed(2);
-              setTimeout(() => {
-                this.$refs.noTax.init();
-              }, 500);
+            })
+          })
+          this.salepopupBoolean = false;
+        }
+        //等待是否可进行销售开票的接口返回后再执行动作
+        if (!this.salepopupBoolean) {
+          hideLoading()
+          if (Object.keys(this.salepopupList).length == 0) return this.$Message.error('请选择对账单')
+          let isOilPartAll = this.salepopupList[0].isOilPart;
+          let taxSignAll = this.salepopupList[0].taxSign;
+          let guestNameAll = this.salepopupList[0].guestName;
+          let boolShow = 0;
+          let accountNos = "";
+          let accountNo = "";
+          let guestNames = "";
+          let guestIds = "";
+          let idx = 0;
+          let applicant = "";
+          let statementAmtOwed1 = 0;
+          this.salepopupList.map((el, index) => {
+            if (el.taxSign == 1 && el.isOilPart != isOilPartAll) {
+              boolShow = 1;//所选对账单 不是  全部为配件类型或者全部为油品类型或者全部不含税
             }
-            break;
-          case 1:
-            this.$message.error("请确认所选对账单全部为配件类型或者全部为油品类型或者全部不含税！");
-            break;
-          case 2:
-            this.$message.error('存在审核中的对账单，不能开票！');
-            break;
-          case 3:
-            this.$message.error('存在不包含销售出库单据的对账单，不能开票！');
-            break;
-          case 4:
-            this.$message.error(`对账单号${accountNo}剩余未开票配件明细为空，不能申请开票！`);
-            break;
-          case 5:
-            this.$message.error("请确认所选对账单为同一往来单位")
-            break;
-          // case 6:
-          //   this.$message.error("所选对账单存在含税配件欠票、含税油品欠票、不含税未开字段为0的对账单")
-          //   break;
-          case 7:
-            this.$message.error(`第${idx + 1}条对账单在${applicant}的草稿箱已存在,请先删除!`)
-            break;
+            if (el.taxSign != 1 && el.taxSign != taxSignAll) {
+              boolShow = 1;//所选对账单 不是  全部为配件类型或者全部为油品类型或者全部不含税
+            }
+            if (el.statementStatus.value == 1) {
+              boolShow = 2//存在 审核中的对账单
+            }
+            if (el.ownSellOutList === 0) {
+              boolShow = 3//存在 不包含销售出库单据的对账单
+            }
+            if (!el.ifInvoiceApply) {
+              accountNo += `${el.accountNo};`
+              boolShow = 4//存在 剩余欠票金额为0的对账单 存在“含税配件欠票、含税油品欠票、不含税未开”字段为0的对账单
+            }
+            // if (0 >= el.statementAmtOwed) {
+            //   boolShow = 4//存在 剩余欠票金额为0的对账单
+            // }
+            if (!this.salepopupMulibool && el.guestName != guestNameAll) {
+              boolShow = 5//角色不为“会计、核算会计、核算主管、核算经理、财务总监”
+            }
+            // if (Number(el.taxArrearsOfPart) == 0 && Number(el.taxArrearsOfOil) == 0 && Number(el.taxNotIncluded) == 0) {
+            //   boolShow = 6//存在“含税配件欠票、含税油品欠票、不含税未开”字段为0的对账单
+            // }
+            if (el.owned == 1) {
+              boolShow = 7//存在 已在草稿单的对账单
+              idx = index;
+              applicant = el.applicant;
+            }
+            accountNos += `${el.accountNo};`
+            guestNames += `${el.guestName};`
+            guestIds += `${el.guestId};`
+            statementAmtOwed1 += Number(el.statementAmtOwed);
+          })
+          switch (boolShow) {
+            case 0:
+              if (taxSignAll === 1) {
+                let params = {
+                  accountNos: accountNos
+                }
+                this.$refs.salepopup.parameter = params;
+                this.$refs.salepopup.information = JSON.parse(JSON.stringify(this.reconciliationStatement));
+                this.$refs.salepopup.information.accountNos = accountNos;
+                this.$refs.salepopup.information.guestNames = guestNames;
+                this.$refs.salepopup.information.guestIds = guestIds;
+                this.$refs.salepopup.information.statementAmtOwed = parseFloat(statementAmtOwed1).toFixed(2);
+                this.$refs.salepopup.information.orgName = this.$store.state.user.userShopName;
+                this.$refs.salepopup.information.applicationDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+                this.$refs.salepopup.isOilPart = isOilPartAll;
+                // 申请单号
+                applyNo().then(res => {
+                  if (res.code === 0) {
+                    this.$refs.salepopup.information.applyNo = res.data.applyNo;
+                    this.$refs.salepopup.information.code = res.data.orgCode;
+                    if (this.salepopupList[0].statementType.value == 1) { //1 是配件 2 是油品
+                      this.$refs.salepopup.information.oilsListOrder = ""
+                      this.$refs.salepopup.information.partsListOrder = res.data.partsListOrder;
+                    } else if (this.salepopupList[0].statementType.value == 2) {
+                      this.$refs.salepopup.information.oilsListOrder = res.data.oilsListOrder;
+                      this.$refs.salepopup.information.partsListOrder = ""
+                    }
+                  }
+                });
+                this.$refs.salepopup.accessoriesBillingData1 = []
+                this.$refs.salepopup.accessoriesBillingData2 = []
+                setTimeout(() => {
+                  this.$refs.salepopup.modal1 = true;
+                }, 500);
+              } else {
+                let params = {
+                  accountNos: accountNos
+                }
+                this.$refs.noTax.parameter = params;
+                this.$refs.noTax.information.accountNos = accountNos;
+                this.$refs.noTax.information.guestNames = guestNames;
+                this.$refs.noTax.information.guestIds = guestIds;
+                this.$refs.noTax.information.notAmt = parseFloat(statementAmtOwed1).toFixed(2);
+                setTimeout(() => {
+                  this.$refs.noTax.init();
+                }, 500);
+              }
+              break;
+            case 1:
+              this.$message.error("请确认所选对账单全部为配件类型或者全部为油品类型或者全部不含税！");
+              break;
+            case 2:
+              this.$message.error('存在审核中的对账单，不能开票！');
+              break;
+            case 3:
+              this.$message.error('存在不包含销售出库单据的对账单，不能开票！');
+              break;
+            case 4:
+              this.$message.error(`对账单号${accountNo}剩余未开票配件明细为空，不能申请开票！`);
+              break;
+            case 5:
+              this.$message.error("请确认所选对账单为同一往来单位")
+              break;
+            // case 6:
+            //   this.$message.error("所选对账单存在含税配件欠票、含税油品欠票、不含税未开字段为0的对账单")
+            //   break;
+            case 7:
+              this.$message.error(`第${idx + 1}条对账单在${applicant}的草稿箱已存在,请先删除!`)
+              break;
+          }
+        }else{
+          showLoading("","请稍等一会儿...")
         }
       },
       // 单据合计方式
@@ -1249,7 +1270,7 @@
           orgId: this.model1 == 0 ? "" : this.model1,
           statementStatus: this.Reconciliationtype,
           guestId: this.receiveGuestId,
-          approveUname:this.approveUname,
+          approveUname: this.approveUname,
           accountNo: this.accountNo//对账单号
         };
         for (let key in obj) {
@@ -1270,16 +1291,21 @@
               item.statementStatusName = item.statementStatus.name;
             });
             this.data1 = res.data.content;
-            this.salepopupList=[];
+            this.salepopupList = [];
             hideLoading()
           } else {
             this.data1 = [];
-            this.salepopupList=[];
+            this.salepopupList = [];
             hideLoading()
           }
         }).catch(e => {
           hideLoading()
         });
+        if(this.salepopupList.length>0){
+
+        }else{
+          this.salepopupList=[]
+        }
       },
       // 页码
       changePage(p) {
@@ -1297,7 +1323,7 @@
       },
 
       // 点击总表查询明细
-      morevis({row,rowIndex}) {
+      morevis({row, rowIndex}) {
         this.taxArrearsfalg = false
         this.statementStatusflag = false
         this.hedgingfalg = false
@@ -1345,7 +1371,7 @@
               }
               this.ifRecallWriteOff = !res.data.ifRecallWriteOff
               this.ifRecallHedge = !res.data.ifRecallHedge
-              this.data1[rowIndex].ifInvoiceApply=res.data.ifInvoiceApply
+              this.data1[rowIndex].ifInvoiceApply = res.data.ifInvoiceApply
             }
           }
         )
@@ -1377,11 +1403,11 @@
         };
         this.getRecord(obj);
         this.getdetailsDocuments(obj);
-        this.salepopupList=this.salepopupList.length>0?this.salepopupList:[];
+        this.salepopupList = this.salepopupList.length > 0 ? this.salepopupList : [];
       },
-      distributionSelection({selection,row,rowIndex}) {
+      distributionSelection({selection, row, rowIndex}) {
         // console.log(selection,1111)
-        if(selection.length===1){
+        if (selection.length === 1) {
           this.taxArrearsfalg = false
           this.statementStatusflag = false
           this.hedgingfalg = false
@@ -1429,7 +1455,7 @@
                 }
                 this.ifRecallWriteOff = !res.data.ifRecallWriteOff
                 this.ifRecallHedge = !res.data.ifRecallHedge
-                this.data1[rowIndex].ifInvoiceApply=res.data.ifInvoiceApply
+                this.data1[rowIndex].ifInvoiceApply = res.data.ifInvoiceApply
               }
             }
           )
@@ -1462,39 +1488,17 @@
           this.getRecord(obj);
           this.getdetailsDocuments(obj);
           this.salepopupList = selection;
-        }else if(selection.length>1){
+        } else if (selection.length > 1) {
           this.salepopupList = selection;
-          let ids=[];
-          this.salepopupList.map(el=>{
-            let data={id:el.id}
-            ids.push(data)
-          })
-          this.salepopupBoolean=true;
-          setCanwithdrawList(ids).then(
-            res => {
-              if (res.code === 0) {
-                this.salepopupList.map(el=>{
-                  res.data.map(el2=>{
-                    if(el.id==el2.id){
-                      el.ifInvoiceApply=el2.ifInvoiceApply
-                    }
-                  })
-                })
-                this.salepopupBoolean=false;
-              }else{
-                this.salepopupBoolean=false;
-              }
-            }
-          )
         }
       },
       // 查看对账单
       viewStatement() {
-        if(this.salepopupList.length>1){
+        if (this.salepopupList.length > 1) {
           return this.$message.error("请选择一条数据")
         }
-        if(this.salepopupList.length===1){
-          this.reconciliationStatement=this.salepopupList[0]
+        if (this.salepopupList.length === 1) {
+          this.reconciliationStatement = this.salepopupList[0]
         }
         if (Object.keys(this.reconciliationStatement).length !== 0) {
           this.$refs.reconciliation.accountModal = true;
@@ -1515,13 +1519,13 @@
       },
       // 对账单收付款结算
       statementSettlement(type) {
-        if(this.salepopupList.length>1){
+        if (this.salepopupList.length > 1) {
           return this.$message.error("请选择一条数据")
         }
-        if(this.salepopupList.length===1){
-          this.reconciliationStatement=this.salepopupList[0]
+        if (this.salepopupList.length === 1) {
+          this.reconciliationStatement = this.salepopupList[0]
         }
-        this.stateType=type;
+        this.stateType = type;
         if (Object.keys(this.reconciliationStatement).length !== 0) {
           if (
             this.reconciliationStatement.pass &&
@@ -1614,7 +1618,7 @@
               orgId: this.model1,
               statementStatus: this.Reconciliationtype,
               guestId: this.receiveGuestId,
-              approveUname:this.approveUname,
+              approveUname: this.approveUname,
               pagesize: this.pagetotal,
               accountNo: this.accountNo
             };

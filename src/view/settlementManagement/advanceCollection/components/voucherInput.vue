@@ -289,6 +289,7 @@ import {
   queryCreditLike,
   getStaffList,
   getDataDictionaryType,
+  getGroupBy,
   getcompany,
   kmType,
   saveTreeDetailItem
@@ -398,7 +399,7 @@ export default {
         if(this.AssistTableDataOther.length==0){
           this.OtherClickTable();
         }
-        
+
         this.fundGetList();
 
         if(this.categoryArr.length==0){
@@ -419,7 +420,8 @@ export default {
         //   this.SupperliergetList(); //供应商初始化
         // }
         if(this.list.length==0){
-          this.getListCompany(); // 公司
+          // this.getListCompany(); // 公司
+          this.getCompanyList()
         }
       }
     },
@@ -485,6 +487,48 @@ export default {
       data.shopId = this.$store.state.user.userData.shopId;
       let res = await getcompany(data);
       if (res.code === 0) {
+        let list = [];
+        res.data.childs.forEach(item => {
+          if (item.childs.length > 0) {
+            list.push({
+              value: item.id,
+              label: item.name,
+              children: item.childs,
+              groupCode: item.groupCode
+            });
+          } else {
+            list.push({
+              value: item.id,
+              label: item.name,
+              children: [],
+              groupCode: item.groupCode
+            });
+          }
+        });
+        list.forEach(item => {
+          if (item.children.length > 0) {
+            item.children.map(val => {
+              val.value = val.id;
+              val.label = val.name;
+              if (val.childs.length > 0) {
+                val.children = val.childs;
+                val.children.map(v => {
+                  v.value = v.id;
+                  v.label = v.name;
+                });
+              } else {
+                val.children = [];
+              }
+            });
+          }
+        });
+        this.list = list;
+      }
+    },
+    //部门”下拉选择框，下拉选项取“权限管理-组织管理”页面，“所属门店”字段为当前门店的最末级组织
+    async getCompanyList(){
+      let res= await getGroupBy()
+      if(res.code===0){
         let list = [];
         res.data.childs.forEach(item => {
           if (item.childs.length > 0) {

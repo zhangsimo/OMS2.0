@@ -117,7 +117,7 @@
                   :data="list"
                   v-model="groundIds"
                   placeholder="选择部门"
-                  style="width: 250px"
+                  style="width: 250px;"
                   @on-change="ListChange"
                 ></Cascader>
               </FormItem>
@@ -286,6 +286,7 @@ import {
   queryCreditLike,
   queryAllSupplier,
   getcompany,
+  getGroupBy,
   getStaffList,
   getDataDictionaryType,
   kmType,
@@ -452,6 +453,48 @@ export default {
             });
           } else {
             list.push({ value: item.id, label: item.name, children: [] });
+          }
+        });
+        list.forEach(item => {
+          if (item.children.length > 0) {
+            item.children.map(val => {
+              val.value = val.id;
+              val.label = val.name;
+              if (val.childs.length > 0) {
+                val.children = val.childs;
+                val.children.map(v => {
+                  v.value = v.id;
+                  v.label = v.name;
+                });
+              } else {
+                val.children = [];
+              }
+            });
+          }
+        });
+        this.list = list;
+      }
+    },
+    //部门”下拉选择框，下拉选项取“权限管理-组织管理”页面，“所属门店”字段为当前门店的最末级组织
+    async getCompanyList(){
+      let res= await getGroupBy()
+      if(res.code===0){
+        let list = [];
+        res.data.childs.forEach(item => {
+          if (item.childs.length > 0) {
+            list.push({
+              value: item.id,
+              label: item.name,
+              children: item.childs,
+              groupCode: item.groupCode
+            });
+          } else {
+            list.push({
+              value: item.id,
+              label: item.name,
+              children: [],
+              groupCode: item.groupCode
+            });
           }
         });
         list.forEach(item => {
@@ -698,7 +741,8 @@ export default {
     showOrhideModel(v){
       if(v){
         if(this.list.length==0){
-          this.getListCompany();
+          // this.getListCompany();
+          this.getCompanyList()
         }
         if(this.AssistTableDataKeHu.length==0){
           this.ClientgetList();
@@ -730,13 +774,13 @@ export default {
             break
           case '3':
             this.TabsChoose = 'department'
-            break 
+            break
           case '4':
             this.TabsChoose = 'personage'
-            break 
+            break
           default:
             this.TabsChoose = 'Other'
-            break          
+            break
         }
 
       }
