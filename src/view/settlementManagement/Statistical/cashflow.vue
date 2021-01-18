@@ -83,8 +83,8 @@
       </div>
     </section>
 
-    <Tabs type="card" class="mt20">
-        <TabPane label="现金流量表">
+    <Tabs type="card" class="mt20" v-model="currentTab">
+        <TabPane label="现金流量表" name="cash">
           <div class="warp_table">
             <vxe-table
               border
@@ -134,7 +134,7 @@
             </vxe-table>
           </div>
         </TabPane>
-        <TabPane label="账户余额表">
+        <TabPane label="账户余额表" name="account">
           <div >
             <vxe-table
               border
@@ -144,19 +144,21 @@
               height="600"
               size="small"
               :data="accountData"
+              show-footer
+              :footer-method="footerMethod"
             >
               <vxe-table-column title="序号" type="seq" width="60"></vxe-table-column>
-              <vxe-table-column title="所属区域" field="rowNo"></vxe-table-column>
-              <vxe-table-column title="所属店号" field="rowNo"></vxe-table-column>
-              <vxe-table-column title="所属门店" field="rowNo"></vxe-table-column>
-              <vxe-table-column title="账户" field="rowNo"></vxe-table-column>
-              <vxe-table-column title="账号" field="rowNo"></vxe-table-column>
-              <vxe-table-column title="开户行" field="rowNo"></vxe-table-column>
-              <vxe-table-column title="对应科目" field="rowNo"></vxe-table-column>
-              <vxe-table-column title="期初余额" field="rowNo"></vxe-table-column>
-              <vxe-table-column title="累计收款" field="rowNo"></vxe-table-column>
-              <vxe-table-column title="累计付款" field="rowNo"></vxe-table-column>
-              <vxe-table-column title="期末余额" field="rowNo"></vxe-table-column>
+              <vxe-table-column title="所属区域" field="area"></vxe-table-column>
+              <vxe-table-column title="所属店号" field="shopCode"></vxe-table-column>
+              <vxe-table-column title="所属门店" field="shopName"></vxe-table-column>
+              <vxe-table-column title="账户" field="accountName"></vxe-table-column>
+              <vxe-table-column title="账号" field="accountCode"></vxe-table-column>
+              <vxe-table-column title="开户行" field="bankName"></vxe-table-column>
+              <vxe-table-column title="对应科目" field="mateAccountName"></vxe-table-column>
+              <vxe-table-column title="期初余额" field="balanceMoney"></vxe-table-column>
+              <vxe-table-column title="累计收款" field="inComeMoney"></vxe-table-column>
+              <vxe-table-column title="累计付款" field="paidMoney"></vxe-table-column>
+              <vxe-table-column title="期末余额" field="endMoney"></vxe-table-column>
             </vxe-table>
             <div class="forShow">
               <Page
@@ -167,8 +169,8 @@
                 show-sizer
                 show-total
                 show-elevator 
-                :on-change="changeNum"
-                :on-page-size-change="changeSize"
+                @on-change="changeNum"
+                @on-page-size-change="changeSize"
               />
             </div>
           </div>
@@ -213,12 +215,17 @@ export default {
       BranchstoreId: this.$store.state.user.userData.currentCompany.id, // 门店id
       Branchstore: [], // 门店
       page: {
-        pageNum: 0,
+        pageNum: 1,
         pageSize: 10,
         total: 0,
         pageSizeO: [10,20,50,100]
       },//账户余额表分页对象
       accountData: [],//账户余额表数据
+      currentTab: 'cash',
+      balanceMoneyTotal: 0,
+      endMoneyTotal: 0,
+      incomeMoneyTotal: 0,
+      paidMoneyTotal: 0,
     };
   },
   async mounted() {
@@ -239,13 +246,13 @@ export default {
     //分页页码改变
     changeNum(num){     
       this.page.pageNum = num
-
+      this.queryAccount()
     },
     //分页每页条数改变
     changeSize(size){
       this.page.pageNum = 1
       this.page.pageSize = size
-
+      this.queryAccount()
     },
     mergeRowMethod({ row, $rowIndex, column, data }) {
       const fields = ["maxterm"];
@@ -361,8 +368,16 @@ export default {
       }
       location.href = api.getPayablesExportsix(params)
     },
+    query(){
+      if(this.currentTab === 'cash'){
+        this.queryCash()
+      }else{
+        this.page.pageNum = 1
+        this.queryAccount()
+      }
+    },
     // 查询
-    async query() {
+    async queryCash() {
       let params = {
         areaId: this.areaId,
         shopNumber: this.BranchstoreId,
@@ -398,7 +413,8 @@ export default {
       let params = {
         areaId: this.areaId,
         shopNumber: this.BranchstoreId,
-        size: 10000
+        page: this.page.pageNum - 1,
+        size: this.page.pageSize,
       };
       if (this.dates.length === 2 && this.dates[0]) {
         params.startTime =
@@ -406,23 +422,61 @@ export default {
         params.endTime =
           moment(this.dates[1]).format("YYYY-MM-DD");
       }
-      params.page = 0;
       for (let key in params) {
         if (!params[key]) {
           Reflect.deleteProperty(params, key);
         }
       }
+     
       try {
         showLoading(".loadingClass", "数据加载中，请勿操作")
-        let res = await api.findListPageAllCashFlowChange(params);
+        let res = await api.findAccountBalanceList(params);
         if (res.code == 0) {
-          this.tableData = res.data.flowList;
-          this.headData = res.data.moneyList
+          this.accountData = res.data.voList
+          this.page.total = res.data.totalElements
+          this.balanceMoneyTotal = res.data.balanceMoneyTotal
+          this.endMoneyTotal = res.data.endMoneyTotal
+          this.incomeMoneyTotal = res.data.incomeMoneyTotal
+          this.paidMoneyTotal = res.data.paidMoneyTotal
         }
         hideLoading()
       } catch (error) {
         hideLoading()
       }
+    },
+    //表尾合计
+    footerMethod({columns, data}) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return "合计";
+          }
+          if (columnIndex === 8) {
+            return this.balanceMoneyTotal;
+          }
+          if (columnIndex === 9) {
+            return this.incomeMoneyTotal;
+          }
+          if (columnIndex === 10) {
+            return this.paidMoneyTotal;
+          }
+          if (columnIndex === 11) {
+            return this.endMoneyTotal;
+          }
+          return null;
+        }),
+        // columns.map((column, columnIndex) => {
+        //   if (columnIndex === 0) {
+        //     return "总合计";
+        //   }
+        //   for (let key in this.total) {
+        //     if (key == column.property) {
+        //       return this.total[key]
+        //     }
+        //   }
+        //   return null;
+        // })
+      ];
     }
   }
 };

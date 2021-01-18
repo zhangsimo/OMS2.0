@@ -92,3 +92,12 @@ export function findListPageAllCashFlowChange(params) {
     params,
   });
 }
+// 账户余额表 查询
+export function findAccountBalanceList(params) {
+  return axios.request({
+    url: `${api.omsSettle}/omsFinanceAccountCashFlow/findAccountBalanceList`,
+    method: "get",
+    params,
+    
+  });
+}
