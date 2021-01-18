@@ -283,6 +283,7 @@
         this.newGroup.id = null;
         this.newGroup.pId = data.id;
         this.newGroup.name = null;
+        this.newGroup.orgId=null;
         this.title = "新增组织";
         this.superior = this.groupsList
         this.modal = true;
@@ -446,6 +447,7 @@
         this.newGroup.id = null;
         this.newGroup.pId = null;
         this.newGroup.name = null;
+        this.newGroup.orgId=null;
         this.title = "新增组织";
         this.$refs.child.resetFields();
         this.superior = []
@@ -457,6 +459,7 @@
         this.newGroup.pId = pid;
         this.newGroup.id = data.id;
         this.newGroup.name = data.name;
+        this.newGroup.orgId=data.orgId;
         if (arr.length == 0) {
           this.superior = [this.groupsList[0]]
         } else {

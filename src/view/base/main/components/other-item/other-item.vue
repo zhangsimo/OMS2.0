@@ -193,13 +193,9 @@
               this.$nextTick(() => {
                 this.$router.go(0);
               })
-
             })
-
           }
         }
-
-
       },
       //去首页
       goHome() {
