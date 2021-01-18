@@ -83,54 +83,97 @@
       </div>
     </section>
 
-    <div class="mt15 warp_table">
-      <vxe-table
-        border
-        resizable
-        auto-resize
-        align="center"
-        height="600"
-        :span-method="mergeRowMethod"
-        :data="tableData"
-      >
-        <vxe-table-column title="《现金流量表》">
-          <vxe-table-column title="项目信息">
-            <vxe-table-column title="大项" field="maxterm"></vxe-table-column>
-            <vxe-table-column
-              title="现金流科目"
-              field="cashAccount"
-            ></vxe-table-column>
-            <vxe-table-column title="行次" field="rowNo"></vxe-table-column>
-            <vxe-table-column
-              title="具体项目类别"
-              field="accountType"
-            ></vxe-table-column>
-            <vxe-table-column
-              title="凭证对应会计科目"
-              field="voucherAccount"
-            ></vxe-table-column>
-          </vxe-table-column>
-          <vxe-table-column title="金额信息">
-            <vxe-table-column title="现金" field="cashMoney"></vxe-table-column>
-            <vxe-table-column
-              title="银行卡"
-              field="cartoonMoney"
-            ></vxe-table-column>
-            <vxe-table-column
-              title="银行账户"
-              field="accountMoney"
-            ></vxe-table-column>
-            <vxe-table-column
-              title="资金合计"
-              field="totalMoney"
-            ></vxe-table-column>
-          </vxe-table-column>
-          <vxe-table-column title="其他信息">
-            <vxe-table-column title="备注" field="remarks"></vxe-table-column>
-          </vxe-table-column>
-        </vxe-table-column>
-      </vxe-table>
-    </div>
+    <Tabs type="card" class="mt20">
+        <TabPane label="现金流量表">
+          <div class="warp_table">
+            <vxe-table
+              border
+              resizable
+              auto-resize
+              align="center"
+              height="600"
+              :span-method="mergeRowMethod"
+              :data="tableData"
+            >
+              <vxe-table-column title="《现金流量表》">
+                <vxe-table-column title="项目信息">
+                  <vxe-table-column title="大项" field="maxterm"></vxe-table-column>
+                  <vxe-table-column
+                    title="现金流科目"
+                    field="cashAccount"
+                  ></vxe-table-column>
+                  <vxe-table-column title="行次" field="rowNo"></vxe-table-column>
+                  <vxe-table-column
+                    title="具体项目类别"
+                    field="accountType"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    title="凭证对应会计科目"
+                    field="voucherAccount"
+                  ></vxe-table-column>
+                </vxe-table-column>
+                <vxe-table-column title="金额信息">
+                  <vxe-table-column title="现金" field="cashMoney"></vxe-table-column>
+                  <vxe-table-column
+                    title="银行卡"
+                    field="cartoonMoney"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    title="银行账户"
+                    field="accountMoney"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    title="资金合计"
+                    field="totalMoney"
+                  ></vxe-table-column>
+                </vxe-table-column>
+                <vxe-table-column title="其他信息">
+                  <vxe-table-column title="备注" field="remarks"></vxe-table-column>
+                </vxe-table-column>
+              </vxe-table-column>
+            </vxe-table>
+          </div>
+        </TabPane>
+        <TabPane label="账户余额表">
+          <div >
+            <vxe-table
+              border
+              resizable
+              auto-resize
+              align="center"
+              height="600"
+              size="small"
+              :data="accountData"
+            >
+              <vxe-table-column title="序号" type="seq" width="60"></vxe-table-column>
+              <vxe-table-column title="所属区域" field="rowNo"></vxe-table-column>
+              <vxe-table-column title="所属店号" field="rowNo"></vxe-table-column>
+              <vxe-table-column title="所属门店" field="rowNo"></vxe-table-column>
+              <vxe-table-column title="账户" field="rowNo"></vxe-table-column>
+              <vxe-table-column title="账号" field="rowNo"></vxe-table-column>
+              <vxe-table-column title="开户行" field="rowNo"></vxe-table-column>
+              <vxe-table-column title="对应科目" field="rowNo"></vxe-table-column>
+              <vxe-table-column title="期初余额" field="rowNo"></vxe-table-column>
+              <vxe-table-column title="累计收款" field="rowNo"></vxe-table-column>
+              <vxe-table-column title="累计付款" field="rowNo"></vxe-table-column>
+              <vxe-table-column title="期末余额" field="rowNo"></vxe-table-column>
+            </vxe-table>
+            <div class="forShow">
+              <Page
+                :total="page.total"
+                :current="page.pageNum"
+                :page-size="page.pageSize"
+                :page-size-opts="page.pageSizeO"
+                show-sizer
+                show-total
+                show-elevator 
+                :on-change="changeNum"
+                :on-page-size-change="changeSize"
+              />
+            </div>
+          </div>
+        </TabPane>
+    </Tabs>
   </div>
 </template>
 
@@ -168,7 +211,14 @@ export default {
       areaId: "", // 区域id
       areas: [], // 区域
       BranchstoreId: this.$store.state.user.userData.currentCompany.id, // 门店id
-      Branchstore: [] // 门店
+      Branchstore: [], // 门店
+      page: {
+        pageNum: 0,
+        pageSize: 10,
+        total: 0,
+        pageSizeO: [10,20,50,100]
+      },//账户余额表分页对象
+      accountData: [],//账户余额表数据
     };
   },
   async mounted() {
@@ -186,6 +236,17 @@ export default {
     }
   },
   methods: {
+    //分页页码改变
+    changeNum(num){     
+      this.page.pageNum = num
+
+    },
+    //分页每页条数改变
+    changeSize(size){
+      this.page.pageNum = 1
+      this.page.pageSize = size
+
+    },
     mergeRowMethod({ row, $rowIndex, column, data }) {
       const fields = ["maxterm"];
       const cellValue = XEUtils.get(row, column.property);
@@ -330,6 +391,38 @@ export default {
       } catch (error) {
         hideLoading()
       }
+    },
+
+    //账户余额表的数据查询
+    async queryAccount() {
+      let params = {
+        areaId: this.areaId,
+        shopNumber: this.BranchstoreId,
+        size: 10000
+      };
+      if (this.dates.length === 2 && this.dates[0]) {
+        params.startTime =
+          moment(this.dates[0]).format("YYYY-MM-DD");
+        params.endTime =
+          moment(this.dates[1]).format("YYYY-MM-DD");
+      }
+      params.page = 0;
+      for (let key in params) {
+        if (!params[key]) {
+          Reflect.deleteProperty(params, key);
+        }
+      }
+      try {
+        showLoading(".loadingClass", "数据加载中，请勿操作")
+        let res = await api.findListPageAllCashFlowChange(params);
+        if (res.code == 0) {
+          this.tableData = res.data.flowList;
+          this.headData = res.data.moneyList
+        }
+        hideLoading()
+      } catch (error) {
+        hideLoading()
+      }
     }
   }
 };
@@ -372,5 +465,10 @@ export default {
 .head span:nth-of-type(odd) {
   background-color: skyblue;
   color: #fff;
+}
+.forShow{
+  margin-top: 10px;
+  margin-bottom: 200px;
+  float: right;
 }
 </style>
