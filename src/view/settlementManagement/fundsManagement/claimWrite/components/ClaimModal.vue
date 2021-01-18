@@ -204,7 +204,6 @@ export default {
         claimMoney: this.tableData[0].thisClaimedAmt,
         remark: this.remark
       }
-      console.log(this.auxiliaryObj)
       if(Object.keys(this.auxiliaryObj).length != 0){
         data.auxiliaryTypeCode = this.auxiliaryObj.auxiliaryTypeCode == 2?1:this.auxiliaryObj.auxiliaryTypeCode //辅助核算选中哪一个
         if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
