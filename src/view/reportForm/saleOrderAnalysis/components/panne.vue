@@ -261,7 +261,7 @@
       }
       var arr = await creat("", this.$store);
       this.search.orgid = arr[1];
-      this.query();
+      // this.query();
       if (this.typepf.length == 0) {
         this.treeInit();
       }
