@@ -129,7 +129,7 @@
       var arr = await creat("", this.$store);
       this.search.orgid = arr[1];
       this.getWares(this.search.orgid)
-      this.query()
+      // this.query()
     },
     methods: {
       //获取仓库

@@ -183,7 +183,6 @@ export default {
     },
     // 快速日期查询
     async getDataQuick(v) {
-      console.log(v)
       this.search.auditDate = v;
       if(this.selectShopList){
         var arr = await creat("", this.$store);
