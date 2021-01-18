@@ -866,6 +866,7 @@
         this.$refs.child.handleSubmit(async () => {
           let data = {};
           data = this.clientList;
+          data.shortName = this.clientList.fullName
           data.isNeedPack ? (data.isNeedPack = 1) : (data.isNeedPack = 0);
           data.isSupplier ? (data.isSupplier = 1) : (data.isSupplier = 0);
           data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
