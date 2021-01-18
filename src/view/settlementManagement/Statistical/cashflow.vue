@@ -155,10 +155,10 @@
               <vxe-table-column title="账号" field="accountCode"></vxe-table-column>
               <vxe-table-column title="开户行" field="bankName"></vxe-table-column>
               <vxe-table-column title="对应科目" field="mateAccountName"></vxe-table-column>
-              <vxe-table-column title="期初余额" field="balanceMoney"></vxe-table-column>
+              <vxe-table-column title="期初余额" field="initMoney"></vxe-table-column>
               <vxe-table-column title="累计收款" field="inComeMoney"></vxe-table-column>
               <vxe-table-column title="累计付款" field="paidMoney"></vxe-table-column>
-              <vxe-table-column title="期末余额" field="endMoney"></vxe-table-column>
+              <vxe-table-column title="期末余额" field="balanceMoney"></vxe-table-column>
             </vxe-table>
             <div class="forShow">
               <Page
@@ -223,7 +223,7 @@ export default {
       accountData: [],//账户余额表数据
       currentTab: 'cash',
       balanceMoneyTotal: 0,
-      endMoneyTotal: 0,
+      initMoneyTotal: 0,
       incomeMoneyTotal: 0,
       paidMoneyTotal: 0,
     };
@@ -435,7 +435,7 @@ export default {
           this.accountData = res.data.voList
           this.page.total = res.data.totalElements
           this.balanceMoneyTotal = res.data.balanceMoneyTotal
-          this.endMoneyTotal = res.data.endMoneyTotal
+          this.initMoneyTotal = res.data.initMoneyTotal
           this.incomeMoneyTotal = res.data.incomeMoneyTotal
           this.paidMoneyTotal = res.data.paidMoneyTotal
         }
@@ -452,7 +452,7 @@ export default {
             return "合计";
           }
           if (columnIndex === 8) {
-            return this.balanceMoneyTotal;
+            return this.initMoneyTotal;
           }
           if (columnIndex === 9) {
             return this.incomeMoneyTotal;
@@ -461,7 +461,7 @@ export default {
             return this.paidMoneyTotal;
           }
           if (columnIndex === 11) {
-            return this.endMoneyTotal;
+            return this.balanceMoneyTotal;
           }
           return null;
         }),
