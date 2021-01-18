@@ -204,6 +204,7 @@ export default {
         claimMoney: this.tableData[0].thisClaimedAmt,
         remark: this.remark
       }
+      console.log(this.auxiliaryObj)
       if(Object.keys(this.auxiliaryObj).length != 0){
         data.auxiliaryTypeCode = this.auxiliaryObj.auxiliaryTypeCode == 2?1:this.auxiliaryObj.auxiliaryTypeCode //辅助核算选中哪一个
         if(data.auxiliaryTypeCode=="1" || data.auxiliaryTypeCode=="2" || data.auxiliaryTypeCode=="3" || data.auxiliaryTypeCode=="4"){
@@ -211,8 +212,13 @@ export default {
         }else{
           data.isAuxiliaryAccounting=1
         }
-        data.auxiliaryName=this.auxiliaryObj.auxiliaryName //辅助核算名称
-        data.auxiliaryCode=this.auxiliaryObj.auxiliaryCode //辅助核算项目编码
+        if(this.auxiliaryObj.auxiliaryTypeCode === '3'){
+          data.auxiliaryName=this.auxiliaryObj.fullName //辅助核算名称
+          data.auxiliaryCode=this.auxiliaryObj.code //辅助核算项目编码
+        }else{
+          data.auxiliaryName=this.auxiliaryObj.auxiliaryName //辅助核算名称
+          data.auxiliaryCode=this.auxiliaryObj.auxiliaryCode //辅助核算项目编码
+        }
         data.paymentTypeName = this.auxiliaryObj.paymentName
         data.paymentTypeCode = this.auxiliaryObj.paymentCode
         if(this.auxiliaryObj.hasOwnProperty("id")){
@@ -221,11 +227,11 @@ export default {
             guestSourceId:this.auxiliaryObj.id||""
           }
         }else {
-          this.$refs.voucherInput.subjectModelShowassist = true;
-          setTimeout(() =>{
-            this.$Message.warning("请选择辅助核算");
-          },500)
-          return;
+          // this.$refs.voucherInput.subjectModelShowassist = true;
+          // setTimeout(() =>{
+          //   this.$Message.warning("请选择辅助核算");
+          // },500)
+          // return;
         }
       }
       try {
