@@ -1,7 +1,7 @@
 <template>
   <Form :rules='rules' :label-width="80" ref='form' :model='data'>
     <FormItem label='上级组织:' prop="pId">
-      <Select v-model="data.pId" :disabled="data.id==null">
+      <Select v-model="data.pId" :disabled="data.id==null||data.pId=='0'">
         <Option v-for="item in parentList" :value="item.id" :key="item.id">{{ item.name }}</Option>
       </Select>
     </FormItem>

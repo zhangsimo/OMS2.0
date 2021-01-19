@@ -283,7 +283,7 @@
         this.newGroup.id = null;
         this.newGroup.pId = data.id;
         this.newGroup.name = null;
-        this.newGroup.orgId=null;
+        this.newGroup.orgId = null;
         this.title = "新增组织";
         this.superior = this.groupsList
         this.modal = true;
@@ -329,22 +329,18 @@
           h("Icon", {
             props: {
               size: 16,
-              type: data.pId=="0"?"":"edit"
+              type: "edit"
             },
             attrs: {
-              title: data.pId=="0"?"":"修改"
+              title: "修改"
             },
-            class: data.pId=="0"?"":"iconfont iconbianjixiugaiicon  icons pointer ml15",
+            class: "iconfont iconbianjixiugaiicon  icons pointer ml15",
             on: {
               click: () => {
-                if(data.pId!="0"){
-                  let pnode = root[node]==undefined?undefined:root[node.parent].node;
-                  let pname = pnode==undefined?data.name:pnode.name;
-                  let pid = pnode==undefined?data.pId:pnode.id;
-                  this.editClick(pname, pid, data);
-                }else{
-                  return
-                }
+                let pnode = root[node] == undefined ? undefined : root[node.parent].node;
+                let pname = pnode == undefined ? data.name : pnode.name;
+                let pid = pnode == undefined ? data.pId : pnode.id;
+                this.editClick(pname, pid, data);
               }
             }
           }),
@@ -422,7 +418,7 @@
                 fontSize: "10px",
                 marginTop: "10px"
               }
-            }, `所属门店:${data.orgName==null?'':data.orgName}`)
+            }, `所属门店:${data.orgName == null ? '' : data.orgName}`)
           ]
         );
       },
@@ -451,7 +447,7 @@
         this.newGroup.id = null;
         this.newGroup.pId = null;
         this.newGroup.name = null;
-        this.newGroup.orgId=null;
+        this.newGroup.orgId = null;
         this.title = "新增组织";
         this.$refs.child.resetFields();
         this.superior = []
@@ -461,11 +457,14 @@
         this.title = "修改组织";
         // this.parentName = pname;
         this.newGroup.pId = pid;
-        this.newGroup.id = data.id;
+        this.newGroup.id = data.pId=="0"?data.pId:data.id;
         this.newGroup.name = data.name;
-        this.newGroup.orgId=data.orgId;
+        this.newGroup.orgId = data.orgId;
         if (arr.length == 0) {
           this.superior = [this.groupsList[0]]
+          if(data.pId=="0"){
+            this.superior[0].id="0"
+          }
         } else {
           this.superior = this.groupsList.filter(el => el.pId == arr[0].pId)
         }
