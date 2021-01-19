@@ -329,18 +329,22 @@
           h("Icon", {
             props: {
               size: 16,
-              type: "edit"
+              type: data.pId=="0"?"":"edit"
             },
             attrs: {
-              title: "修改"
+              title: data.pId=="0"?"":"修改"
             },
-            class: "iconfont iconbianjixiugaiicon  icons pointer ml15",
+            class: data.pId=="0"?"":"iconfont iconbianjixiugaiicon  icons pointer ml15",
             on: {
               click: () => {
-                let pnode = root[node]==undefined?undefined:root[node.parent].node;
-                let pname = pnode==undefined?data.name:pnode.name;
-                let pid = pnode==undefined?data.pId:pnode.id;
-                this.editClick(pname, pid, data);
+                if(data.pId!="0"){
+                  let pnode = root[node]==undefined?undefined:root[node.parent].node;
+                  let pname = pnode==undefined?data.name:pnode.name;
+                  let pid = pnode==undefined?data.pId:pnode.id;
+                  this.editClick(pname, pid, data);
+                }else{
+                  return
+                }
               }
             }
           }),
