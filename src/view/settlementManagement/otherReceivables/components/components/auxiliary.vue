@@ -789,10 +789,12 @@ export default {
       if (selectedData.length == 1) {
         this.AssistAccounting.auxiliaryTypeCode = '3'
         this.AssistAccounting.fullName = selectedData[0].label;
+        this.AssistAccounting.shortName = selectedData[0].label;
         this.AssistAccounting.code = selectedData[0].value;
         this.auxiliaryTypeCode = "3";
       } else {
         this.AssistAccounting.fullName = selectedData[selectedData.length - 1].name;
+        this.AssistAccounting.shortName = selectedData[selectedData.length - 1].name;
         this.AssistAccounting.code = selectedData[selectedData.length - 1].value;
         this.AssistAccounting.auxiliaryTypeCode = '3'
         this.auxiliaryTypeCode = "3";
