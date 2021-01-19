@@ -185,6 +185,15 @@ export function getReconciliationNo(params) {
   })
 }
 
+// 月结对账
+export function getMonthReconciliationTopTable(params) {
+  return axios.request({
+    url: `${api.omsSettle}/accounts/receivable/findReconciliationNo`,
+    method: 'get',
+    params
+  })
+}
+
 // 月结对账选中结算
 export function getSettlement(data) {
   return axios.request({

@@ -143,6 +143,7 @@
               border
               :columns="columns1"
               :data="data1"
+              :loading="loading1"
               size="small"
               class="mt10"
               max-height="400"
@@ -162,6 +163,7 @@
               border
               :columns="columns2"
               :data="data2"
+              :loading="loading2"
               class="mt10"
               size="small"
               max-height="400"
@@ -1984,7 +1986,11 @@
         copyData: [],
         copyData1: [],
         copyData2: [],
-        selectBoxList: []//应收应付 数组 勾选
+        selectBoxList: [],//应收应付 数组 勾选
+        //销售清单loading
+        loading1:false,
+        //采购清单loading
+        loading2:false
       };
     },
     computed: {
@@ -2204,14 +2210,14 @@
         this.data1Loading = true;
         this.data = [];
         this.copyData = [];
-        this.pageObj.total = 0;
-        this.pageObj.num = 1;
+        obj.page = this.pageObj.num-1;
+        obj.size = this.pageObj.size;
         showLoading(".loadingClass", "数据加载中，请勿操作")
         getreceivable(obj).then(res => {
           this.data1Loading = false;
           if (res.data.length !== 0) {
             //去除 已对账未收金额和已对账未付金额 同时为0
-            let arrData = (res.data || []);
+            let arrData = (res.data.content || []);
             arrData.map((item, index) => {
               item.num = index + 1;
               switch (item.belongSystem) {
@@ -2226,10 +2232,11 @@
                   break;
               }
             });
-            // this.data = arrData;
-            this.copyData = arrData
-            this.pageObj.total = arrData.length;
-            this.data = this.changePageList(this.pageObj.num, this.pageObj.size, this.copyData);
+            this.data = arrData;
+            this.pageObj.total = res.data.totalElements;
+            // this.copyData = arrData
+            // this.pageObj.total = arrData.length;
+            // this.data = this.changePageList(this.pageObj.num, this.pageObj.size, this.copyData);
 
           }
           hideLoading()
@@ -2237,20 +2244,25 @@
           hideLoading()
         });
       },
+      //上列表分页
       pageChange({type, currentPage, pageSize, $event}) {
         this.pageObj.num = currentPage;
         this.pageObj.size = pageSize;
-        this.data = this.changePageList(currentPage, pageSize, this.copyData);
+        // this.data = this.changePageList(currentPage, pageSize, this.copyData);
+        this.query();
       },
+      //销售清单分页
       pageChange1({type, currentPage, pageSize, $event}) {
         this.pageObj1.num = currentPage;
         this.pageObj1.size = pageSize;
-        this.data1 = this.changePageList(currentPage, pageSize, this.copyData1);
+        // this.data1 = this.changePageList(currentPage, pageSize, this.copyData1);
+        this.getDetailed(this.selectTabJson, this.value,1);
       },
+      //采购清单分页
       pageChange2({type, currentPage, pageSize, $event}) {
         this.pageObj2.num = currentPage;
         this.pageObj2.size = pageSize;
-        this.data2 = this.changePageList(currentPage, pageSize, this.copyData2);
+        this.getDetailed(this.selectTabJson, this.value,-1);
       },
       changePageList(currentPage, pageSize, sourceData) {
         let firstNum = pageSize * (currentPage - 1);
@@ -2259,56 +2271,77 @@
         return arrData || [];
       },
       // 销售/采购接口
-      getDetailed(data, obj) {
-        this.pageObj1.total = 0;
-        this.pageObj1.num = 1;
-        this.pageObj2.total = 0;
-        this.pageObj2.num = 1;
-        getSalelist({
-          tenantId: data.tenantId,
-          orgId: data.orgId,
-          startDate: obj[0]
-            ? moment(obj[0]).format("YYYY-MM-DD") + " 00:00:00"
-            : "",
-          endDate: obj[1]
-            ? moment(obj[1]).format("YYYY-MM-DD") + " 23:59:59"
-            : "",
-          guestId: data.guestId,
-          accountType:this.accountType
-        }).then(res => {
-          if (res.data.one) {
+      getDetailed(data, obj,type) {
+        if(type==1){
+          this.loading1 = true;
+          getSalelist({
+            tenantId: data.tenantId,
+            orgId: data.orgId,
+            type:1,
+            startDate: obj[0]
+              ? moment(obj[0]).format("YYYY-MM-DD") + " 00:00:00"
+              : "",
+            endDate: obj[1]
+              ? moment(obj[1]).format("YYYY-MM-DD") + " 23:59:59"
+              : "",
+            guestId: data.guestId,
+            accountType:this.accountType,
+            page:this.pageObj1.num-1,
+            size:this.pageObj1.size
+          }).then(res => {
+            this.loading1 = false;
+            if (res.code==0) {
 
-            // let arrData = res.data.one.filter(item => item.noCharOffAmt != 0 || item.noAccountAmt != 0);
-            let arrData = res.data.one;
+              // let arrData = res.data.one.filter(item => item.noCharOffAmt != 0 || item.noAccountAmt != 0);
+              let arrData = res.data.content||[];
 
-            arrData.map((item, index) => {
-              item.num = index + 1;
-              item.guestTypeName = item.guestType.name;
-              item.serviceTypeName = item.serviceType.name;
-              item.speciesName = item.species.name;
-            });
-            this.copyData1 = arrData;
-            this.pageObj1.total = arrData.length;
-            this.data1 = this.changePageList(this.pageObj1.num, this.pageObj1.size, this.copyData1);
-          } else {
-            this.data1 = [];
-          }
-          if (res.data.two) {
-            // let arrData2 = res.data.two.filter(item => item.noCharOffAmt != 0 || item.noAccountAmt != 0)
-            let arrData2 = res.data.two
-            arrData2.map((item, index) => {
-              item.num = index + 1;
-              item.guestTypeName = item.guestType.name;
-              item.serviceTypeName = item.serviceType.name;
-              item.speciesName = item.species.name;
-            });
-            this.copyData2 = arrData2;
-            this.pageObj2.total = arrData2.length;
-            this.data2 = this.changePageList(this.pageObj2.num, this.pageObj2.size, this.copyData2);
-          } else {
-            this.data2 = [];
-          }
-        });
+              arrData.map((item, index) => {
+                item.num = index + 1;
+                item.guestTypeName = item.guestType.name;
+                item.serviceTypeName = item.serviceType.name;
+                item.speciesName = item.species.name;
+              });
+              this.pageObj1.total = res.data.totalElements;
+              this.data1 = arrData;
+            } else {
+              this.data1 = [];
+            }
+          });
+        }else{
+          this.loading2 = true;
+          getSalelist({
+            tenantId: data.tenantId,
+            orgId: data.orgId,
+            type:-1,
+            startDate: obj[0]
+              ? moment(obj[0]).format("YYYY-MM-DD") + " 00:00:00"
+              : "",
+            endDate: obj[1]
+              ? moment(obj[1]).format("YYYY-MM-DD") + " 23:59:59"
+              : "",
+            guestId: data.guestId,
+            accountType:this.accountType,
+            page:this.pageObj2.num-1,
+            size:this.pageObj2.size
+          }).then(res => {
+            this.loading2 = false;
+            if (res.code == 0) {
+              // let arrData2 = res.data.two.filter(item => item.noCharOffAmt != 0 || item.noAccountAmt != 0)
+              let arrData2 = res.data.content||[];
+              arrData2.map((item, index) => {
+                item.num = index + 1;
+                item.guestTypeName = item.guestType.name;
+                item.serviceTypeName = item.serviceType.name;
+                item.speciesName = item.species.name;
+              });
+              this.pageObj2.total = res.data.totalElements;
+              this.data2 = arrData2;
+            } else {
+              this.data2 = [];
+            }
+          });
+        }
+
       },
       // // 往来单位
       // Dealings() {
@@ -2337,7 +2370,10 @@
         };
         this.selectTabJson = row;
         this.$refs.Monthlyreconciliation.parameter = {...row, ...date};
-        this.getDetailed(row, this.value);
+        this.getDetailed(row, this.value,1);
+        this.getDetailed(row, this.value,-1);
+        this.pageObj1.num = 1;
+        this.pageObj2.num = 1;
       },
       selectBox({selection}) {
         this.selectBoxList = selection;
