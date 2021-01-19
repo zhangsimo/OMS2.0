@@ -375,7 +375,7 @@
           <vxe-table-column title="最近一次开票申请人" field="recentApplier" width="140"></vxe-table-column>
           <vxe-table-column title="最近一次开票申请时间" field="recentTime" width="140"></vxe-table-column>
           <vxe-table-column title="含税配件金额" field="taxAmountOfPart" width="120"></vxe-table-column>
-          <vxe-table-column title="含税油品" field="taxAmountOfOil" width="120"></vxe-table-column>
+          <vxe-table-column title="含税油品金额" field="taxAmountOfOil" width="120"></vxe-table-column>
           <vxe-table-column title="不含税金额" field="noTaxAmount" width="120"></vxe-table-column>
           <vxe-table-column title="含税配件已开" field="taxAmountOfPartOpened" width="120"></vxe-table-column>
           <vxe-table-column title="含税油品已开" field="taxAmountOfOilOpened" width="120"></vxe-table-column>
