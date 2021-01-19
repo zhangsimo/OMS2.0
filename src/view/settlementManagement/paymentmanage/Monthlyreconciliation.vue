@@ -174,6 +174,8 @@
                 size="mini"
                 :data="data1"
                 :loading="data1Loading"
+                row-id="id"
+                :checkbox-config="{reserve:true}"
                 :sort-config="{trigger: 'cell', defaultSort: {field: 'transferDate', order: 'asc'}, orders: ['desc', 'asc']}"
                 @sort-change="sortMethodCollect"
                 @checkbox-all="collectCheckoutAll"
@@ -213,7 +215,7 @@
                 :page-size.sync="pageObj.size"
                 :total="pageObj.total"
                 @page-change="pageChange"
-                :page-sizes="[50,100,200,500,1000]"
+                :page-sizes="[50,100,200,500]"
                 :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
               </vxe-pager>
             </div>
@@ -230,6 +232,8 @@
                 :data="data2"
                 ref="payable"
                 :loading="data2Loading"
+                row-id="id"
+                :checkbox-config="{reserve:true}"
                 :sort-config="{trigger: 'cell', defaultSort: {field: 'transferDate', order: 'asc'}, orders: ['desc', 'asc']}"
                 @sort-change="sortMethodPay"
                 @checkbox-all="paymentCheckoutAll"
@@ -269,7 +273,7 @@
                 :page-size.sync="pageObj1.size"
                 :total="pageObj1.total"
                 @page-change="pageChange2"
-                :page-sizes="[50,100,200,500,1000]"
+                :page-sizes="[50,100,200,500]"
                 :layouts="['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
               </vxe-pager>
             </div>
@@ -526,7 +530,7 @@
   import {
     getCustomerDetails,
     getNewClient,
-    getClientTreeList
+    getClientTreeList,
   } from "@/api/system/essentialData/clientManagement";
   import {getSupplierTreeList, getNewSupplier} from "@/api/system/essentialData/supplierManagement";
   import {
@@ -543,6 +547,7 @@
     getStore,
     getAccountName,
     getPaymentName,
+    getMonthReconciliationTopTable,
     colOrPaySort/**应收、应付数据*/
   } from "@/api/bill/saleOrder";
   import index from "../../admin/roles";
@@ -915,6 +920,10 @@
         tempPaymentlist: {},
         //临时存储应收业务销售出库/退货对账
         tempCollectlist: {},
+        //应付 采购入库/退货排序
+        paymentlistSort:{},
+        //应收 销售出库/退货对账
+        collectlistSort:{}
       };
     },
     async mounted() {
@@ -1022,20 +1031,12 @@
       pageChange({type, currentPage, pageSize, $event}) {
         this.pageObj.num = currentPage;
         this.pageObj.size = pageSize;
-        this.data1 = this.changePageList(currentPage, pageSize, this.copyData);
-        let currentPageArr = this.tempCollectlist['page' + currentPage];
-        if (currentPageArr && currentPageArr.length && currentPageArr.length > 0) {
-          this.$refs.receivable.setCheckboxRow(currentPageArr, true)
-        }
+        this.Initialization(1,this.collectlistSort);
       },
       pageChange2({type, currentPage, pageSize, $event}) {
         this.pageObj1.num = currentPage;
         this.pageObj1.size = pageSize;
-        this.data2 = this.changePageList(currentPage, pageSize, this.copyData1);
-        let currentPageArr = this.tempPaymentlist['page' + currentPage];
-        if (currentPageArr && currentPageArr.length && currentPageArr.length > 0) {
-          this.$refs.payable.setCheckboxRow(currentPageArr, true)
-        }
+        this.Initialization(-1,this.paymentlistSort);
       },
       changePageList(currentPage, pageSize, sourceData) {
         let firstNum = pageSize * (currentPage - 1);
@@ -1122,7 +1123,10 @@
       },
       query() {
         this.moreSearch = {};
-        this.Initialization();
+        this.pageObj.num = 1;
+        this.pageObj1.num = 1;
+        this.Initialization(1);
+        this.Initialization(-1);
       },
       //打开模态框
       openSelect(request) {
@@ -1209,6 +1213,21 @@
           this.copyData1 = [];
 
           this.$refs.quickDate.resetFun();
+
+         let res = await getMonthReconciliationTopTable();
+         if(res.code==0){
+           for (let i of (res.data||[])) {
+             if (i.number === 3) {
+               this.arrId[0] = i.accountNo;
+             } else if (i.number === 1) {
+               this.arrId[1] = i.accountNo;
+             } else if (i.number === 2) {
+               this.arrId[2] = i.accountNo;
+             } else {
+               this.arrId[3] = i.accountNo;
+             }
+           }
+         }
         }
       },
       getAccountNameListFun(v) {
@@ -1237,7 +1256,10 @@
         this.paymentBaddebt = 0;
         this.paymentRebate = 0;
         this.getAccountNameList();
-        this.Initialization();
+        this.pageObj.num = 1;
+        this.pageObj1.num = 1;
+        this.Initialization(1);
+        this.Initialization(-1);
       },
       //应收 / 应付数据 排序
       async colOrPaySortMethod(data) {
@@ -1279,90 +1301,111 @@
         if (res.code === 0) {
           if (data.type == 1) {
             this.data1Loading = false;
-            this.data1 = res.data;
+            this.data1 = res.data.content||[];
           } else if (data.type == -1) {
             this.data2Loading = false;
-            this.data2 = res.data;
+            this.data2 = res.data.content||[];
           }
         }
       },
       // 获取数据
-      Initialization(data) {
-        // let { orgId, startDate, endDate, guestId } = this.parameter;
-        let obj = {orgId: this.model1, guestId: this.companyInfo};
-        // if(this.moreSearch.accountDate&&this.moreSearch.accountDate.length>0&&this.moreSearch.accountDate[0]&&this.moreSearch.accountDate[1]) {
-        obj.startDate = this.value[0]
-          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-          : "";
-        obj.endDate = this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-          : ""
-        // }
-        if (obj.endDate) {
-          obj.endDate = obj.endDate.split(' ')[0] + " 23:59:59"
-        }
-        if (this.moreSearch.businessType) {
-          obj.serviceType = this.moreSearch.businessType;
-        }
-        if (this.moreSearch.orderNo) {
-          obj.serviceId = this.moreSearch.orderNo;
-        }
-        if (this.moreSearch.orderNo) {
-          obj.serviceId = this.moreSearch.orderNo;
-        }
-        if (this.moreSearch.taxMark) {
-          obj.taxSign = this.moreSearch.taxMark;
-        }
-        this.data1Loading = true;
-        this.data2Loading = true;
-        this.data1 = [];
-        this.data2 = [];
+      Initialization(type,data) {
+        if(type==1){
+          // let { orgId, startDate, endDate, guestId } = this.parameter;
+          let obj = {orgId: this.model1, guestId: this.companyInfo};
+          if (data) {
+            obj.dateSort = data.dateSort ? data.dateSort : 0;//日期排序 1升序 -1降序
+            obj.amtSort = data.amtSort ? data.amtSort : 0;//单据金额 1升序 -1降序
+          }
+          // if(this.moreSearch.accountDate&&this.moreSearch.accountDate.length>0&&this.moreSearch.accountDate[0]&&this.moreSearch.accountDate[1]) {
+          obj.startDate = this.value[0]
+            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+            : "";
+          obj.endDate = this.value[1]
+            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+            : ""
+          // }
+          if (obj.endDate) {
+            obj.endDate = obj.endDate.split(' ')[0] + " 23:59:59"
+          }
+          if (this.moreSearch.businessType) {
+            obj.serviceType = this.moreSearch.businessType;
+          }
+          if (this.moreSearch.orderNo) {
+            obj.serviceId = this.moreSearch.orderNo;
+          }
+          if (this.moreSearch.orderNo) {
+            obj.serviceId = this.moreSearch.orderNo;
+          }
+          if (this.moreSearch.taxMark) {
+            obj.taxSign = this.moreSearch.taxMark;
+          }
+          obj.type=type;
+          obj.page = this.pageObj.num-1;
+          obj.size = this.pageObj.size;
+          this.data1Loading = true;
+          colOrPaySort(obj).then(res => {
+            this.data1Loading = false;
 
-        this.pageObj.total = 0;
-        this.pageObj.num = 1;
-        this.pageObj1.total = 0;
-        this.pageObj1.num = 1;
-        getReconciliation(obj).then(res => {
-          this.data1Loading = false;
-          this.data2Loading = false;
-          for (let i of res.data.one) {
-            if (i.number === 3) {
-              this.arrId[0] = i.accountNo;
-            } else if (i.number === 1) {
-              this.arrId[1] = i.accountNo;
-            } else if (i.number === 2) {
-              this.arrId[2] = i.accountNo;
+            if (res.code == 0) {
+              (res.data.content||[]).map(item => {
+                item.serviceTypeName = item.serviceType.name;
+                item.speciesName = item.species.name;
+              });
+              this.pageObj.total = res.data.totalElements;
+              this.data1 = res.data.content||[]
             } else {
-              this.arrId[3] = i.accountNo;
+              this.data1 = [];
             }
+          });
+        }else{
+          // let { orgId, startDate, endDate, guestId } = this.parameter;
+          let obj = {orgId: this.model1, guestId: this.companyInfo};
+          if (data) {
+            obj.dateSort = data.dateSort ? data.dateSort : 0;//日期排序 1升序 -1降序
+            obj.amtSort = data.amtSort ? data.amtSort : 0;//单据金额 1升序 -1降序
           }
-
-          if (res.data.two.length !== 0) {
-            res.data.two.map(item => {
-              item.serviceTypeName = item.serviceType.name;
-              item.speciesName = item.species.name;
-            });
-            this.copyData = res.data.two;
-            this.pageObj.total = res.data.two.length;
-            this.data1 = this.changePageList(this.pageObj.num, this.pageObj.size, this.copyData);
-          } else {
-            this.data1 = [];
+          // if(this.moreSearch.accountDate&&this.moreSearch.accountDate.length>0&&this.moreSearch.accountDate[0]&&this.moreSearch.accountDate[1]) {
+          obj.startDate = this.value[0]
+            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+            : "";
+          obj.endDate = this.value[1]
+            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+            : ""
+          // }
+          if (obj.endDate) {
+            obj.endDate = obj.endDate.split(' ')[0] + " 23:59:59"
           }
-          if (res.data.three.length !== 0) {
-            res.data.three.map(item => {
-              item.serviceTypeName = item.serviceType.name;
-              item.speciesName = item.species.name;
-            });
-            // this.data2 = res.data.three;
-
-            this.copyData1 = res.data.three;
-            this.pageObj1.total = res.data.three.length;
-            this.data2 = this.changePageList(this.pageObj1.num, this.pageObj1.size, this.copyData1);
-
-          } else {
-            this.data2 = [];
+          if (this.moreSearch.businessType) {
+            obj.serviceType = this.moreSearch.businessType;
           }
-        });
+          if (this.moreSearch.orderNo) {
+            obj.serviceId = this.moreSearch.orderNo;
+          }
+          if (this.moreSearch.orderNo) {
+            obj.serviceId = this.moreSearch.orderNo;
+          }
+          if (this.moreSearch.taxMark) {
+            obj.taxSign = this.moreSearch.taxMark;
+          }
+          obj.type=type;
+          obj.page = this.pageObj1.num-1;
+          obj.size = this.pageObj1.size;
+          this.data2Loading = true;
+          colOrPaySort(obj).then(res => {
+            this.data2Loading = false;
+            if (res.code== 0) {
+              (res.data.content||[]).map(item => {
+                item.serviceTypeName = item.serviceType.name;
+                item.speciesName = item.species.name;
+              });
+              this.data2 = res.data.content||[];
+              this.pageObj1.total = res.data.totalElements;
+            } else {
+              this.data2 = [];
+            }
+          });
+        }
       }, // 对账门店
       storeAccount(val) {
         this.info = false;
@@ -1374,7 +1417,10 @@
         this.Actualtotalpayment = 0;
         this.Reconciliationtotal = 0;
         this.getPaymentNameList();
-        this.Initialization();
+        this.pageObj.num = 1;
+        this.pageObj1.num = 1;
+        this.Initialization(1);
+        this.Initialization(-1);
       },
       // 切换往来单位
       companySelect(val) {
@@ -1540,7 +1586,6 @@
         //property:多个排序时所点击的头部
         //column:本列
         let data = {
-          type: 1
         };
         switch (property) {
           case "transferDate":
@@ -1552,8 +1597,11 @@
             data.dateSort ? delete data.dateSort : "";
             break;
         }
-        this.colOrPaySortMethod(data);
-        this.totalcollect = 0;
+        this.collectlistSort = data;
+        this.pageObj.num =1;
+        this.Initialization(1,data)
+        // this.colOrPaySortMethod(data);
+        // this.totalcollect = 0;
       },
       setTempCollectlist(selection) {
         this.tempCollectlist['page' + this.pageObj.num] = selection;
@@ -1613,7 +1661,6 @@
         //property:多个排序时所点击的头部
         //column:本列
         let data = {
-          type: -1
         };
         switch (property) {
           case "transferDate":
@@ -1625,8 +1672,11 @@
             data.dateSort ? delete data.dateSort : "";
             break;
         }
-        this.colOrPaySortMethod(data);
-        this.totalpayment = 0;
+        this.pageObj1.num = 1;
+        this.paymentlistSort = data;
+        this.Initialization(-1,data)
+        // this.colOrPaySortMethod(data);
+        // this.totalpayment = 0;
       },
       setTempPaymentList(selection) {
         this.tempPaymentlist['page' + this.pageObj1.num] = selection;
@@ -2040,7 +2090,8 @@
         this.quickDate(daterange)
       },
       moreOk() {
-        this.Initialization();
+        this.Initialization(1);
+        this.Initialization(-1);
         this.accountLayer = false;
         this.moreSearch = {}
       },
