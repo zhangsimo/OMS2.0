@@ -16,8 +16,8 @@
       </strong>
     </div>
     <div class="login-right">
-<!--      <p class="login-right-top"><a href="javascript:void(0)" @click="addFavorite">加入收藏</a>-->
-<!--      </p>-->
+      <!--      <p class="login-right-top"><a href="javascript:void(0)" @click="addFavorite">加入收藏</a>-->
+      <!--      </p>-->
       <div class="login-con">
         <h3 class="login-con-header">极配正品</h3>
         <div class="form-con">
@@ -33,51 +33,62 @@
                 </Input>
               </FormItem>
               <FormItem prop="mobile" style="margin-bottom: 20px">
-                <Input style="width: 300px" size="large" v-model="form.mobile"  placeholder="手机号码">
+                <Input style="width: 300px" size="large" v-model="form.mobile" placeholder="手机号码">
 
                 </Input>
               </FormItem>
-               <FormItem  style="margin-bottom: 20px">
-                <Input style="width: 140px" size="large" v-model="form.username"  placeholder="请输入验证码"></Input>
-                <div class="fr ml10"> <a href="javascript:void(0)" @click="getCo"><span style="color: white!important;cursor: pointer;">{{getCodeBtnText}}</span></a> </div>
+              <FormItem style="margin-bottom: 20px">
+                <Input style="width: 140px" size="large" v-model="form.username" placeholder="请输入验证码"></Input>
+                <div class="fr ml10"><a href="javascript:void(0)" @click="getCo"><span
+                  style="color: white!important;cursor: pointer;">{{getCodeBtnText}}</span></a></div>
               </FormItem>
-               <FormItem prop="username" style="margin-bottom: 20px">
-                <Select  clearable style="width:300px" size="large" v-model="modell">
+              <FormItem prop="username" style="margin-bottom: 20px">
+                <Select clearable style="width:300px" size="large" v-model="modell">
                   <Option v-for="item in type" :value="item.dictCode" :key="item.dictCode">{{ item.dictName }}</Option>
                 </Select>
               </FormItem>
               <Row>
                 <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" class="flex zzzz">
                   <FormItem prop="province">
-                    <Select v-model="formValidate.province" placeholder="请选择省份" style="width: 142px;height: 38px;" class="mr5 plh">
-                      <Option v-for="item in provinceArr" v-if="item.parentId==0" :key="item.id" :value="item.id" >{{ item.name}}</Option>
+                    <Select v-model="formValidate.province" placeholder="请选择省份" style="width: 142px;height: 38px;"
+                            class="mr5 plh">
+                      <Option v-for="item in provinceArr" v-if="item.parentId==0" :key="item.id" :value="item.id">{{
+                        item.name}}
+                      </Option>
                     </Select>
                   </FormItem>
                   <FormItem prop="city">
-                    <Select v-model="formValidate.city" placeholder="请选择城市" style="width: 142px;height: 38px!important;" class="mr10">
-                      <Option v-for="item in provinceArr" v-if="formValidate.province==item.parentId" :key="item.id" :value="item.id" >{{ item.name}}</Option>
+                    <Select v-model="formValidate.city" placeholder="请选择城市" style="width: 142px;height: 38px!important;"
+                            class="mr10">
+                      <Option v-for="item in provinceArr" v-if="formValidate.province==item.parentId" :key="item.id"
+                              :value="item.id">{{ item.name}}
+                      </Option>
                     </Select>
                   </FormItem>
                 </Form>
               </Row>
-                <div class="flex mt15">
-                  <div style="color: #7c1c1a">
+              <div class="flex mt15">
+                <div style="color: #7c1c1a">
                   注册即同意
-                  </div>
-                  <div class="ml20">
-                    <a href="javascript:void(0)" @click="showPolicy"><span style="color: white!important;cursor: pointer;">隐私政策/用户协议</span></a>
-                  </div>
-
                 </div>
+                <div class="ml20">
+                  <a href="javascript:void(0)" @click="showPolicy"><span
+                    style="color: white!important;cursor: pointer;">隐私政策/用户协议</span></a>
+                </div>
+
+              </div>
               <FormItem>
-                <Button style="width: 300px" @click="registerA" :disabled="canRegister" size="large" :loading="loading" class="login-con-submit mt10" long>注册</Button>
+                <Button style="width: 300px" @click="registerA" :disabled="canRegister" size="large" :loading="loading"
+                        class="login-con-submit mt10" long>注册
+                </Button>
               </FormItem>
               <div class="flex">
-                    <div class="ml5" style="color: #7c1c1a">已有账号?</div>
-                    <div class="ml20">
-                      <a href="javascript:void(0)" @click="goLogin" ><span style="color: white!important;cursor: pointer;font-size: 16px">登录</span></a>
-                    </div>
-                  </div>
+                <div class="ml5" style="color: #7c1c1a">已有账号?</div>
+                <div class="ml20">
+                  <a href="javascript:void(0)" @click="goLogin"><span
+                    style="color: white!important;cursor: pointer;font-size: 16px">登录</span></a>
+                </div>
+              </div>
 
             </Form>
           </div>
@@ -93,7 +104,9 @@
             <p class="title">提示条款</p>
             <p class="val">
               极配OMS服务提供者（或简称“我们”）将按法律法规要求，采取相应安全保护措施，尽力保护用户的个人信息安全可控,我们制定本《法律声明及隐私权政策》（下称“本政策 /本隐私权政策”）并提醒用户：
-              本政策适用于极配OMS产品或服务 需要特别说明的是，本政策不适用于其他第三方向用户提供的服务，也不适用于极配OMS中已另行独立设置法律声明及隐私权政策的产品或服务。在使用极配OMS各项产品或服务前，请用户务必仔细阅读并透彻理解本政策，在确认充分理解并同意后使用相关产品或服务。一旦用户开始使用极配OMS各项产品或服务，即表示用户已充分理解并同意本政策。 如对本政策内容有任何疑问、意见或建议，用户可通过极配OMS提供的各种联系方式（http://oms.g-part.cn）与我们联系。</p>
+              本政策适用于极配OMS产品或服务
+              需要特别说明的是，本政策不适用于其他第三方向用户提供的服务，也不适用于极配OMS中已另行独立设置法律声明及隐私权政策的产品或服务。在使用极配OMS各项产品或服务前，请用户务必仔细阅读并透彻理解本政策，在确认充分理解并同意后使用相关产品或服务。一旦用户开始使用极配OMS各项产品或服务，即表示用户已充分理解并同意本政策。
+              如对本政策内容有任何疑问、意见或建议，用户可通过极配OMS提供的各种联系方式（http://oms.g-part.cn）与我们联系。</p>
           </div>
           <div class="content">
             <p class="title">第一部分 定义</p>
@@ -121,12 +134,14 @@
             <p class="title">第二部分 法律声明</p>
             <div class="tip-title">
               <p class="name">一、权利归属</p>
-              <p class="val">除非极配OMS另行声明，极配OMS内的所有产品、技术、软件、程序、数据及其他信息（包括文字、图标、图片、照片、音频、视频、图表、色彩组合、版面设计等）的所有权利（包括版权、商标权、专利权、商业秘密及其他相关权利）均归极配OMS服务提供者及/或其关联公司所有。未经极配OMS服务提供者及/或其关联公司许可，任何人不得以包括通过机器人、蜘蛛等程序或设备监视、复制、传播、展示、镜像、上载、下载等方式擅自使用极配OMS内的任何内容。
+              <p class="val">
+                除非极配OMS另行声明，极配OMS内的所有产品、技术、软件、程序、数据及其他信息（包括文字、图标、图片、照片、音频、视频、图表、色彩组合、版面设计等）的所有权利（包括版权、商标权、专利权、商业秘密及其他相关权利）均归极配OMS服务提供者及/或其关联公司所有。未经极配OMS服务提供者及/或其关联公司许可，任何人不得以包括通过机器人、蜘蛛等程序或设备监视、复制、传播、展示、镜像、上载、下载等方式擅自使用极配OMS内的任何内容。
                 极配OMS的“极配OMS”、“oms.g-part.cn”等文字及/或标识，以及极配OMS的其他标识、徽记、产品和服务名称均为极配OMS服务提供者及/或其关联公司在中国和其他国家的商标，如有宣传、展示等任何使用需要，用户必须取得极配OMS服务提供者及/或其关联公司事先书面授权。 </p>
             </div>
             <div class="tip-title">
               <p class="name">二、知识产权保护</p>
-              <p class="val">我们尊重知识产权，反对并打击侵犯知识产权的行为。知识产权权利人若认为极配OMS内容侵犯其合法权益的，可以通过极配OMS进行投诉，我们将在收到知识产权权利人合格通知后依据相应的法律法规以及平台规则及时处理。</p>
+              <p class="val">
+                我们尊重知识产权，反对并打击侵犯知识产权的行为。知识产权权利人若认为极配OMS内容侵犯其合法权益的，可以通过极配OMS进行投诉，我们将在收到知识产权权利人合格通知后依据相应的法律法规以及平台规则及时处理。</p>
             </div>
           </div>
           <div class="content">
@@ -143,9 +158,10 @@
             <p>9.如何联系我们</p>
             <div class="tip-title">
               <p class="name">一、我们如何收集和使用用户的信息</p>
-              <p >在用户使用我们的产品及/或服务时，我们需要/可能需要收集和使用的用户的个人信息包括如下两种：</p>
-              <p >1.为实现向用户提供我们产品及/或服务的基本功能，用户须授权我们收集、使用的必要的信息。如用户拒绝提供相应信息，用户将无法正常使用我们的产品及/或服务；</p>
-              <p >2.为实现向用户提供我们产品及/或服务的附加功能，用户可选择授权我们收集、使用的信息。如用户拒绝提供，用户将无法正常使用相关附加功能或无法达到我们拟达到的功能效果，但并不会影响用户正常使用我们产品及/或服务的基本功能。
+              <p>在用户使用我们的产品及/或服务时，我们需要/可能需要收集和使用的用户的个人信息包括如下两种：</p>
+              <p>1.为实现向用户提供我们产品及/或服务的基本功能，用户须授权我们收集、使用的必要的信息。如用户拒绝提供相应信息，用户将无法正常使用我们的产品及/或服务；</p>
+              <p>
+                2.为实现向用户提供我们产品及/或服务的附加功能，用户可选择授权我们收集、使用的信息。如用户拒绝提供，用户将无法正常使用相关附加功能或无法达到我们拟达到的功能效果，但并不会影响用户正常使用我们产品及/或服务的基本功能。
                 用户理解并同意.为给用户带来更好的产品和服务体验，我们在持续努力改进我们的技术，随之我们可能会不时推出新的或优化后的功能，可能需要收集、使用新的个人信息或变更个人信息使用目的或方式。对此，我们将通过更新本政策、弹窗、页面提示等方式另行向用户说明对应信息的收集目的、范围及使用方式，并为用户提供自主选择同意的方式，且在征得用户明示同意后收集、使用。
                 在此过程中，如果用户有任何疑问、意见或建议的，用户可通过极配OMS提供的各种联系方式与我们联系，我们会尽快为用户作出解答。
                 我们会出于本政策所述的以下目的，收集和使用用户的个人信息：</p>
@@ -154,43 +170,51 @@
               <p>(二)向用户提供商品或服务</p>
               <p>1.我们在用户使用服务过程中收集的信息</p>
               <p>为向用户提供更契合用户需求的页面展示和搜索结果、了解产品适配性、识别账号异常状态，我们会收集关于用户使用的服务以及使用方式的信息并将这些信息进行关联，这些信息包括：
-                设备信息：我们会根据用户在软件安装及使用中授予的具体权限，接收并记录用户所使用的设备相关信息（例如设备型号、操作系统版本、设备设置、唯一设备标识符等软硬件特征信息）、设备所在位置相关信息（例如IP 地址、GPS位置以及能够提供相关信息的WLAN接入点、蓝牙和基站等传感器信息）。
+                设备信息：我们会根据用户在软件安装及使用中授予的具体权限，接收并记录用户所使用的设备相关信息（例如设备型号、操作系统版本、设备设置、唯一设备标识符等软硬件特征信息）、设备所在位置相关信息（例如IP
+                地址、GPS位置以及能够提供相关信息的WLAN接入点、蓝牙和基站等传感器信息）。
                 日志信息：当用户使用我们的网站或客户端提供的产品或服务时，我们会自动收集用户对我们服务的详细使用情况，作为有关网络日志保存。例如用户的搜索查询内容、IP地址、浏览器的类型、电信运营商、使用的语言、访问日期和时间及用户访问的网页记录等。
                 请注意，单独的设备信息、日志信息等是无法识别特定自然人身份的信息。如果我们将这类非个人信息与其他信息结合用于识别特定自然人身份，或者将其与个人信息结合使用，则在结合使用期间，这类非个人信息将被视为个人信息，除取得用户授权或法律法规另有规定外，我们会将该类个人信息做匿名化、去标识化处理。
                 为展示用户账号的订单信息，我们会收集用户在使用我们服务过程中产生的订单信息用于用户对订单进行管理。
                 当用户与我们联系时，我们可能会保存用户的通信/通话记录和内容或用户留下的联系方式等信息，以便与用户联系或帮助用户解决问题，或记录相关问题的处理方案及结果。</p>
               <p>（三）为用户提供安全保障</p>
-              <p>为提高用户使用我们服务的安全性，保护用户或其他用户或公众的人身财产安全免遭侵害，更好地预防钓鱼网站、欺诈、网络漏洞、计算机病毒、网络攻击、网络侵入等安全风险，更准确地识别违反法律法规或极配OMS相关协议规则的情况， 我们可能使用或整合用户的用户信息、交易信息、设备信息、有关网络日志取得用户授权或依据法律共享的信息，来综合判断用户账户及使用风险、进行身份验证、检测及防范安全事件，并依法采取必要的记录、审计、分析、处置措施。</p>
+              <p>
+                为提高用户使用我们服务的安全性，保护用户或其他用户或公众的人身财产安全免遭侵害，更好地预防钓鱼网站、欺诈、网络漏洞、计算机病毒、网络攻击、网络侵入等安全风险，更准确地识别违反法律法规或极配OMS相关协议规则的情况，
+                我们可能使用或整合用户的用户信息、交易信息、设备信息、有关网络日志取得用户授权或依据法律共享的信息，来综合判断用户账户及使用风险、进行身份验证、检测及防范安全事件，并依法采取必要的记录、审计、分析、处置措施。</p>
               <p>（四）其他用途</p>
               <p>我们将信息用于本政策未载明的其他用途，或者将基于特定目的收集而来的信息用于其他目的时，会事先征求用户的同意。</p>
               <p>（五）征得授权同意的例外</p>
               <p>根据相关法律法规规定，以下情形中收集用户的个人信息无需征得用户的授权同意： </p>
               <p>1.与国家安全、国防安全有关的；</p>
-                <p>2.与公共安全、公共卫生、重大公共利益有关的；</p>
-                <p>3.与犯罪侦查、起诉、审判和判决执行等有关的；</p>
-                <p>4.出于维护个人信息主体或其他个人的生命、财产等重大合法权益但又很难得到用户本人同意的；</p>
-                <p>5.所收集的个人信息是用户自行向社会公众公开的；</p>
-                <p>6.从合法公开披露的信息中收集个人信息的，如合法的新闻报道、政府信息公开等渠道；</p>
-                <p>7.根据用户的要求签订合同所必需的；</p>
-                <p>8.用于维护所提供的产品或服务的安全稳定运行所必需的，例如发现、处置产品或服务的故障；</p>
-                <p>9.为合法的新闻报道所必需的；</p>
-                <p>10.学术研究机构基于公共利益开展统计或学术研究所必要，且对外提供学术研究或描述的结果时，对结果中所包含的个人信息进行去标识化处理的；</p>
-                <p>11.法律法规规定的其他情形。如我们停止运营极配OMS产品或服务，我们将及时停止继续收集用户个人信息的活动，将停止运营的通知以逐一送达或公告的形式通知用户，对所持有的个人信息进行删除或匿名化处理。</p>
+              <p>2.与公共安全、公共卫生、重大公共利益有关的；</p>
+              <p>3.与犯罪侦查、起诉、审判和判决执行等有关的；</p>
+              <p>4.出于维护个人信息主体或其他个人的生命、财产等重大合法权益但又很难得到用户本人同意的；</p>
+              <p>5.所收集的个人信息是用户自行向社会公众公开的；</p>
+              <p>6.从合法公开披露的信息中收集个人信息的，如合法的新闻报道、政府信息公开等渠道；</p>
+              <p>7.根据用户的要求签订合同所必需的；</p>
+              <p>8.用于维护所提供的产品或服务的安全稳定运行所必需的，例如发现、处置产品或服务的故障；</p>
+              <p>9.为合法的新闻报道所必需的；</p>
+              <p>10.学术研究机构基于公共利益开展统计或学术研究所必要，且对外提供学术研究或描述的结果时，对结果中所包含的个人信息进行去标识化处理的；</p>
+              <p>11.法律法规规定的其他情形。如我们停止运营极配OMS产品或服务，我们将及时停止继续收集用户个人信息的活动，将停止运营的通知以逐一送达或公告的形式通知用户，对所持有的个人信息进行删除或匿名化处理。</p>
               <p class="name">二、我们如何使用 Cookie 和同类技术</p>
               <p>（一）Cookie</p>
-              <p>为确保网站正常运转、为用户获得更轻松的访问体验、向用户推荐用户可能感兴趣的内容，我们会在用户的计算机或移动设备上存储名为 Cookie 的小数据文件。Cookie 通常包含标识符、站点名称以及一些号码和字符。
-                用户可根据自己的偏好管理或删除Cookie。用户可以清除计算机上保存的所有 Cookie，大部分网络浏览器都设有阻止 Cookie 的功能。但如果用户这么做，则需要在每一次访问我们的网站时更改用户设置。如需详细了解如何更改浏览器设置，请访问用户使用的浏览器的相关设置页面。 </p>
+              <p>为确保网站正常运转、为用户获得更轻松的访问体验、向用户推荐用户可能感兴趣的内容，我们会在用户的计算机或移动设备上存储名为 Cookie 的小数据文件。Cookie
+                通常包含标识符、站点名称以及一些号码和字符。
+                用户可根据自己的偏好管理或删除Cookie。用户可以清除计算机上保存的所有 Cookie，大部分网络浏览器都设有阻止 Cookie
+                的功能。但如果用户这么做，则需要在每一次访问我们的网站时更改用户设置。如需详细了解如何更改浏览器设置，请访问用户使用的浏览器的相关设置页面。 </p>
               <p>（二）网站信标和像素标签</p>
-              <p>除 Cookie 外，我们还会在网站上使用网站信标和像素标签等其他同类技术。例如，我们向用户发送的电子邮件可能含有链接至我们网站内容的地址链接，如果用户点击该链接，我们则会跟踪此次点击，帮助我们了解用户的产品或服务偏好以便于我们主动改善客户服务体验。网站信标通常是一种嵌入到网站或电子邮件中的透明图像。借助于电子邮件中的像素标签，我们能够获知电子邮件是否被打开。如果用户不希望自己的活动以这种方式被追踪，则可以随时从我们的寄信名单中退订。</p>
+              <p>除 Cookie
+                外，我们还会在网站上使用网站信标和像素标签等其他同类技术。例如，我们向用户发送的电子邮件可能含有链接至我们网站内容的地址链接，如果用户点击该链接，我们则会跟踪此次点击，帮助我们了解用户的产品或服务偏好以便于我们主动改善客户服务体验。网站信标通常是一种嵌入到网站或电子邮件中的透明图像。借助于电子邮件中的像素标签，我们能够获知电子邮件是否被打开。如果用户不希望自己的活动以这种方式被追踪，则可以随时从我们的寄信名单中退订。</p>
               <p class="name">三、我们如何共享、转让、公开披露用户的个人信息</p>
               <p>（一）转让 </p>
               <p>我们不会将用户的个人信息、公司信息转让给任何公司、组织和个人，但以下情况除外：</p>
               <p>1.在获取明确同意的情况下转让：获得用户的明确同意后，我们会向其他方转让用户的个人信息；</p>
-              <p>2.在极配OMS服务提供者发生合并、收购或破产清算情形，或其他涉及合并、收购或破产清算情形时，如涉及到个人信息转让，我们会要求新的持有用户个人信息的公司、组织继续受本政策的约束，否则我们将要求该公司、组织和个人重新向用户征求授权同意。</p>
+              <p>
+                2.在极配OMS服务提供者发生合并、收购或破产清算情形，或其他涉及合并、收购或破产清算情形时，如涉及到个人信息转让，我们会要求新的持有用户个人信息的公司、组织继续受本政策的约束，否则我们将要求该公司、组织和个人重新向用户征求授权同意。</p>
               <p>（二）公开披露 </p>
               <p>我们仅会在以下情况下，公开披露用户的个人信息：</p>
               <p>1.获得用户明确同意或基于用户的主动选择，我们可能会公开披露用户的个人信息；</p>
-              <p>2.如果我们确定用户出现违反法律法规或严重违反极配OMS相关协议规则的情况，或为保护极配OMS及其关联公司用户或公众的人身财产安全免遭侵害，我们可能依据法律法规或极配OMS相关协议规则征得用户同意的情况下披露关于用户的个人信息，包括相关违规行为以及极配OMS已对用户采取的措施。</p>
+              <p>
+                2.如果我们确定用户出现违反法律法规或严重违反极配OMS相关协议规则的情况，或为保护极配OMS及其关联公司用户或公众的人身财产安全免遭侵害，我们可能依据法律法规或极配OMS相关协议规则征得用户同意的情况下披露关于用户的个人信息，包括相关违规行为以及极配OMS已对用户采取的措施。</p>
               <p>（三）共享、转让、公开披露个人信息时事先征得授权同意的例外 </p>
               <p>以下情形中，共享、转让、公开披露用户的个人信息无需事先征得用户的授权同意：</p>
               <p>1.与国家安全、国防安全有关的； </p>
@@ -235,8 +259,10 @@
         <div class="modal-box">
           <p class="content-title">用户注册协议</p>
           <div>
-            <p>在注册使用极配订单管理系统（以下简称“极配OMS”）前，请注册用户务必充分阅读并理解《服务协议》（以下简称“本协议”）的所有条款。特别是免除或者限制责任的条款、争议解决和法律适用条款。如注册用户对协议有任何疑问的，应向极配OMS客服咨询。</p>
-            <p>当注册用户按照注册页面提示填写信息、阅读并同意本协议且勾选注册页面下方的“我已阅读并同意《服务协议》”选项等全部注册程序后，即表示注册用户已充分阅读、理解并接受本协议的全部内容，并与极配OMS达成协议。注册 用户承诺接受并遵守本协议的约定，并不得以未阅读本协议的内容或者未获得极配OMS对注册用户问询的解答等理由，主张本协议无效，或要求撤销本协议。</p>
+            <p>
+              在注册使用极配订单管理系统（以下简称“极配OMS”）前，请注册用户务必充分阅读并理解《服务协议》（以下简称“本协议”）的所有条款。特别是免除或者限制责任的条款、争议解决和法律适用条款。如注册用户对协议有任何疑问的，应向极配OMS客服咨询。</p>
+            <p>当注册用户按照注册页面提示填写信息、阅读并同意本协议且勾选注册页面下方的“我已阅读并同意《服务协议》”选项等全部注册程序后，即表示注册用户已充分阅读、理解并接受本协议的全部内容，并与极配OMS达成协议。注册
+              用户承诺接受并遵守本协议的约定，并不得以未阅读本协议的内容或者未获得极配OMS对注册用户问询的解答等理由，主张本协议无效，或要求撤销本协议。</p>
           </div>
           <div class="content">
             <p class="title">一、定义</p>
@@ -256,7 +282,8 @@
               3、用户应对使用“极配OMS”的一切行为承担责任，如因用户行为给其他第三方或“极配OMS”造成任何损失的，用户应承担赔偿责任。
             </p>
             <p>
-              4、用户在“极配OMS”实施了违法行为，导致第三方投诉（包括但不限于第三方以发函等形式指控“极配OMS”侵权，提起诉讼、仲裁，或使“极配OMS”面临相关主管 机关的审查或质询），“极配OMS”有权先暂停用户的使用。用户应在收到通知后，以自己名义出面与第三方协商、应诉或接受相关主管机关审查或质询，承担所有费用，并赔偿“极配OMS”造成的全部损失。
+              4、用户在“极配OMS”实施了违法行为，导致第三方投诉（包括但不限于第三方以发函等形式指控“极配OMS”侵权，提起诉讼、仲裁，或使“极配OMS”面临相关主管
+              机关的审查或质询），“极配OMS”有权先暂停用户的使用。用户应在收到通知后，以自己名义出面与第三方协商、应诉或接受相关主管机关审查或质询，承担所有费用，并赔偿“极配OMS”造成的全部损失。
             </p>
             <p class="title">三、“极配OMS”的权利义务：</p>
             <p>1、“极配OMS”应为用户提供优质的服务，并接受用户的监督及合理建议。</p>
@@ -335,7 +362,8 @@
               4、极配OMS不保证为向注册用户提供便利而设置的外部链接的准确性、有效性、安全性和完整性，但保证不提供钓鱼网站、病毒网站。同时，对于该等外部链接指向的不由极配OMS实际控制的任何网页上的内容，极配OMS不承担任何责任。<br>
               5、在法律允许的情况下，极配OMS对于与本协议有关或由本协议引起的，或者由于使用极配OMS、或由于其所包含的或以其它方式通过极配OMS提供给注册用户的全部信息、内容、材料、产品（包括软件）和服务、或购买和使用产品引起的任何间接的、惩罚性的、特殊的、派生的损失（包括但不限于业务损失、收益损失、利润损失、使用数据或其他经济利益的损失），不论是如何产生的，也不论是由对本协议的违约（包括违反保证）还是由侵权造成的，均不负有任何责任，即使其事先已被告知此等损失的可能性。另外，即使本协议规定的排他性救济没有达到其基本目的，也应排除极配OMS对上述损失的责任。
               <p class="title">九、隐私权保护及授权条款</p>
-              1、极配OMS对于注册用户提供的、极配OMS自行收集的、经认证的个人信息将按照本协议予以保护、使用或者披露。 极配OMS无需注册用户同意即可向第三方授权主体转让与极配OMS有关的全部或部分权利和义务。未经极配OMS事先书面同意，注册用户不得转让其在本协议项下的任何权利和义务。<br>
+              1、极配OMS对于注册用户提供的、极配OMS自行收集的、经认证的个人信息将按照本协议予以保护、使用或者披露。
+              极配OMS无需注册用户同意即可向第三方授权主体转让与极配OMS有关的全部或部分权利和义务。未经极配OMS事先书面同意，注册用户不得转让其在本协议项下的任何权利和义务。<br>
               2、极配OMS可能自公开及私人资料来源处收集注册用户的额外资料，以更好地掌握注册用户情况，并为注册用户度身定制极配OMS服务、解决争议并有助确保在极配OMS进行安全交易。<br>
               3、极配OMS按照注册用户在极配OMS上的行为自动追踪关于注册用户的某些资料。在不透露注册用户的隐私资料的前提下，极配OMS有权对整个注册用户数据库进行分析并对注册用户数据库进行商业上的利用。<br>
               4、注册用户同意极配OMS可使用关于注册用户的相关资料（包括但不限于极配OMS持有的有关注册用户的档案中的资料，极配OMS从注册用户目前及以前在极配OMS上的活动所获取的其他资料以及极配OMS通过其他方式自行收集的资料）以解决争议、对纠纷进行调停。注册用户同意极配OMS可通过人工或自动程序对注册用户的资料进行评价。<br>
@@ -369,18 +397,18 @@
         </div>
 
       </section>
-<!--      <p style="text-align: center;margin: 10px 0;">-->
-<!--        <Radio-group :model.sync="isAgree">-->
-<!--          <Radio value="1">同意</Radio>-->
-<!--          <Radio value="2">不同意</Radio>-->
-<!--        </Radio-group>-->
-<!--      </p>-->
+      <!--      <p style="text-align: center;margin: 10px 0;">-->
+      <!--        <Radio-group :model.sync="isAgree">-->
+      <!--          <Radio value="1">同意</Radio>-->
+      <!--          <Radio value="2">不同意</Radio>-->
+      <!--        </Radio-group>-->
+      <!--      </p>-->
     </Modal>
   </div>
 </template>
 
 <script>
-  import { sendMessage , findByDynamicQuery ,findByDictCode ,register} from '../../../api/lease/registerLogin'
+  import {sendMessage, findByDynamicQuery, findByDictCode, register} from '../../../api/lease/registerLogin'
   // import { getCode } from './register'
   // import SlideValidate from './slide-validate'
   import Message from '_c/message'
@@ -388,81 +416,81 @@
   export default {
     name: 'gpart-login-page',
     components: {},
-    data () {
+    data() {
       const validatePhone = (rule, value, callback) => {
-            if (!value) {
-                return callback(new Error('手机号不能为空'));
-            } else if (!/^\d{3}-\d{8}|\d{4}-\{7,8}$/.test(value)) {
-                callback(new Error('手机号格式不正确'));
-            } else {
-                callback();
-            }
-        };
+        if (!value) {
+          return callback(new Error('手机号不能为空'));
+        } else if (!/^1[345789]\d{9}$/.test(value)) {
+          callback(new Error('手机号格式不正确'));
+        } else {
+          callback();
+        }
+      };
       return {
         formValidate: {},//省份城市
         provinceArr: [],//省市
-        ruleValidate:{},
+        ruleValidate: {},
         //公司类型下拉框数组
-        company:[],
+        company: [],
         //省下拉框
-        province :[],
+        province: [],
         //市下拉框
-        city:[],
-        getCodeBtnText:'获取验证码',
-          timerBack:60,
-          cansend:true,
+        city: [],
+        getCodeBtnText: '获取验证码',
+        timerBack: 60,
+        cansend: true,
         form: {
           companyName: '',
           mobile: '',
         },
-         rules: {
-                companyName: [
-                    {required: true, message: '公司名称不能为空', trigger: ['blur','change']}
-                ],
-                mobile: [
-                    { required: true,validator:validatePhone,trigger:['blur', 'change']}
-                ],
-                code: [
-                    { required: true,trigger:['blur', 'change']}
-                ]
-            },
-        single:false,
-        loading:false,
+        rules: {
+          companyName: [
+            {required: true, message: '公司名称不能为空', trigger: ['blur', 'change']}
+          ],
+          mobile: [
+            {required: true, validator: validatePhone, trigger: ['blur', 'change']}
+          ],
+          code: [
+            {required: true, trigger: ['blur', 'change']}
+          ]
+        },
+        single: false,
+        loading: false,
         type: [],//类型
-        modell:'', //下拉框
-          canRegister:false,
-          showP:false,//政策弹窗
-          isAgree:1,
+        modell: '', //下拉框
+        canRegister: false,
+        showP: false,//政策弹窗
+        isAgree: 1,
       }
     },
     methods: {
       //获取验证码
       getCo() {
         let tel = {}
-        tel.mobile =this.form.mobile;
-          if(this.cansend){
-              this.timerBack=60;
-              this.getCodeBtnText = `${this.timerBack}后重新获取验证码`;
-              this.cansend=false;
-              sendMessage(tel).then(res => {
-                  if(res.code==0){
-                      let timer = setInterval(()=>{
-                          this.timerBack --
-                          this.getCodeBtnText = `${this.timerBack}后重新获取验证码`
-                          if(this.timerBack==0){
-                              clearInterval(timer)
-                              this.timerBack = 60;
-                              this.getCodeBtnText = '获取验证码';
-                              this.cansend=true;
-                          }
-                      },1000)
-                  }else{
-                      this.timerBack = 60;
-                      this.getCodeBtnText = '获取验证码';
-                      this.cansend=true;
-                  }
-              })
-          }
+        tel.mobile = this.form.mobile;
+        if (this.cansend) {
+          this.timerBack = 60;
+          this.getCodeBtnText = `${this.timerBack}后重新获取验证码`;
+          this.cansend = false;
+          sendMessage(tel).then(res => {
+            if (res.code == 0) {
+              let timer = setInterval(() => {
+                this.timerBack--
+                this.getCodeBtnText = `${this.timerBack}后重新获取验证码`
+                if (this.timerBack == 0) {
+                  clearInterval(timer)
+                  this.timerBack = 60;
+                  this.getCodeBtnText = '获取验证码';
+                  this.cansend = true;
+                }
+              }, 1000)
+            } else {
+              this.timerBack = 60;
+              this.getCodeBtnText = '获取验证码';
+              this.cansend = true;
+            }
+          })
+        }
 
       },
       //已有账号去登录
@@ -472,7 +500,7 @@
       register() {
         this.$router.push("/register")
       },
-      handleSubmit () {
+      handleSubmit() {
         this.form.username = this.form.username.trim()
         this.loading = true
         this.$refs.registerForm.validate((valid) => {
@@ -512,13 +540,11 @@
         try {
           obj.style.behavior = 'url(#default#homepage)';
           obj.setHomePage(vrl);
-        }
-        catch (e) {
+        } catch (e) {
           if (window.netscape) {
             try {
               netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
-            }
-            catch (e) {
+            } catch (e) {
               alert("此操作被浏览器拒绝！\n请在浏览器地址栏输入“about:config”并回车\n然后将 [signed.applets.codebase_principal_support]的值设置为'true',双击即可。");
             }
             var prefs = Components.classes['@mozilla.org/preferences-service;1'].getService(Components.interfaces.nsIPrefBranch);
@@ -527,48 +553,54 @@
         }
       },
       // 省份城市
-      citya(){
+      citya() {
         let params = {}
         findByDynamicQuery(params).then(res => {
           // console.log(res)
-          if(res.code === 0){
+          if (res.code === 0) {
             this.provinceArr = res.data
           }
         })
       },
       //数据字典
-      findBy(){
+      findBy() {
         findByDictCode().then(res => {
-          if(res.code === 0){
+          if (res.code === 0) {
             this.type = res.data
             // console.log(this.type)
           }
         })
       },
       //注册
-      registerA(){
-        let formData = new FormData();
-        formData.append('companyName', this.form.companyName);
-        formData.append('mobile', this.form.mobile);
-        formData.append('code', this.form.username);
-        formData.append('type', this.modell);
-        formData.append('provinceId', this.formValidate.province);
-        formData.append('cityId', this.formValidate.city);
+      registerA() {
+        this.$refs.registerForm.validator(valid => {
+          if (valid) {
+            let formData = new FormData();
+            formData.append('companyName', this.form.companyName);
+            formData.append('mobile', this.form.mobile);
+            formData.append('code', this.form.username);
+            formData.append('type', this.modell);
+            formData.append('provinceId', this.formValidate.province);
+            formData.append('cityId', this.formValidate.city);
 
-        // console.log(formData);
-        register(formData).then(res => {
-            if(res.code === 0){
-              this.$Message.success('注册成功')
-             this.$router.push("/login")
-            }
-        })
+            // console.log(formData);
+            register(formData).then(res => {
+              if (res.code === 0) {
+                this.$Message.success('注册成功')
+                this.$router.push("/login")
+              }
+            })
+          } else {
+            this.$Message.error("带*为必填");
+          }
+        });
       },
-        //展示用户政策
-        showPolicy(){
-          this.showP=true;
-        }
+      //展示用户政策
+      showPolicy() {
+        this.showP = true;
+      }
     },
-    mounted(){
+    mounted() {
       this.citya()
       this.findBy()
     }
@@ -576,36 +608,41 @@
 </script>
 
 <style scoped>
-  .zzzz >>> .ivu-select-single .ivu-select-selection{
-    height: 38px!important;
+  .zzzz >>> .ivu-select-single .ivu-select-selection {
+    height: 38px !important;
   }
-  .zzzz >>> .ivu-select-single .ivu-select-selection .ivu-select-placeholder{
-    height: 38px!important;
+
+  .zzzz >>> .ivu-select-single .ivu-select-selection .ivu-select-placeholder {
+    height: 38px !important;
     line-height: 38px;
   }
-  .zzzz >>> .ivu-form-item{
-    margin-bottom: 0!important;
+
+  .zzzz >>> .ivu-form-item {
+    margin-bottom: 0 !important;
   }
 </style>
 <style scoped lang="less">
-  .model-content{
+  .model-content {
     height: 500px;
     padding: 0 20px;
-    overflow-y:auto ;
-    .content-title{
+    overflow-y: auto;
+
+    .content-title {
       height: 40px;
       line-height: 40px;
       text-align: center;
       font-weight: 700;
     }
-    .title{
-      color:#333;
-      font-size:14px;
+
+    .title {
+      color: #333;
+      font-size: 14px;
       font-weight: 700;
       text-align: left;
       margin-bottom: 20px;
     }
-    .content{
+
+    .content {
       margin-bottom: 20px;
     }
   }
