@@ -202,6 +202,9 @@ export default class Role extends Vue {
   }
   //修改员工
   private changeStaff() {
+    if(this.oneStaff.moduleType==2&&this.oneStaff.moduleId==this.$store.state.user.userData.tenantId){
+      return this.$message.error("不可修改")
+    }
     if (!this.oneStaff.id) {
       this.$message.error('请先选择需要修改的角色')
       return
@@ -218,6 +221,9 @@ export default class Role extends Vue {
 
   //删除员工
   private delectStaff() {
+    if(this.oneStaff.moduleType==2&&this.oneStaff.moduleId==this.$store.state.user.userData.tenantId){
+      return this.$message.error("不可删除")
+    }
     if (!this.oneStaff.id) {
       this.$message.error('请先选择角色')
       return
