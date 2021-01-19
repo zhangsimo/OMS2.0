@@ -196,19 +196,19 @@
         this.sortObj = {};
         switch (field) {
           case 'sellAmt':
-            this.sortObj['sellSort'] = order;
+            this.sortObj.sellSort = order;
             break;
           case 'costAmt':
-            this.sortObj['costSort'] = order;
+            this.sortObj.costSort = order;
             break;
           case 'sellGrossMargin':
-            this.sortObj['grossMarginSort'] = order;
+            this.sortObj.grossMarginSort = order;
             break;
           case 'preSellAmt':
-            this.sortObj['preSellSort'] = order;
+            this.sortObj.preSellSort = order;
             break;
           case 'preGrossMargin':
-            this.sortObj['preGrossMarginSort'] = order;
+            this.sortObj.preGrossMarginSort = order;
             break;
         }
         this.page.num = 1;
