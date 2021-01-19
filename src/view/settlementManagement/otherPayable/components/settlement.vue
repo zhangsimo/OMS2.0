@@ -328,9 +328,9 @@
         if(flag22){
           return this.$message.error('已经存在重复单据')
         }
+        this.isSub = 0
         this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + ';' + val.serviceId;
         let jsonArr = [JSON.parse(JSON.stringify(val))]
-        if (jsonArr.length >= 1) {
           jsonArr.map(item => {
             item.orgName = this.reconciliationStatement.orgName;
             item.accountNo = item.serviceId;
@@ -341,7 +341,6 @@
             item.rpAmt = -item.paymentBalance;
             item.unAmtLeft = +item.rpAmt - +item.unAmt;
           })
-        }
         this.BusinessType.push(...jsonArr)
         this.checkComputed()
       },
