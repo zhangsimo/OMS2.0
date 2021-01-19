@@ -8,7 +8,7 @@
     <!--</section>-->
     <div style="min-width: 600px">
       <section
-        class="con-box w400 fl mr15"
+        class="con-box w500 fl mr5"
         style=" overflow-x: hidden;overflow-y: auto;height: 670px"
       >
         <!--<span style="font-size: 16px">组织信息</span>-->
@@ -20,7 +20,7 @@
       </section>
       <section
         class="con-box fl"
-        style="width: calc(100% - 415px);min-width: 400px"
+        style="width: calc(100% - 505px);min-width: 400px"
       >
         <Table
           size="small"
@@ -319,7 +319,7 @@
             attrs: {
               title: "添加下级组织"
             },
-            class: "ivu-icon ivu-icon-ios-add-circle pointer ml15",
+            class: "ivu-icon ivu-icon-ios-add-circle pointer ml10",
             on: {
               click: () => {
                 this.addClick(data.id, data);
@@ -334,7 +334,7 @@
             attrs: {
               title: "修改"
             },
-            class: "iconfont iconbianjixiugaiicon  icons pointer ml15",
+            class: "iconfont iconbianjixiugaiicon  icons pointer ml10",
             on: {
               click: () => {
                 let pnode = root[node] == undefined ? undefined : root[node.parent].node;
@@ -352,7 +352,7 @@
             attrs: {
               title: "删除"
             },
-            class: "iconfont iconlajitongicon icons pointer ml15",
+            class: "iconfont iconlajitongicon icons pointer ml10",
             on: {
               click: () => {
                 if (childCount > 0) {
@@ -365,7 +365,6 @@
           })
         ];
         if (data.id == 0) {
-          opts.pop();
           opts.pop();
         }
         let title = "";
@@ -407,7 +406,7 @@
                 style: {
                   display: "inline-block",
                   float: "right",
-                  marginRight: "32px"
+                  marginRight: "8px"
                 }
               },
               opts
