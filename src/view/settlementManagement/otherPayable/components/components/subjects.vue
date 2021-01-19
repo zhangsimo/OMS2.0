@@ -338,25 +338,15 @@ export default {
       }
     },
     showOrhideModel(v){
+      this.subjectModel = ''
       if(v){
-        if(this.subjectTableDataZiChan.length==0){
+        
           this.accountingGetListZiChan();
-        }
-        if(this.subjectTableDataFuZhai.length==0){
           this.accountingGetListFuZhai();
-        }
-        if(this.subjectTableDataGongTong.length==0){
           this.accountingGetListGongTong();
-        }
-        if(this.subjectTableDataQuanYi.length==0){
           this.accountingGetListQuanYi();
-        }
-        if(this.subjectTableDataChengBen.length==0){
           this.accountingGetListChengBen();
-        }
-        if(this.subjectTableDataSunYi.length==0){
           this.accountingGetListSunYi();
-        }
       }
     }
   },

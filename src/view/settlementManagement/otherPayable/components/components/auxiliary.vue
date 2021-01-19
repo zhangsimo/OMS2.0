@@ -854,6 +854,7 @@ export default {
         this.formDynamic.fund="";
         this.formDynamic.code="";
         this.AssistAccounting = {};
+        this.groundIds = []
         this.$refs.AssistTableDataKeHu.clearRadioRow()
         this.$refs.AssistTableDataGongYingShang.clearRadioRow()
         this.$refs.AssistTableDataGeRen.clearRadioRow()
