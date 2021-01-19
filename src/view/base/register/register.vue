@@ -466,32 +466,37 @@
     methods: {
       //获取验证码
       getCo() {
-        let tel = {}
-        tel.mobile = this.form.mobile;
-        if (this.cansend) {
-          this.timerBack = 60;
-          this.getCodeBtnText = `${this.timerBack}后重新获取验证码`;
-          this.cansend = false;
-          sendMessage(tel).then(res => {
-            if (res.code == 0) {
-              let timer = setInterval(() => {
-                this.timerBack--
-                this.getCodeBtnText = `${this.timerBack}后重新获取验证码`
-                if (this.timerBack == 0) {
-                  clearInterval(timer)
+        this.$refs.registerForm.validate((valid) => {
+          if (valid) {
+            let tel = {}
+            tel.mobile = this.form.mobile;
+            if (this.cansend) {
+              this.timerBack = 60;
+              this.getCodeBtnText = `${this.timerBack}后重新获取验证码`;
+              this.cansend = false;
+              sendMessage(tel).then(res => {
+                if (res.code == 0) {
+                  let timer = setInterval(() => {
+                    this.timerBack--
+                    this.getCodeBtnText = `${this.timerBack}后重新获取验证码`
+                    if (this.timerBack == 0) {
+                      clearInterval(timer)
+                      this.timerBack = 60;
+                      this.getCodeBtnText = '获取验证码';
+                      this.cansend = true;
+                    }
+                  }, 1000)
+                } else {
                   this.timerBack = 60;
                   this.getCodeBtnText = '获取验证码';
                   this.cansend = true;
                 }
-              }, 1000)
-            } else {
-              this.timerBack = 60;
-              this.getCodeBtnText = '获取验证码';
-              this.cansend = true;
+              })
             }
-          })
-        }
-
+          } else {
+            return this.$message.error("校验不通过")
+          }
+        })
       },
       //已有账号去登录
       goLogin() {
@@ -573,7 +578,7 @@
       },
       //注册
       registerA() {
-        this.$refs.registerForm.validator(valid => {
+        this.$refs.registerForm.validate(valid => {
           if (valid) {
             let formData = new FormData();
             formData.append('companyName', this.form.companyName);
