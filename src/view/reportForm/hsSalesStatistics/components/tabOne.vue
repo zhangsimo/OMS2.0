@@ -189,6 +189,7 @@
           this.totalObj = resTotal.data||{};
         }
       },
+
       sortChange({field,order}){
         this.sortObj = {};
         switch (field) {
