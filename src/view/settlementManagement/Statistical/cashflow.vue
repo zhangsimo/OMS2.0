@@ -373,6 +373,7 @@ export default {
         this.queryCash()
       }else{
         this.page.pageNum = 1
+        this.queryCash()
         this.queryAccount()
       }
     },
