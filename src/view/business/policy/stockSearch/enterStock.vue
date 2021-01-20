@@ -744,10 +744,10 @@
           this.searchForm3.endEnterDate=ThisYearStr()[1]
           this.searchForm3.guestName="";
           if (this.$refs.quickDate1) {
-            this.$refs.quickDate1.searchQuick = "7";
+            this.$refs.quickDate1.searchQuick = "0";
           }
           if (this.$refs.quickDate2) {
-            this.$refs.quickDate2.searchQuick = "7";
+            this.$refs.quickDate2.searchQuick = "0";
           }
           // this.getEnters();
         }
@@ -853,17 +853,19 @@
         this.tIndex = index;
         if (this.tIndex == 2) {
           //这里是因为tab切换时quickDate的searchQuick没有清空转回到7
-          if (this.$refs.quickDate1) {
-            this.$refs.quickDate1.searchQuick = "7";
+          if (this.$refs.quickDate2) {
+            // this.$refs.quickDate2.searchQuick = "0";
+            this.$refs.quickDate2.getval(this.$refs.quickDate2.searchQuick)
           }
-          this.getOuts();
+          // this.getOuts();
         }
         if (this.tIndex == 1) {
           //这里是因为tab切换时quickDate的searchQuick没有清空转回到7
-          if (this.$refs.quickDate2) {
-            this.$refs.quickDate2.searchQuick = "7";
+          if (this.$refs.quickDate1) {
+            // this.$refs.quickDate1.searchQuick = "0";
+            this.$refs.quickDate1.getval(this.$refs.quickDate1.searchQuick)
           }
-          this.getList();
+          // this.getList();
         }
         if (this.tIndex == 3) {
           this.getHold();
