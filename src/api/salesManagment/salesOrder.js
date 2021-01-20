@@ -117,7 +117,14 @@ export function getprintList (params) {
     params
   })
 }
-
+//打印拣货单
+export function getPrintPickUpList(params){
+  return axios.request({
+    url: `${api.omsOrder}/`,
+    method: 'get',
+    params
+  })
+}
 
 //作废
 export function getCancellation (data) {
