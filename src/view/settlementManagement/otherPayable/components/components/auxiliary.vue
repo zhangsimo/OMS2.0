@@ -675,6 +675,7 @@ export default {
       if (this.dictCode) {
         params.dictCode = this.dictCode;
       }
+      params.searchType = 1
       kmType(params).then(res => {
         if (res.code === 0) {
           this.AssistTableDataOther = res.data;
