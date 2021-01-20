@@ -193,6 +193,7 @@
       },
 
       sortChange({field,order}){
+        console.log(field,order);
         this.sortObj = {};
         switch (field) {
           case 'sellAmt':
@@ -211,6 +212,7 @@
             this.sortObj.preGrossMarginSort = order;
             break;
         }
+        console.log(this.sortObj);
         this.page.num = 1;
         this.getList();
       },
