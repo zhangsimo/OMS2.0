@@ -80,7 +80,7 @@
           <div class="db flex Box">
             <Input v-model="salesman" placeholder="请输入业务员" style="width: 110px;" class="mr15" />
             <Input v-model="referrer" placeholder="请输入推荐人" style="width: 110px;" class="mr15" />
-            <Button class="mr15 w90" @click="search">
+            <Button class="mr15 w90" type="warning" @click="search">
               <span>
                 <Icon custom="iconfont iconchaxunicon icons" />查询
               </span>
@@ -93,7 +93,7 @@
             <Button
               @click="startUse"
               class="mr15 w90"
-              type="warning"
+              type="success"
               v-has="'start'"
               v-if="Message.isDisabled == 1"
             >
@@ -104,7 +104,7 @@
             <Button
               @click="endUse"
               class="mr15 w90"
-              type="warning"
+              type="primary"
               v-has="'start'"
               v-else-if="Message.isDisabled == 0 "
             >
