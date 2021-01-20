@@ -172,9 +172,7 @@
         this.body.showStore = this.showStore?1:0;
         this.body.showGuest = this.showGuest?1:0;
         this.body.showBusinessUnit = this.showBusinessUnit?1:0;
-        console.log(this.sortObj)
         let reqObj = {...this.body,...this.sortObj};
-        console.log(reqObj)
         let res = await api.getHarsonSaleReport(params,reqObj);
         let resTotal = await api.getHarsonSaleReportTotal({},reqObj);
         this.showFooter = false;
@@ -192,10 +190,10 @@
         }
       },
 
-      sortChange({field,order}){
-        console.log(field,order);
+      sortChange({property,order}){
+        console.log(property,order);
         this.sortObj = {};
-        switch (field) {
+        switch (property) {
           case 'sellAmt':
             this.sortObj.sellSort = order;
             break;
@@ -212,7 +210,6 @@
             this.sortObj.preGrossMarginSort = order;
             break;
         }
-        console.log(this.sortObj);
         this.page.num = 1;
         this.getList();
       },
