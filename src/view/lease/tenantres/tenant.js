@@ -1,9 +1,8 @@
 import * as api from "_api/lease/tenantres";
-import { findResScope} from '_api/admin/resourceApi'
+import {findResScope} from '_api/admin/resourceApi'
 
 
-
-const data = function() {
+const data = function () {
   return {
     // 分割线
     split: 0.33,
@@ -49,9 +48,9 @@ const data = function() {
         title: "资源类型",
         // key: "resType",
         minWidth: 120,
-        render:(h , params) => {
+        render: (h, params) => {
           let tex = params.row.resType == 0 ? '菜单' : '按钮'
-          return h('span' ,{} ,tex)
+          return h('span', {}, tex)
         }
         // render: editRow(this, 'tbdata', 'resType'),
       },
@@ -89,10 +88,10 @@ const data = function() {
     tbdata: [], // 表身
     selectData: new Set(), // 选中的数据
     canSave: false,
-    sysTypeArr:[
-      {title:'全部' , scope:'all'}
+    sysTypeArr: [
+      {title: '全部', scope: 'all'}
     ],//获取全部系统
-    sysType:'oms',//当前系统
+    sysType: 'oms',//当前系统
   };
 };
 
@@ -103,7 +102,7 @@ const isArray = any => any && Array.isArray(any);
 function editRow(self, tbdata, filed, validator) {
   return (h, params) => {
     let tb = '';
-    if(tbdata.indexOf('.') !== -1) {
+    if (tbdata.indexOf('.') !== -1) {
       tb = tbdata.split('.').reduce((prev, next) => prev[next], self['tbdata']);
     } else {
       tb = self[tbdata];
@@ -129,12 +128,12 @@ function editRow(self, tbdata, filed, validator) {
 // 全部展开收起树形图
 const treeExpand = (self, treeData) => {
   isArray(treeData) &&
-    treeData.forEach(element => {
-      element.expand = self.expand;
-      if (isArray(element.childs)) {
-        treeExpand(self, element.childs);
-      }
-    });
+  treeData.forEach(element => {
+    element.expand = self.expand;
+    if (isArray(element.childs)) {
+      treeExpand(self, element.childs);
+    }
+  });
 };
 
 // 树形图渲染
@@ -151,16 +150,16 @@ const getTree = tree => {
 
 // //渲染树形图
 const checkTree = (tree, treeList) => {
-  if(isArray(tree) && tree.length > 0){
-    tree.map( tel => {
-      if(tel.resType == 1 || tel.childs.length == 0) {
+  if (isArray(tree) && tree.length > 0) {
+    tree.map(tel => {
+      if (tel.resType == 1 || tel.childs.length == 0) {
         treeList.forEach(item => {
           if (item.id == tel.id) {
             tel.checked = true
           }
         })
       }
-      checkTree(tel.childs , treeList)
+      checkTree(tel.childs, treeList)
     })
   } else {
     return
@@ -200,7 +199,7 @@ const findTree = (tree, content) => {
 };
 
 // 树形图模糊搜索
-const queryTree = function(self) {
+const queryTree = function (self) {
   let val = self.treecontent;
   self.treeData = JSON.parse(JSON.stringify(self.orginTree));
   if (!val) {
@@ -217,7 +216,7 @@ const methods = {
 //搜索全部系统
   findResScope() {
     findResScope().then(res => {
-      this.sysTypeArr = [...this.sysTypeArr,...res.data]
+      this.sysTypeArr = [...this.sysTypeArr, ...res.data]
     })
   },
 
@@ -232,25 +231,25 @@ const methods = {
   },
   async initList() {
     let params = {};
-    if(!this.tenantID.trim()) return
+    if (!this.tenantID.trim()) return
     params.tenantNo = this.tenantID;
     params.page = 0
     params.size = 10000
     params.systemScope = this.sysType === 'all' ? '' : this.sysType
     let res = await api.getAll(params);
     if (res.code === 0) {
-      sessionStorage.setItem('leaseRight' , this.tenantID)
+      sessionStorage.setItem('leaseRight', this.tenantID)
       this.canSave = false
-      if(res.data.length === 0){
+      if (res.data.length === 0) {
         this.treeData = this.orginTree
         this.tbdata = res.data;
         return
       }
       this.tbdata = res.data;
-      if (isArray(this.tbdata) && this.tbdata.length > 0){
+      if (isArray(this.tbdata) && this.tbdata.length > 0) {
         let tree = JSON.parse(JSON.stringify(this.orginTree))
         let that = this
-      checkTree(tree , this.tbdata)
+        checkTree(tree, this.tbdata)
         this.treeData = tree
 
       }
@@ -258,27 +257,27 @@ const methods = {
   },
   // 保存
   async save() {
-    if(!this.canSave) return this.$message.error('请修改信息之后再保存')
-   let arr = [],
+    if (!this.canSave) return this.$message.error('请修改信息之后再保存')
+    let arr = [],
       data = {}
 
-    if(sessionStorage.getItem('leaseRight') != null){
+    if (sessionStorage.getItem('leaseRight') != null) {
       data.tenantNo = sessionStorage.getItem('leaseRight')
     }
     data.systemScope = this.sysType
-    let obj = await api.hasLessee(data)
-    if(obj.code === 0){
-      if(!obj.data.id) return this.$message.error('未查询到此租户')
-      this.selectTrees.forEach( item => {
-        arr.push(item.id)
-      })
-      data.resIds = arr
-      let res = await api.addresource(data);
-      if(res.code === 0) {
-        this.$Message.success('保存成功');
-        this.initList();
-      }
+    // let obj = await api.hasLessee(data)
+    // if(obj.code === 0){
+    //   if(!obj.data.id) return this.$message.error('未查询到此租户')
+    this.selectTrees.forEach(item => {
+      arr.push(item.id)
+    })
+    data.resIds = arr
+    let res = await api.addresource(data);
+    if (res.code === 0) {
+      this.$Message.success('保存成功');
+      this.initList();
     }
+    // }
 
   },
   // 展开收起
@@ -326,7 +325,7 @@ const methods = {
   delTable() {
     this.selectData.forEach(id => {
       this.tbdata.forEach((el, index, arr) => {
-        if(el.id === id) {
+        if (el.id === id) {
           arr.splice(index, 1);
         }
       })
@@ -334,10 +333,10 @@ const methods = {
   },
   // 保存
   async saveTable() {
-    if(this.selectData.size <= 0 && this.tbdata.length <= 0) {
+    if (this.selectData.size <= 0 && this.tbdata.length <= 0) {
       return this.$Message.error('没有删除或修改的数据');
     }
-    if(this.selectData.size > 0) {
+    if (this.selectData.size > 0) {
       let ids = Array.from(this.selectData);
       let res1 = await api.deltenant(ids);
     }
@@ -346,14 +345,14 @@ const methods = {
       el.isDisabled = isDisabled;
     })
     let res2 = await api.updatetenant(this.tbdata);
-    if(res2.code === 0) {
+    if (res2.code === 0) {
       this.$Message.success('删除成功');
       this.qureyTable();
     }
   },
 };
 
-const mounted = function() {
+const mounted = function () {
   this.initTree();
   treeExpand(this, this.treeData);
   this.findResScope()
