@@ -9,13 +9,16 @@
         :rules="ruleValidate"
         :label-width="80"
       >
-        <div class="pane-made-hd fs12">
+        <div class="pane-made-hd fs12 flex">
           <span class="titler mr5">固定额度:</span>
           <span class="titler mr10">{{ limitList.fixationQuota |priceFilters}}</span>
           <span class="titler mr5">临时额度:</span>
           <span class="titler mr10">{{ limitList.tempQuota |priceFilters}}</span>
           <span class="titler mr5">可用余额:</span>
           <span class="titler mr5">{{ limitList.sumAmt  |priceFilters}}</span>
+          <div style="flex:1;display:flex;flex-direction: row-reverse;padding-top: 3px;font-size: 8px">
+            <Button class="mr20" size="small" @click="printPick">打印拣货单</Button>
+          </div>
         </div>
         <div class="clearfix purchase pb10" ref="planForm">
           <FormItem label="客户：" prop="guestId" :show-message="false" inline>
@@ -463,6 +466,7 @@
     <See-file ref="fileList" :data="oneRow"></See-file>
     <alot-model ref="AlotModel"></alot-model>
     <print ref="printFH"></print>
+    <printPickupList ref="printPickupList" style="display: none"></printPickupList>
   </div>
 </template>
 
@@ -504,13 +508,15 @@
   import AlotModel from "../components/AlotModel"
   import SalesCus from "../../../../components/allocation/salesCus";
   import {showLoading, hideLoading} from "@/utils/loading"
-  import Print from "../components/print";
+  import Print from "../components/print";//
+  import printPickupList from "../components/printPickupList";//销售订单打印拣货单
 
   export default {
     name: "OrderRight",
     inject: ["reload"],
     components: {
       Print,
+      printPickupList,
       SalesCus,
       ClientData,
       goodsInfo,
@@ -660,7 +666,15 @@
       printModelShow(){
         this.$refs.printFH.openModal();
       },
-
+      printPick(){
+        let order = {};
+        order.id=this.$store.state.dataList.oneOrder.id;
+        if(order.id==undefined){
+          return this.$message.error("请选择单据")
+        }
+        this.$refs.printPickupList.openModal(order)
+        this.$refs.$parent.$parent.OrderLeft.gitlistValue()
+      },
 
       //------------------------------------------------------------------------//
       //表格tab切换可编辑部位

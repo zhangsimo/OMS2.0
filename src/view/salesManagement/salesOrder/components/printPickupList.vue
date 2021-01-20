@@ -179,7 +179,7 @@
             <td colspan="8"></td>
             <td colspan="2" style="padding: 0 2px;">
               <span>合计: </span>
-              <span>{{ onelist.afterSaleQty }}</span>
+              <span>{{ onelist.orderQty }}</span>
             </td>
           </tr>
           <tr style="font-size: 12px;line-height: 12px;">

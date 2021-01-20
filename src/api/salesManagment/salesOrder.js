@@ -120,7 +120,7 @@ export function getprintList (params) {
 //打印拣货单
 export function getPrintPickUpList(params){
   return axios.request({
-    url: `${api.omsOrder}/`,
+    url: `${api.omsOrder}/sellOrderMain/printPickingList`,
     method: 'get',
     params
   })
