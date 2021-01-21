@@ -12,7 +12,6 @@ import importDirective from '@/directive'
 import '@/assets/iview/iview.css';
 import './index.less'
 import '@/assets/icons/iconfont.css'
-import '@/mock'
 import 'babel-polyfill'
 import Message from './components/message'
 import './assets/iconfonts/iconfont.css'

@@ -7,8 +7,6 @@ import {getOtherAllPay} from '_api/documentApproval/OtherPayment.js'
 import { getThisAllList,getGuestShortName ,getPayAccount} from "@/api/documentApproval/documentApproval/documentApproval";
 import { getAccountName } from "../../../../api/bill/saleOrder";
 import { getPost } from "../utils";
-import fa from "element-ui/src/locale/lang/fa";
-import { valid } from "mockjs";
 export default {
   name: "AdvanceApply",
   components: {
@@ -319,7 +317,7 @@ export default {
 
     //保存提交
     async save(type) {
-      
+
       this.$refs.formInline.validate(async valid => {
         if (valid) {
           // let valg = false
@@ -351,7 +349,7 @@ export default {
           this.$Message.error("带*必填");
         }
       });
-       
+
     }
   }
 };
